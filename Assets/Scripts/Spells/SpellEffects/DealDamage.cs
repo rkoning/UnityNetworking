@@ -11,7 +11,7 @@ public class DealDamage : SpellEffect
         var health = target.GetComponent<Health>();
         if (health)
         {
-            health.TakeDamage(damage);
+            health.TakeDamage(damage, spell.owner);
         }
     }
 }

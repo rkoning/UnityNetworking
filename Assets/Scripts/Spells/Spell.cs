@@ -2,7 +2,7 @@
 
 public class Spell : MonoBehaviour
 {
-
+    public Avatar owner;
     public delegate void CastAction();
     public event CastAction OnCast;
     public event CastAction OnHold;

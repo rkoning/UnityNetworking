@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
 
@@ -154,13 +155,17 @@ public class RoomManager : NetworkRoomManager
 
     public override void OnGUI()
     {
-        base.OnGUI();
-        if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
-        {
-            // set to false to hide it in the game scene
-            showStartButton = false;
+        try {
+            base.OnGUI();
+            if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
+            {
+                // set to false to hide it in the game scene
+                showStartButton = false;
 
-            ServerChangeScene(GameplayScene);
+                ServerChangeScene(GameplayScene);
+            }
+        } catch (Exception e) {
+            Debug.Log(e.Message);
         }
     }
 

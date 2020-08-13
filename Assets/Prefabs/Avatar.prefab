@@ -4827,6 +4827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40823e2d58c2b7440a7dd0c56ccda3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 8789311890762768883}
 --- !u!114 &7049148185418894473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5130,6 +5131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 371325baf48cc9a468df48e5794d3611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   maxHealth: 100
   currentHealth: 0
 --- !u!114 &6354347484227684189
