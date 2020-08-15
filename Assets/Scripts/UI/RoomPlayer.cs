@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Reflection;
+using UnityEngine;
 using Mirror;
+using TMPro;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Components/NetworkRoomPlayer.html
@@ -14,93 +18,109 @@ using Mirror;
 /// </summary>
 public class RoomPlayer : NetworkRoomPlayer
 {
-    #region Start & Stop Callbacks
+    [Header("UI")]
+    [SerializeField] private GameObject lobbyUI = null;
+    [SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
+    [SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
+    [SerializeField] private Button startGameButton = null;
 
-    /// <summary>
-    /// This is invoked for NetworkBehaviour objects when they become active on the server.
-    /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
-    /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
-    /// </summary>
-    public override void OnStartServer() { }
+    [SyncVar(hook = nameof(HandleDisplayNameChanged))]
+    public string DisplayName = "Loading...";
+    
+    [SyncVar(hook = nameof(HandleReadyStatusChanged))]
+    public bool IsReady = false;
 
-    /// <summary>
-    /// Invoked on the server when the object is unspawned
-    /// <para>Useful for saving object data in persistant storage</para>
-    /// </summary>
-    public override void OnStopServer() { }
-
-    /// <summary>
-    /// Called on every NetworkBehaviour when it is activated on a client.
-    /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
-    /// </summary>
-    public override void OnStartClient() { }
-
-    /// <summary>
-    /// This is invoked on clients when the server has caused this object to be destroyed.
-    /// <para>This can be used as a hook to invoke effects or do client specific cleanup.</para>
-    /// </summary>
-    public override void OnStopClient() { }
-
-    /// <summary>
-    /// Called when the local player object has been set up.
-    /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
-    /// </summary>
-    public override void OnStartLocalPlayer() { }
-
-    /// <summary>
-    /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
-    /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
-    /// <para>When <see cref="NetworkIdentity.AssignClientAuthority"/> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnection parameter included, this will be called on the client that owns the object.</para>
-    /// </summary>
-    public override void OnStartAuthority() { }
-
-    /// <summary>
-    /// This is invoked on behaviours when authority is removed.
-    /// <para>When NetworkIdentity.RemoveClientAuthority is called on the server, this will be called on the client that owns the object.</para>
-    /// </summary>
-    public override void OnStopAuthority() { }
-
-    #endregion
-
-    #region Room Client Callbacks
-
-    /// <summary>
-    /// This is a hook that is invoked on all player objects when entering the room.
-    /// <para>Note: isLocalPlayer is not guaranteed to be set until OnStartLocalPlayer is called.</para>
-    /// </summary>
-    public override void OnClientEnterRoom() { }
-
-    /// <summary>
-    /// This is a hook that is invoked on all player objects when exiting the room.
-    /// </summary>
-    public override void OnClientExitRoom() { }
-
-    #endregion
-
-    #region SyncVar Hooks
-
-    /// <summary>
-    /// This is a hook that is invoked on clients when the index changes.
-    /// </summary>
-    /// <param name="oldIndex">The old index value</param>
-    /// <param name="newIndex">The new index value</param>
-    public override void IndexChanged(int oldIndex, int newIndex) { }
-
-    /// <summary>
-    /// This is a hook that is invoked on clients when a RoomPlayer switches between ready or not ready.
-    /// <para>This function is called when the a client player calls SendReadyToBeginMessage() or SendNotReadyToBeginMessage().</para>
-    /// </summary>
-    /// <param name="readyState">Whether the player is ready or not.</param>
-    public override void ReadyStateChanged(bool _, bool readyState) { }
-
-    #endregion
-
-    #region Optional UI
-
-    public override void OnGUI()
-    {
-        base.OnGUI();
+    private bool isLeader;
+    public bool IsLeader {
+        set {
+            isLeader = value;
+            startGameButton.gameObject.SetActive(value);
+        }
     }
 
-    #endregion
+    private RoomManager room;
+    public RoomManager Room {
+        get {
+           if (room != null) return room;
+           return room = NetworkManager.singleton as RoomManager;
+        }
+    }
+
+    public override void OnStartAuthority() {
+        CmdSetDisplayName(Random.Range(0, 100).ToString());
+        lobbyUI.SetActive(true);
+    }
+
+    public void CloseLobbyUI() {
+        lobbyUI.SetActive(false);
+    }
+
+    public override void OnStartClient() {
+        Room.RoomPlayers.Add(this);
+        UpdateDisplay();
+    }
+
+    public override void OnNetworkDestroy() {
+        Room.RoomPlayers.Remove(this);
+        UpdateDisplay();
+    }
+
+    public void HandleReadyStatusChanged(bool oldValue, bool newValue) => UpdateDisplay();
+    public void HandleDisplayNameChanged(string oldValue, string newValue) => UpdateDisplay();
+
+    private void UpdateDisplay() {
+        if (!hasAuthority) {
+            foreach (var player in Room.RoomPlayers) {
+                if (player.hasAuthority) {
+                    player.UpdateDisplay();
+                    break;
+                }
+            }
+            return;
+        }
+
+        for (int i = 0; i < playerNameTexts.Length; i++) {
+            playerNameTexts[i].text = "Waiting For Player...";
+            playerReadyTexts[i].text = string.Empty;
+        }
+
+        for (int i = 0; i < Room.RoomPlayers.Count; i++) {
+            playerNameTexts[i].text = Room.RoomPlayers[i].DisplayName;
+            playerReadyTexts[i].text = Room.RoomPlayers[i].IsReady ? 
+                "<color=green>Ready</color>" :
+                "<color=red>Not Ready</color>";
+        }
+    }
+
+    public void HandleReadyToStart(bool readyToStart) {
+        if (!isLeader) return;
+
+        startGameButton.interactable = readyToStart;
+    }
+
+    public void Replace(GameObject gamePlayer) {
+        gamePlayer.GetComponent<GamePlayer>().SetDisplayName(DisplayName);
+        NetworkServer.ReplacePlayerForConnection(connectionToClient, gamePlayer);
+        NetworkServer.Destroy(gameObject);
+    }
+
+    [Command]
+    private void CmdSetDisplayName(string displayName) {
+        DisplayName = displayName;
+    }
+
+    [Command]
+    public void CmdReadyUp() {
+        IsReady = !IsReady;
+        Room.NotifyPlayersOfReadyState();
+    }
+
+    [Command]
+    public void CmdStartGame() {
+        if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
+
+        Room.StartGame();
+    }
+
+    public override void OnGUI() { }
 }

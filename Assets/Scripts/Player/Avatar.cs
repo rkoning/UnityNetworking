@@ -3,7 +3,10 @@ using Mirror;
 
 public class Avatar : NetworkBehaviour
 {
-    CharacterController controller;
+    public GamePlayer player;
+    private CharacterController controller;
+    private Health health;
+
     public float walkSpeed = 7.5f;
     public float runSpeed = 11.5f;
     public float jumpSpeed = 8f;
@@ -22,10 +25,10 @@ public class Avatar : NetworkBehaviour
 
     public Spell spell;
 
-    #region Unity Callbacks
     private void Start()
     {
-        if (isLocalPlayer)
+        health = GetComponent<Health>();
+        if (hasAuthority)
         {
             controller = GetComponent<CharacterController>();
             // Cursor.lockState = CursorLockMode.Locked;
@@ -40,7 +43,10 @@ public class Avatar : NetworkBehaviour
 
     private void Update()
     {
-        if (!isLocalPlayer)
+        if (!hasAuthority)
+            return;
+        
+        if (health.IsDead)
             return;
         
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -80,7 +86,6 @@ public class Avatar : NetworkBehaviour
             CmdCast();
         }
     }
-    #endregion
 
     [Command]
     private void CmdCast()

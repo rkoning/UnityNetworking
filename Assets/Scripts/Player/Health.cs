@@ -10,38 +10,36 @@ public class Health : NetworkBehaviour
     [SyncVar]
     public float currentHealth;
 
+    [SyncVar(hook = nameof(OnDeath))]
+    public bool IsDead = false;
+
     private Avatar lastDamagedBy;
+
+    public GamePlayer gamePlayer;
 
     private void Start()
     {
         currentHealth = maxHealth;
     }
 
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.B)) {
+            TakeDamage(100f, null);
+        }
+    }
+
     public void TakeDamage(float damage, Avatar source) {
+        Debug.Log(connectionToServer + " " + connectionToClient + " " + hasAuthority);
         currentHealth -= damage;
         lastDamagedBy = source;
         if (currentHealth <= 0)
         {
-            CmdDie();
+            IsDead = true;
+            gamePlayer.CmdStartRespawn();
         }
     }
 
-    [Command]
-    public void CmdDie()
-    {
-        try {
-            lastDamagedBy.GetComponent<PlayerScore>().score += 1;
-            var spawn = NetworkManager.singleton.GetStartPosition();
-            var newPlayer = Instantiate(NetworkManager.singleton.playerPrefab, spawn.position, spawn.rotation);
-            NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer);
-            RpcRespawn(spawn);
-            NetworkServer.Destroy(this.gameObject);
-        } catch (Exception e) {
-            Debug.Log(e.Message);
-        }
-    }
-
-    public void Respawn() {
-
+    private void OnDeath(bool oldValue, bool newValue) {
+        // gamePlayer.CmdStartRespawn();
     }
 }

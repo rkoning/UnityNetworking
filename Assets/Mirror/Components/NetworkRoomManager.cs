@@ -644,7 +644,9 @@ namespace Mirror
         /// <summary>
         /// This is a hook to allow custom behaviour when the game client enters the room.
         /// </summary>
-        public virtual void OnRoomClientEnter() { }
+        public virtual void OnRoomClientEnter() {
+            
+        }
 
         /// <summary>
         /// This is a hook to allow custom behaviour when the game client exits the room.

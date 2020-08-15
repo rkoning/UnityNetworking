@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
@@ -21,54 +22,49 @@ using Mirror;
 public class RoomManager : NetworkRoomManager
 {
 
+    public List<RoomPlayer> RoomPlayers { get; } = new List<RoomPlayer>();
+    public List<GamePlayer> GamePlayers { get; } = new List<GamePlayer>();
+
     private bool showStartButton;
 
-    #region Server Callbacks
+    public override void OnRoomStopServer() {
+        RoomPlayers.Clear();
+        // // Demonstrates how to get the Network Manager out of DontDestroyOnLoad when
+        // // going to the offline scene to avoid collision with the one that lives there.
+        // if (gameObject.scene.name == "DontDestroyOnLoad" && !string.IsNullOrEmpty(offlineScene) && SceneManager.GetActiveScene().path != offlineScene)
+        //     SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
 
-    /// <summary>
-    /// This is called on the server when the server is started - including when a host is started.
-    /// </summary>
-    public override void OnRoomStartServer() { }
-
-    /// <summary>
-    /// This is called on the server when the server is stopped - including when a host is stopped.
-    /// </summary>
-    public override void OnRoomStopServer() { 
-        // Demonstrates how to get the Network Manager out of DontDestroyOnLoad when
-        // going to the offline scene to avoid collision with the one that lives there.
-        if (gameObject.scene.name == "DontDestroyOnLoad" && !string.IsNullOrEmpty(offlineScene) && SceneManager.GetActiveScene().path != offlineScene)
-            SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
-
-        base.OnRoomStopServer();
+        // base.OnRoomStopServer();
     }
-
-    /// <summary>
-    /// This is called on the host when a host is started.
-    /// </summary>
-    public override void OnRoomStartHost() { }
-
-    /// <summary>
-    /// This is called on the host when the host is stopped.
-    /// </summary>
-    public override void OnRoomStopHost() { }
-
-    /// <summary>
-    /// This is called on the server when a new client connects to the server.
-    /// </summary>
-    /// <param name="conn">The new connection.</param>
-    public override void OnRoomServerConnect(NetworkConnection conn) { }
 
     /// <summary>
     /// This is called on the server when a client disconnects.
     /// </summary>
     /// <param name="conn">The connection that disconnected.</param>
-    public override void OnRoomServerDisconnect(NetworkConnection conn) { }
+    public override void OnRoomServerDisconnect(NetworkConnection conn) { 
+        if (conn.identity != null) {
+            var player = conn.identity.GetComponent<RoomPlayer>();
+            RoomPlayers.Remove(player);
 
-    /// <summary>
-    /// This is called on the server when a networked scene finishes loading.
-    /// </summary>
-    /// <param name="sceneName">Name of the new scene.</param>
-    public override void OnRoomServerSceneChanged(string sceneName) { }
+            NotifyPlayersOfReadyState();
+        }
+        base.OnRoomServerDisconnect(conn);
+    }
+
+    public void NotifyPlayersOfReadyState() {
+        foreach (var player in RoomPlayers) {
+            player.HandleReadyToStart(IsReadyToStart());
+        }
+    }
+
+    private bool IsReadyToStart() {
+        if (numPlayers < minPlayers) { return false; }
+
+        foreach(var player in RoomPlayers) {
+            if (!player.IsReady) { return false; }
+        }
+        return true;
+    }
 
     /// <summary>
     /// This allows customization of the creation of the room-player object on the server.
@@ -101,7 +97,13 @@ public class RoomManager : NetworkRoomManager
     /// <param name="conn">The connection the player object is for.</param>
     public override void OnRoomServerAddPlayer(NetworkConnection conn)
     {
-        base.OnRoomServerAddPlayer(conn);
+        if (SceneManager.GetActiveScene().path == RoomScene) {
+            bool isLeader = RoomPlayers.Count == 0;
+
+            RoomPlayer roomPlayer = Instantiate(roomPlayerPrefab) as RoomPlayer;
+            roomPlayer.IsLeader = isLeader;
+            NetworkServer.AddPlayerForConnection(conn, roomPlayer.gameObject);
+        }
     }
 
     /// <summary>
@@ -112,12 +114,19 @@ public class RoomManager : NetworkRoomManager
     /// <param name="roomPlayer">The room player object.</param>
     /// <param name="gamePlayer">The game player object.</param>
     /// <returns>False to not allow this player to replace the room player.</returns>
-    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
+    public override void OnRoomServerSceneChanged(string sceneName)
     {
-        PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
-        var player = roomPlayer.GetComponent<RoomPlayer>();
-        score.index = player.index;
-        return true;
+        base.OnRoomServerSceneChanged(sceneName);
+        // var gamePlayerInstance = Instantiate(gamePlayer);
+        // roomPlayer.GetComponent<RoomPlayer>().Replace(gamePlayer);
+        for (int i = 0; i < RoomPlayers.Count; i++) {
+            var conn = RoomPlayers[i].connectionToClient;
+            var roomPlayer = conn.identity.gameObject;
+            NetworkServer.Destroy(roomPlayer);
+        }
+        // PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
+        // var player = roomPlayer.GetComponent<RoomPlayer>();
+        // score.index = player.index;
     }
 
     /// <summary>
@@ -133,7 +142,6 @@ public class RoomManager : NetworkRoomManager
         }
     }
 
-    #endregion
 
     #region Client Callbacks
 
@@ -149,25 +157,21 @@ public class RoomManager : NetworkRoomManager
         base.OnRoomStopClient();
     }
 
+    // public override void ServerChangeScene(string newSceneName) {
+    //     var currentPath = SceneManager.GetActiveScene().path;
+    //     base.ServerChangeScene(newSceneName);
+
+
+    // }
+
     #endregion
 
-    #region Optional UI
-
-    public override void OnGUI()
-    {
-        try {
-            base.OnGUI();
-            if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
-            {
-                // set to false to hide it in the game scene
-                showStartButton = false;
-
-                ServerChangeScene(GameplayScene);
-            }
-        } catch (Exception e) {
-            Debug.Log(e.Message);
+    public void StartGame() {
+        if (SceneManager.GetActiveScene().path == RoomScene) {
+            if (!IsReadyToStart()) { return; }
+            ServerChangeScene(GameplayScene);
         }
     }
 
-    #endregion
+    public override void OnGUI() { }
 }
