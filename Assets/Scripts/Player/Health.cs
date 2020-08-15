@@ -67,6 +67,7 @@ public class Health : NetworkBehaviour
         transform.rotation = spawnPoint.rotation;
         CmdPlayerAlive();
     }
+    
     private void OnDeath(bool oldValue, bool newValue) {
         // gamePlayer.CmdStartRespawn();
     }

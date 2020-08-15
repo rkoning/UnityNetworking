@@ -18,11 +18,16 @@ using UnityEngine.UI;
 /// </summary>
 public class RoomPlayer : NetworkRoomPlayer
 {
+    [Header("Characters")]
+    [SerializeField] private CharacterBuild[] availableCharacters;
+    private CharacterBuild selectedCharacter;
+
     [Header("UI")]
     [SerializeField] private GameObject lobbyUI = null;
     [SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
     [SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
     [SerializeField] private Button startGameButton = null;
+    [SerializeField] private TMP_Dropdown characterDropdown;
 
     [SyncVar(hook = nameof(HandleDisplayNameChanged))]
     public string DisplayName = "Loading...";
@@ -49,6 +54,7 @@ public class RoomPlayer : NetworkRoomPlayer
     public override void OnStartAuthority() {
         CmdSetDisplayName(Random.Range(0, 100).ToString());
         lobbyUI.SetActive(true);
+        selectedCharacter = availableCharacters[0];
     }
 
     public void CloseLobbyUI() {
@@ -90,6 +96,20 @@ public class RoomPlayer : NetworkRoomPlayer
                 "<color=green>Ready</color>" :
                 "<color=red>Not Ready</color>";
         }
+
+        var options = new List<TMP_Dropdown.OptionData>();
+        for (int i = 0; i < availableCharacters.Length; i++) {
+            options.Add(new TMP_Dropdown.OptionData(availableCharacters[i].character.name));
+        }
+        characterDropdown.options = options;
+    }
+
+    public void SelectCharacterBuild(int index) {
+        selectedCharacter = availableCharacters[index];
+    }
+
+    public CharacterBuild GetSelectedBuild() {
+        return selectedCharacter;
     }
 
     public void HandleReadyToStart(bool readyToStart) {

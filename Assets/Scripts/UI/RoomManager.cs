@@ -114,19 +114,13 @@ public class RoomManager : NetworkRoomManager
     /// <param name="roomPlayer">The room player object.</param>
     /// <param name="gamePlayer">The game player object.</param>
     /// <returns>False to not allow this player to replace the room player.</returns>
-    public override void OnRoomServerSceneChanged(string sceneName)
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        base.OnRoomServerSceneChanged(sceneName);
-        // var gamePlayerInstance = Instantiate(gamePlayer);
-        // roomPlayer.GetComponent<RoomPlayer>().Replace(gamePlayer);
-        // for (int i = 0; i < RoomPlayers.Count; i++) {
-        //     var conn = RoomPlayers[i].connectionToClient;
-        //     var roomPlayer = conn.identity.gameObject;
-        //     NetworkServer.Destroy(roomPlayer);
-        // }
-        // PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
-        // var player = roomPlayer.GetComponent<RoomPlayer>();
-        // score.index = player.index;
+        var rp = roomPlayer.GetComponent<RoomPlayer>();
+        PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
+        score.index = rp.index;
+        gamePlayer.GetComponent<GamePlayer>().build = rp.GetSelectedBuild();
+        return true;
     }
 
     // public override void OnRoomClientSceneChanged(NetworkConnection conn) {

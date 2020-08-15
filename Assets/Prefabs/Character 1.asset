@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 905e782ecfdc9ce45bd114a604107cde, type: 3}
-  m_Name: TestChar
+  m_Name: Character 1
   m_EditorClassIdentifier: 
   avatarPrefab: {fileID: 8789311890762768882, guid: b6178670ce67be142ba8a1f0ba533cb3,
     type: 3}

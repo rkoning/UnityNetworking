@@ -63,9 +63,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  displayName: Loading...
   build:
-    character: {fileID: 11400000, guid: d4fc203a0661d0a4a86e23bdaefd3a10, type: 2}
+    character: {fileID: 0}
     deck: {fileID: 0}
+  connectionId: 0
 --- !u!114 &-5342012637617738015
 MonoBehaviour:
   m_ObjectHideFlags: 0
