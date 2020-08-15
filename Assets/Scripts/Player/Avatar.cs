@@ -25,6 +25,8 @@ public class Avatar : NetworkBehaviour
 
     public Spell spell;
 
+
+
     private void Start()
     {
         health = GetComponent<Health>();
@@ -48,6 +50,7 @@ public class Avatar : NetworkBehaviour
         
         if (health.IsDead)
             return;
+
         
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         Vector3 currSpeed = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));

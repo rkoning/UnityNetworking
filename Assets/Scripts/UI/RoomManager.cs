@@ -23,7 +23,7 @@ public class RoomManager : NetworkRoomManager
 {
 
     public List<RoomPlayer> RoomPlayers { get; } = new List<RoomPlayer>();
-    public List<GamePlayer> GamePlayers { get; } = new List<GamePlayer>();
+    public List<GamePlayer> GamePlayers = new List<GamePlayer>();
 
     private bool showStartButton;
 
@@ -119,15 +119,31 @@ public class RoomManager : NetworkRoomManager
         base.OnRoomServerSceneChanged(sceneName);
         // var gamePlayerInstance = Instantiate(gamePlayer);
         // roomPlayer.GetComponent<RoomPlayer>().Replace(gamePlayer);
-        for (int i = 0; i < RoomPlayers.Count; i++) {
-            var conn = RoomPlayers[i].connectionToClient;
-            var roomPlayer = conn.identity.gameObject;
-            NetworkServer.Destroy(roomPlayer);
-        }
+        // for (int i = 0; i < RoomPlayers.Count; i++) {
+        //     var conn = RoomPlayers[i].connectionToClient;
+        //     var roomPlayer = conn.identity.gameObject;
+        //     NetworkServer.Destroy(roomPlayer);
+        // }
         // PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
         // var player = roomPlayer.GetComponent<RoomPlayer>();
         // score.index = player.index;
     }
+
+    // public override void OnRoomClientSceneChanged(NetworkConnection conn) {
+    //     // for (int i = 0; i < RoomPlayers.Count; i++) {
+    //     //     var rpConn = RoomPlayers[i].connectionToClient;
+    //     //     Debug.Log(rpConn);
+    //     //     Debug.Log(rpConn.identity);
+    //     //     Debug.Log(rpConn.identity.gameObject);
+
+    //     //     var roomPlayer = rpConn.identity.gameObject;
+    //     //     NetworkServer.Destroy(roomPlayer);
+    //     // }
+    //     if (SceneManager.GetActiveScene().path == GameplayScene) {
+    //         NetworkServer.Destroy(conn.identity.gameObject);
+    //     }
+    //     base.OnRoomClientSceneChanged(conn);
+    // }
 
     /// <summary>
     /// This is called on the server when all the players in the room are ready.
