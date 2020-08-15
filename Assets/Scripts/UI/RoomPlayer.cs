@@ -54,7 +54,7 @@ public class RoomPlayer : NetworkRoomPlayer
     public override void OnStartAuthority() {
         CmdSetDisplayName(Random.Range(0, 100).ToString());
         lobbyUI.SetActive(true);
-        selectedCharacter = availableCharacters[0];
+        SelectCharacterBuild(0);
     }
 
     public void CloseLobbyUI() {
@@ -105,6 +105,18 @@ public class RoomPlayer : NetworkRoomPlayer
     }
 
     public void SelectCharacterBuild(int index) {
+        if (!hasAuthority)
+            return;
+        CmdSelectCharacterBuild(index);
+    }
+
+    [Command]
+    private void CmdSelectCharacterBuild(int index) {
+        RpcSelectCharacterBuild(index);
+    }
+
+    [ClientRpc]
+    private void RpcSelectCharacterBuild(int index) {
         selectedCharacter = availableCharacters[index];
     }
 

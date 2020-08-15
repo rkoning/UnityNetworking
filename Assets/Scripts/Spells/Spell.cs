@@ -14,7 +14,7 @@ public class Spell : MonoBehaviour
     public delegate void HitTargetAction(Target target);
     public event HitTargetAction OnHitTarget;
 
-    private void Start()
+    public void Init()
     {
         // Register event defaults
         OnCast += () => { };

@@ -119,9 +119,12 @@ public class RoomManager : NetworkRoomManager
         var rp = roomPlayer.GetComponent<RoomPlayer>();
         PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
         score.index = rp.index;
+        Debug.Log(rp.GetSelectedBuild());
         gamePlayer.GetComponent<GamePlayer>().build = rp.GetSelectedBuild();
+        rp.gameObject.SetActive(false);
         return true;
     }
+ 
 
     // public override void OnRoomClientSceneChanged(NetworkConnection conn) {
     //     // for (int i = 0; i < RoomPlayers.Count; i++) {

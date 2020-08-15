@@ -6,7 +6,7 @@ namespace Mirror.Cloud
 {
     public static class Logger
     {
-        public static bool VerboseLogging = false;
+        public static bool VerboseLogging = true;
         static readonly ILogger logger = LogFactory.GetLogger("MirrorCloudServices");
 
         public static void LogRequest(string page, string method, bool hasJson, string json)

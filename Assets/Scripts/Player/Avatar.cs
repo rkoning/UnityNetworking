@@ -23,9 +23,7 @@ public class Avatar : NetworkBehaviour
     [HideInInspector]
     public bool canMove = true;
 
-    public Spell spell;
-
-
+    public Deck deck;
 
     private void Start()
     {
@@ -86,19 +84,11 @@ public class Avatar : NetworkBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            CmdCast();
+            deck.Cast(0);
         }
-    }
 
-    [Command]
-    private void CmdCast()
-    {
-        RpcOnCast();
-    }
-
-    [ClientRpc]
-    private void RpcOnCast()
-    {
-        spell.Cast();
+        if (Input.GetKeyDown(KeyCode.R)) {
+            deck.StartShuffle();
+        }
     }
 }

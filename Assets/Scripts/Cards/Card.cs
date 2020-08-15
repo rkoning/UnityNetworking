@@ -2,17 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card : MonoBehaviour
+[CreateAssetMenu(fileName = "NewCard", menuName = "ScriptableObjects/Card", order = 0)]
+public class Card : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject spellPrefab;
+    public string description;
+    public int manaCost;
 }

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
+  m_Name: ShotgunSpell
+  m_EditorClassIdentifier: 
+  spellPrefab: {fileID: 153864932133261481, guid: eb06332e2d9787a4d8ac33a84178a458,
+    type: 3}
+  description: 
+  manaCost: 0
