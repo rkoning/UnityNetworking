@@ -20,13 +20,17 @@ public class GamePlayer : NetworkBehaviour
         }
     }
 
+    [Header("Character")]
     public CharacterBuild build;
 
     private Avatar avatar;
 
+    [Header("UI")]
+    public GameObject hudUI;
+    [SerializeField] private DeckUI deckUI;
+
     #region Start & Stop Callbacks
 
-    public int connectionId;
     public override void OnStartClient() {
         DontDestroyOnLoad(gameObject);
         Room.GamePlayers.Add(this);
@@ -34,6 +38,7 @@ public class GamePlayer : NetworkBehaviour
 
     public override void OnStartAuthority() {
         CmdSpawnAvatar();
+        hudUI.SetActive(true);
     }
 
     public override void OnStopClient() {
@@ -62,6 +67,8 @@ public class GamePlayer : NetworkBehaviour
             if (health.GetComponent<NetworkIdentity>().netId == avatarId) {
                 health.gamePlayer = this;
                 avatar = health.GetComponent<Avatar>();
+                deckUI.deck = health.GetComponent<Deck>();
+                deckUI.Init();
             }
         }
     }

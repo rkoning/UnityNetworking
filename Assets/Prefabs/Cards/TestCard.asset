@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellPrefab: {fileID: 153864932133261481, guid: ac83cfb3b6bddf54ab21fbf0aa6d3ae3,
     type: 3}
+  sprite: {fileID: 21300000, guid: a1a5fc872c71558498cbff8161298dc6, type: 3}
   description: 
-  manaCost: 0
+  manaCost: 1

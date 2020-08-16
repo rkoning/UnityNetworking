@@ -87,6 +87,22 @@ public class Avatar : NetworkBehaviour
             deck.Cast(0);
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            deck.Cast(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            deck.Cast(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) {
+            deck.Cast(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) {
+            deck.Cast(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5)) {
+            deck.Cast(4);
+        }
+
         if (Input.GetKeyDown(KeyCode.R)) {
             deck.StartShuffle();
         }

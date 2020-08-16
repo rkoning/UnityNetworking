@@ -7,10 +7,27 @@ using Mirror;
 
 public class Deck : NetworkBehaviour {
 
+    [Header("Mana")]
+    public float maxMana = 5f;
+    public float currentMana;
+    public float manaRegen = 0.5f;
+
     [Header("Deck")]
     public List<Card> cards;
     public int currentCard;
     private int deckSize;
+
+    public int DeckSize {
+        get {
+            return deckSize;
+        }
+    }
+
+    public int RemainingCards {
+        get {
+            return deckSize - currentCard;
+        }
+    }
 
     [Header("Hand")]
     public List<Card> hand = new List<Card>();
@@ -23,6 +40,8 @@ public class Deck : NetworkBehaviour {
 
     [Header("Shuffle")]
     public float shuffleTime;
+    public float RemainingShuffleTime { get; private set; }
+
     private Coroutine shuffling;
 
     public bool IsShuffling { get; private set; }
@@ -47,12 +66,18 @@ public class Deck : NetworkBehaviour {
         if (!hasAuthority) {
             return;
         }
+
+        float dT = Time.deltaTime;
+        currentMana += manaRegen * dT;
+        currentMana = Mathf.Clamp(currentMana, 0, maxMana);
+
         if (IsShuffling) {
+            RemainingShuffleTime -= dT;
             return;
         }
 
         if (hand.Count < handSize) {
-            nextDraw += Time.deltaTime;
+            nextDraw += dT;
             if (nextDraw > drawDelay) {
                 nextDraw = 0;
                 Draw();
@@ -83,6 +108,7 @@ public class Deck : NetworkBehaviour {
         if (!IsShuffling) {
             IsShuffling = true;
             hand.Clear();
+            RemainingShuffleTime = shuffleTime;
             shuffling = StartCoroutine(WaitThenShuffle(shuffleTime));
         }
     }
@@ -112,11 +138,12 @@ public class Deck : NetworkBehaviour {
     }
 
     public void Cast(int handIndex) {
-        Debug.Log("Casting at: " + handIndex);
-        if (hand.Count <= handIndex) {
+        if (hand.Count <= handIndex || currentMana < hand[handIndex].manaCost) {
             return;
             // TODO: play fizzle sound
         }
+
+        currentMana -= hand[handIndex].manaCost;
         System.Guid spellAssetId = hand[handIndex].spellPrefab.GetComponent<NetworkIdentity>().assetId;
         hand.RemoveAt(handIndex);
         CmdCast(spellAssetId);

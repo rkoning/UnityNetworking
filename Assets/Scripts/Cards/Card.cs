@@ -6,6 +6,7 @@ using UnityEngine;
 public class Card : ScriptableObject
 {
     public GameObject spellPrefab;
+    public Sprite sprite;
     public string description;
-    public int manaCost;
+    public float manaCost;
 }
