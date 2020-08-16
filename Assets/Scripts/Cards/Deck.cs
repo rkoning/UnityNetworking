@@ -7,6 +7,8 @@ using Mirror;
 
 public class Deck : NetworkBehaviour {
 
+    [SerializeField] private Transform castTransform;
+    
     [Header("Mana")]
     public float maxMana = 5f;
     public float currentMana;
@@ -45,6 +47,7 @@ public class Deck : NetworkBehaviour {
     private Coroutine shuffling;
 
     public bool IsShuffling { get; private set; }
+
 
     private void Start() {
 
@@ -160,7 +163,7 @@ public class Deck : NetworkBehaviour {
     [ClientRpc]
     private void RpcCast(System.Guid assetId)
     {
-        var spell = ObjectPool.singleton.GetFromPool(assetId, transform.position + transform.forward, transform.rotation).GetComponent<Spell>();
+        var spell = ObjectPool.singleton.GetFromPool(assetId, castTransform.position, castTransform.rotation).GetComponent<Spell>();
         spell.owner = avatar;
         spell.Cast();
         StartCoroutine(Destroy(spell.gameObject, 2.0f));

@@ -33,7 +33,8 @@ public class GamePlayer : NetworkBehaviour
 
     public override void OnStartClient() {
         DontDestroyOnLoad(gameObject);
-        Room.GamePlayers.Add(this);
+        if (Room)
+            Room.GamePlayers.Add(this);
     }
 
     public override void OnStartAuthority() {

@@ -1074,7 +1074,7 @@ MonoBehaviour:
   syncInterval: 0.1
   displayName: Loading...
   build:
-    character: {fileID: 0}
+    character: {fileID: 11400000, guid: f19ecc432bf73ed47b439cde9140fd24, type: 2}
     deck: {fileID: 0}
   hudUI: {fileID: 8537316417355801523}
   deckUI: {fileID: 3898028849077292535}

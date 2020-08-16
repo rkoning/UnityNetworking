@@ -7,6 +7,8 @@ public class Avatar : NetworkBehaviour
     private CharacterController controller;
     private Health health;
 
+    [SerializeField] private Animator animator;
+
     public float walkSpeed = 7.5f;
     public float runSpeed = 11.5f;
     public float jumpSpeed = 8f;
@@ -25,6 +27,8 @@ public class Avatar : NetworkBehaviour
 
     public Deck deck;
 
+    private bool didCast = false;
+
     private void Start()
     {
         health = GetComponent<Health>();
@@ -33,7 +37,7 @@ public class Avatar : NetworkBehaviour
             controller = GetComponent<CharacterController>();
             // Cursor.lockState = CursorLockMode.Locked;
             // Cursor.visible = false;
-        }
+         }
         else
         {
             // Disable the camera if this isn't the local player
@@ -60,6 +64,7 @@ public class Avatar : NetworkBehaviour
      
         if (Input.GetButton("Jump") && controller.isGrounded)
         {
+            animator.SetTrigger("isJumping");
             moveDirection.y = jumpSpeed;
         }
         else
@@ -71,6 +76,13 @@ public class Avatar : NetworkBehaviour
         {
             moveDirection.y -= gravity * Time.deltaTime;
         }
+        
+        currSpeed = currSpeed / walkSpeed;
+        currSpeed.x -= currSpeed.x > .5f ? 0.5f : 0f;
+        currSpeed.z -= currSpeed.z > .5f ? 0.5f : 0f;
+
+        animator.SetFloat("velx", currSpeed.x);
+        animator.SetFloat("vely", currSpeed.z);
 
         controller.Move(moveDirection * Time.deltaTime);
 
@@ -82,29 +94,39 @@ public class Avatar : NetworkBehaviour
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
 
+        didCast = false;
         if (Input.GetMouseButtonDown(0))
         {
-            deck.Cast(0);
+            CastSpell(0);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
-            deck.Cast(0);
+            CastSpell(0);
+
         }
         if (Input.GetKeyDown(KeyCode.Alpha2)) {
-            deck.Cast(1);
+            CastSpell(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3)) {
-            deck.Cast(2);
+            CastSpell(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4)) {
-            deck.Cast(3);
+            CastSpell(3);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5)) {
-            deck.Cast(4);
+            CastSpell(4);
         }
 
+        if (didCast) {
+            // animator.SetTrigger("isCasting");
+        }
         if (Input.GetKeyDown(KeyCode.R)) {
             deck.StartShuffle();
         }
+    }
+
+    private void CastSpell(int index) {
+        deck.Cast(index);
+        didCast = true;
     }
 }

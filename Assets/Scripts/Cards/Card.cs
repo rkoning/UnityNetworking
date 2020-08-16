@@ -9,4 +9,6 @@ public class Card : ScriptableObject
     public Sprite sprite;
     public string description;
     public float manaCost;
+    public Lore lore;
+    
 }
