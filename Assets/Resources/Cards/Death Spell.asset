@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 905e782ecfdc9ce45bd114a604107cde, type: 3}
-  m_Name: Character 2
+  m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
+  m_Name: Death Spell
   m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 6112897556631295836, guid: fcc208e53dcaa57449b0c898a32054f0,
-    type: 3}
+  spellPrefab: {fileID: 0}
+  sprite: {fileID: 21300000, guid: dc2b27c43dfd7754b8a42cbf35a06151, type: 3}
+  description: Ooky Spooky
+  manaCost: 8
+  lore: 2

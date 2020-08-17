@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905e782ecfdc9ce45bd114a604107cde, type: 3}
+  m_Name: Lich
+  m_EditorClassIdentifier: 
+  activeName: Monument
+  activeDescription: Create a permanent descructable obelisk, if you die, you instead
+    teleport to the obelisk and destroy it.
+  passiveName: Domain
+  passiveDescription: Each Obelisk you control grants increased mana regeneration,
+    max mana, and increases your summon cap by 5
+  lores: 0000000002000000
+  avatarPrefab: {fileID: 6112897556631295836, guid: fcc208e53dcaa57449b0c898a32054f0,
+    type: 3}

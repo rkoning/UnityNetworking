@@ -14,6 +14,6 @@ public class FullDeck : MonoBehaviour
         nameText.text = deck.name;
 
         editButton.onClick.AddListener(() => deckPanel.EditDeck(deck));
-        editButton.onClick.AddListener(() => deckPanel.DeleteDeck(gameObject, deck));
+        deleteButton.onClick.AddListener(() => deckPanel.DeleteDeck(gameObject, deck));
     }
 }

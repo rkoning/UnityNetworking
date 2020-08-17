@@ -23,19 +23,34 @@ public class CardPanel : MonoBehaviour {
 
     private SavedDeck currentDeck;
 
-    private static string cardsFolder = "Cards";
+    public string cardsFolder = "Cards";
 
     [Header("UI Elements")]
     [SerializeField] private TMP_InputField deckName;
 
     private void OnEnable() {
         LoadAllCards();
-        PopulateCards(new Lore[] {Lore.Arcane, Lore.Eldritch});    
     }
 
-    public void SetCurrentDeck(SavedDeck deck) {
-        deckName.text = deck.name;
+    private void OnDisable() {
+        for (int i = 0; i < displayedCards.Count; i++) {
+            Destroy(displayedCards[i].gameObject);
+        }
+        displayedCards.Clear();
+        for (int i = 0; i < cardsInDeck.Count; i++) {
+            Destroy(cardsInDeck[i].gameObject);
+        }
+        cardsInDeck.Clear();
+    }
+
+    public void SetCurrentDeck(SavedDeck deck, bool isNew) {
+
+        if (!isNew) {
+            deckName.interactable = false;
+        }
         this.currentDeck = deck;
+        deckName.text = deck.name;
+        PopulateCards(currentDeck.character.lores);
         for (int i = 0; i < deck.cards.Count; i++) {
             var card = Instantiate(deckCardPrefab, deckContent).GetComponent<DeckCard>();
             card.SetCard(deck.cards[i], this);
@@ -46,6 +61,7 @@ public class CardPanel : MonoBehaviour {
     public void PopulateCards(Lore[] lores) {
         filteredCards = allCards.Where((Card c) => lores.Contains(c.lore)).ToArray();
 
+        displayedCards = new List<FullCard>();
         for (int i = 0; i < filteredCards.Length; i++) {
             var dc = Instantiate(fullCardPrefab, cardsContent).GetComponent<FullCard>();
             dc.SetCard(filteredCards[i], this);
@@ -80,13 +96,5 @@ public class CardPanel : MonoBehaviour {
             currentDeck.cards.Add(deckCard.GetCard());
         }
         currentDeck.Save();
-    }
-
-    public void Exit() {
-
-    } 
-
-    public void SelectCard() {
-
     }
 }

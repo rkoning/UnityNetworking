@@ -17,6 +17,13 @@ public class DeckPanel : MonoBehaviour
         LoadDecks();
     }
 
+    private void OnDisable() {
+        for (int i = 0; i < displayedDecks.Count; i++) {
+            Destroy(displayedDecks[i].gameObject);
+        }    
+        displayedDecks.Clear();
+    }
+
     public void LoadDecks() {
         try {
             string deckDir = $"{Application.persistentDataPath}/Decks";
@@ -27,9 +34,7 @@ public class DeckPanel : MonoBehaviour
             string[] deckFiles = System.IO.Directory.GetFiles(deckDir);
             decks  = new SavedDeck[deckFiles.Length];
             for (int i = 0; i < deckFiles.Length; i++) {
-                Debug.Log(deckFiles[i]);
                 string fileName = deckFiles[i].Substring(deckFiles[i].LastIndexOf("\\") + 1);
-                Debug.Log(fileName);
                 decks[i] = new SavedDeck(fileName);
                 decks[i].Load();
 
@@ -46,15 +51,16 @@ public class DeckPanel : MonoBehaviour
     }
 
     public void NewDeck() {
-        deckbuilder.OpenCardPanel(new SavedDeck());
+        deckbuilder.OpenCharacterPanel();
     }
 
     public void DeleteDeck(GameObject deckUI, SavedDeck deck) {
+        Debug.Log("Delete");
         deck.Delete();
         Destroy(deckUI);      
     }
 
     public void EditDeck(SavedDeck deck) {
-        deckbuilder.OpenCardPanel(deck);
+        deckbuilder.OpenCardPanel(deck, false);
     }
 }

@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 905e782ecfdc9ce45bd114a604107cde, type: 3}
-  m_Name: Character 1
+  m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
+  m_Name: Divination Spell
   m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 8789311890762768882, guid: b6178670ce67be142ba8a1f0ba533cb3,
-    type: 3}
+  spellPrefab: {fileID: 0}
+  sprite: {fileID: 21300000, guid: a2bfaf50ed738eb4fabc51c74afa8a35, type: 3}
+  description: whoosh
+  manaCost: 2
+  lore: 8
