@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class FullCardUI : MonoBehaviour
+public class FullCard : MonoBehaviour
 {
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descriptionText;
@@ -12,15 +12,18 @@ public class FullCardUI : MonoBehaviour
     [SerializeField] private TMP_Text manaCostText;
     [SerializeField] private Image art;
     [SerializeField] private Image lockedSprite;
+    [SerializeField] private Button addButton;
 
     private bool locked;
 
-    public void SetCard(Card card) {
+    public void SetCard(Card card, CardPanel cardPanel) {
         nameText.text = card.name;
         descriptionText.text = card.description;
         manaCostText.text = card.manaCost.ToString();
         loreText.text = card.lore.ToString();
         art.sprite = card.sprite;
+
+        addButton.onClick.AddListener(() => cardPanel.AddCardToDeck(card));
     }
 
     public void Lock() {

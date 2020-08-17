@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
-  m_Name: ShotgunSpell
+  m_Name: TestCard
   m_EditorClassIdentifier: 
-  spellPrefab: {fileID: 153864932133261481, guid: eb06332e2d9787a4d8ac33a84178a458,
+  spellPrefab: {fileID: 153864932133261481, guid: ac83cfb3b6bddf54ab21fbf0aa6d3ae3,
     type: 3}
-  sprite: {fileID: 21300000, guid: 905b8a75e5ba1254cba8a9ec1f00e33e, type: 3}
-  description: 
-  manaCost: 2
+  sprite: {fileID: 21300000, guid: a1a5fc872c71558498cbff8161298dc6, type: 3}
+  description: Fires a single bolt of energy
+  manaCost: 1
+  lore: 0
