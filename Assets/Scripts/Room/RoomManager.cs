@@ -103,6 +103,7 @@ public class RoomManager : NetworkRoomManager
             RoomPlayer roomPlayer = Instantiate(roomPlayerPrefab) as RoomPlayer;
             roomPlayer.IsLeader = isLeader;
             NetworkServer.AddPlayerForConnection(conn, roomPlayer.gameObject);
+            Debug.Log("Added connection for: " + conn + " " + roomPlayer);
         }
     }
 

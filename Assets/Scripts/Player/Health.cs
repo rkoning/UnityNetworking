@@ -41,7 +41,6 @@ public class Health : NetworkBehaviour
         if (!hasAuthority) {
             return;
         }
-        Debug.Log(connectionToServer + " " + connectionToClient + " " + hasAuthority);
         currentHealth -= damage;
         lastDamagedBy = source;
         if (currentHealth <= 0)

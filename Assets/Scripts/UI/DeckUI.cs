@@ -19,7 +19,6 @@ public class DeckUI : MonoBehaviour
     private bool initialized;
     public void Init() {
         initialized = true;
-        Debug.Log("HandSize: " + deck.handSize);
         for (int i = 0; i < deck.handSize; i++) {
             var card = Instantiate(cardPrefab, handPanel).GetComponent<CardUI>();
             card.gameObject.SetActive(false);

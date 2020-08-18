@@ -55,7 +55,7 @@ public class Deck : NetworkBehaviour {
         avatar.deck = this;
         deckSize = cards.Count;
         for (int i = 0; i < deckSize; i++) {
-            ObjectPool.singleton.RegisterPrefab(cards[i].spellPrefab.gameObject, 10);
+            ObjectPool.singleton.RegisterPrefab(cards[i].spellPrefab, 10);
         }
         if (!hasAuthority) {
             return;

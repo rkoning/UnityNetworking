@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: Divination Spell
   m_EditorClassIdentifier: 
-  spellPrefab: {fileID: 0}
+  spellPrefab: {fileID: 6619547819356998495, guid: 98673cec4a7edd04288c48d49e709011,
+    type: 3}
   sprite: {fileID: 21300000, guid: a2bfaf50ed738eb4fabc51c74afa8a35, type: 3}
   description: whoosh
   manaCost: 2

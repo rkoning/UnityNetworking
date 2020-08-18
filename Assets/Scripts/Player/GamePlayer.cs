@@ -21,7 +21,7 @@ public class GamePlayer : NetworkBehaviour
     }
 
     [Header("Character")]
-    public CharacterBuild build;
+    public SavedDeck build;
 
     private Avatar avatar;
 
@@ -68,7 +68,9 @@ public class GamePlayer : NetworkBehaviour
             if (health.GetComponent<NetworkIdentity>().netId == avatarId) {
                 health.gamePlayer = this;
                 avatar = health.GetComponent<Avatar>();
-                deckUI.deck = health.GetComponent<Deck>();
+                var deck = health.GetComponent<Deck>();
+                deck.cards = build.cards;
+                deckUI.deck = deck;
                 deckUI.Init();
             }
         }

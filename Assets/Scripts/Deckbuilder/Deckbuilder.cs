@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Deckbuilder : MonoBehaviour
+public class DeckBuilder : MonoBehaviour
 {
-
+    public string mainMenuScene = "MainMenu";
     [SerializeField] private CardPanel cardPanel;
     [SerializeField] private DeckPanel deckPanel;
     [SerializeField] private CharacterPanel characterPanel;
@@ -31,5 +32,9 @@ public class Deckbuilder : MonoBehaviour
         cardPanel.gameObject.SetActive(false);
         deckPanel.gameObject.SetActive(false);
         characterPanel.gameObject.SetActive(true);
+    }
+
+    public void LoadMainMenu() {
+        SceneManager.LoadScene(mainMenuScene);
     }
 }

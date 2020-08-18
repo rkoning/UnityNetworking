@@ -8,7 +8,7 @@ public class DeckPanel : MonoBehaviour
     public List<FullDeck> displayedDecks = new List<FullDeck>();
     public GameObject deckPrefab;
 
-    [SerializeField] private Deckbuilder deckbuilder;
+    [SerializeField] private DeckBuilder deckbuilder;
     [SerializeField] private Transform decksContent;
 
     private SavedDeck[] decks;
@@ -19,20 +19,22 @@ public class DeckPanel : MonoBehaviour
 
     private void OnDisable() {
         for (int i = 0; i < displayedDecks.Count; i++) {
-            Destroy(displayedDecks[i].gameObject);
+            if (displayedDecks[i])
+                Destroy(displayedDecks[i].gameObject);
         }    
         displayedDecks.Clear();
     }
 
     public void LoadDecks() {
         try {
+
             string deckDir = $"{Application.persistentDataPath}/Decks";
             if (!System.IO.Directory.Exists(deckDir)) {
                 System.IO.Directory.CreateDirectory(deckDir);
             }
             
             string[] deckFiles = System.IO.Directory.GetFiles(deckDir);
-            decks  = new SavedDeck[deckFiles.Length];
+            decks  = SavedDeck.LoadLocalDecks();
             for (int i = 0; i < deckFiles.Length; i++) {
                 string fileName = deckFiles[i].Substring(deckFiles[i].LastIndexOf("\\") + 1);
                 decks[i] = new SavedDeck(fileName);
@@ -55,7 +57,6 @@ public class DeckPanel : MonoBehaviour
     }
 
     public void DeleteDeck(GameObject deckUI, SavedDeck deck) {
-        Debug.Log("Delete");
         deck.Delete();
         Destroy(deckUI);      
     }

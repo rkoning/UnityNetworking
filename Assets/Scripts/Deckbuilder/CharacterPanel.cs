@@ -21,7 +21,7 @@ public class CharacterPanel : MonoBehaviour
     [SerializeField] private TMP_Text passiveText;
     [SerializeField] private TMP_Text loreText;
 
-    [SerializeField] private Deckbuilder deckBuilder;
+    [SerializeField] private DeckBuilder deckBuilder;
 
     private void OnEnable() {
         LoadAllCharacters();

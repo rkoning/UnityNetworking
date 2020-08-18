@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: Eldritch Spell
   m_EditorClassIdentifier: 
-  spellPrefab: {fileID: 0}
+  spellPrefab: {fileID: 3406390564830975270, guid: f85b4eeb50a538e44ab5ce54a17f74f4,
+    type: 3}
   sprite: {fileID: 21300000, guid: eceb2fdccf0eaf0409a936f01eb1fc73, type: 3}
   description: Yikes!
   manaCost: 2

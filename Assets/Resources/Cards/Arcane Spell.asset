@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: Arcane Spell
   m_EditorClassIdentifier: 
-  spellPrefab: {fileID: 0}
+  spellPrefab: {fileID: 7471415483371910422, guid: 8b49fe08e164b264c87036e6f408b5de,
+    type: 3}
   sprite: {fileID: 21300000, guid: 9b1fe904c83cd32408560b0683686459, type: 3}
   description: Bop
   manaCost: 1

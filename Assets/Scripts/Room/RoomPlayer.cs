@@ -19,8 +19,8 @@ using UnityEngine.UI;
 public class RoomPlayer : NetworkRoomPlayer
 {
     [Header("Characters")]
-    [SerializeField] private CharacterBuild[] availableCharacters;
-    private CharacterBuild selectedCharacter;
+    [SerializeField] private SavedDeck[] availableBuilds;
+    private SavedDeck selectedBuild;
 
     [Header("UI")]
     [SerializeField] private GameObject lobbyUI = null;
@@ -54,6 +54,8 @@ public class RoomPlayer : NetworkRoomPlayer
     public override void OnStartAuthority() {
         CmdSetDisplayName(Random.Range(0, 100).ToString());
         lobbyUI.SetActive(true);
+        LoadBuilds();
+        UpdateDisplay();
         SelectCharacterBuild(0);
     }
 
@@ -63,7 +65,6 @@ public class RoomPlayer : NetworkRoomPlayer
 
     public override void OnStartClient() {
         Room.RoomPlayers.Add(this);
-        UpdateDisplay();
     }
 
     public override void OnNetworkDestroy() {
@@ -97,9 +98,12 @@ public class RoomPlayer : NetworkRoomPlayer
                 "<color=red>Not Ready</color>";
         }
 
+        if (availableBuilds == null) {
+            return;
+        }
         var options = new List<TMP_Dropdown.OptionData>();
-        for (int i = 0; i < availableCharacters.Length; i++) {
-            options.Add(new TMP_Dropdown.OptionData(availableCharacters[i].character.name));
+        for (int i = 0; i < availableBuilds.Length; i++) {
+            options.Add(new TMP_Dropdown.OptionData(availableBuilds[i].name));
         }
         characterDropdown.options = options;
     }
@@ -107,25 +111,20 @@ public class RoomPlayer : NetworkRoomPlayer
     public void SelectCharacterBuild(int index) {
         if (!hasAuthority)
             return;
-        CmdSelectCharacterBuild(index);
+        selectedBuild = availableBuilds[index];
     }
 
-    [Command]
-    private void CmdSelectCharacterBuild(int index) {
-        RpcSelectCharacterBuild(index);
+    public SavedDeck GetSelectedBuild() {
+        return selectedBuild;
     }
 
-    [ClientRpc]
-    private void RpcSelectCharacterBuild(int index) {
-        selectedCharacter = availableCharacters[index];
+    public void LoadBuilds() {
+        availableBuilds = SavedDeck.LoadLocalDecks();
     }
-
-    public CharacterBuild GetSelectedBuild() {
-        return selectedCharacter;
-    }
-
+    
     public void HandleReadyToStart(bool readyToStart) {
-        if (!isLeader) return;
+        // if (!isLeader) return;
+        // TODO: Replace this with a countdown
 
         startGameButton.interactable = readyToStart;
     }
@@ -145,11 +144,12 @@ public class RoomPlayer : NetworkRoomPlayer
     public void CmdReadyUp() {
         IsReady = !IsReady;
         Room.NotifyPlayersOfReadyState();
+        Debug.Log(Room.RoomPlayers.Count);
     }
 
     [Command]
     public void CmdStartGame() {
-        if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
+        // if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
 
         Room.StartGame();
     }

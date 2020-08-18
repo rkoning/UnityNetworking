@@ -8,6 +8,8 @@ public class SavedDeck
     public List<Card> cards = new List<Card>();
     public Character character;
 
+    private static string deckDir = $"{Application.persistentDataPath}/Decks";
+
     public SavedDeck() {}
     public SavedDeck(string fileName) {
         this.fileName = fileName;
@@ -17,7 +19,6 @@ public class SavedDeck
         if (name == null) {
             return;
         }
-        fileName = $"{name}.json";
         SaveToJSON();
     }
 
@@ -34,11 +35,11 @@ public class SavedDeck
             return;
         }
 
-        System.IO.File.Delete($"{Application.persistentDataPath}/Decks/{fileName}");
+        System.IO.File.Delete($"{deckDir}/{fileName}");
     }
 
     private void LoadFromJSON() {
-        string deckJson = System.IO.File.ReadAllText($"{Application.persistentDataPath}/Decks/{fileName}");
+        string deckJson = System.IO.File.ReadAllText($"{deckDir}/{fileName}");
         DeckData data = JsonUtility.FromJson<DeckData>(deckJson);
         this.name = data.name;
         this.character = data.character;
@@ -48,8 +49,30 @@ public class SavedDeck
     private void SaveToJSON() {
         DeckData data = new DeckData(name, character, cards.ToArray());
         string json = JsonUtility.ToJson(data, true);
-        // TODO: Parse out any ../ and catch execptions
-        System.IO.File.WriteAllText($"{Application.persistentDataPath}/Decks/{fileName}", json);
+        if (fileName == null) {
+            fileName = $"{System.Guid.NewGuid()}.json";
+        }
+        System.IO.File.WriteAllText($"{deckDir}/{fileName}", json);
+    }
+
+    /// <summary>
+    /// Gets a list of the decks that are loaded in the user's LocalLow folder
+    /// </summary>
+    /// <returns>All decks that were found locally</returns>
+    public static SavedDeck[] LoadLocalDecks() {
+        if (!System.IO.Directory.Exists(deckDir)) {
+            System.IO.Directory.CreateDirectory(deckDir);
+        }
+        
+        string[] deckFiles = System.IO.Directory.GetFiles(deckDir);
+        SavedDeck[] decks  = new SavedDeck[deckFiles.Length];
+
+        for (int i = 0; i < deckFiles.Length; i++) {
+            string fileName = deckFiles[i].Substring(deckFiles[i].LastIndexOf("\\") + 1);
+            decks[i] = new SavedDeck(fileName);
+            decks[i].Load();
+        }
+        return decks;
     }
 }
 
