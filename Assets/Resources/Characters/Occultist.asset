@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905e782ecfdc9ce45bd114a604107cde, type: 3}
   m_Name: Occultist
   m_EditorClassIdentifier: 
+  id: 1
   activeName: Forbidden Knowledge
   activeDescription: I have an active ability!!!
   passiveName: Best left forgotten

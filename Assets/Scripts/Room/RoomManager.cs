@@ -74,6 +74,10 @@ public class RoomManager : NetworkRoomManager
     /// <returns>The new room-player object.</returns>
     public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnection conn)
     {
+        if (isHeadless) {
+            var rp = Instantiate(roomPlayerPrefab);
+            RoomPlayers.Add((RoomPlayer) rp);
+        }
         return base.OnRoomServerCreateRoomPlayer(conn);
     }
 
@@ -115,8 +119,7 @@ public class RoomManager : NetworkRoomManager
     /// <param name="roomPlayer">The room player object.</param>
     /// <param name="gamePlayer">The game player object.</param>
     /// <returns>False to not allow this player to replace the room player.</returns>
-    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
-    {
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer) {
         var rp = roomPlayer.GetComponent<RoomPlayer>();
         PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
         score.index = rp.index;
@@ -124,7 +127,6 @@ public class RoomManager : NetworkRoomManager
         rp.gameObject.SetActive(false);
         return true;
     }
- 
 
     public override void OnRoomClientSceneChanged(NetworkConnection conn) {
         if (SceneManager.GetActiveScene().path == GameplayScene) {

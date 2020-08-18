@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SavedDeck
 {
@@ -40,19 +42,35 @@ public class SavedDeck
 
     private void LoadFromJSON() {
         string deckJson = System.IO.File.ReadAllText($"{deckDir}/{fileName}");
-        DeckData data = JsonUtility.FromJson<DeckData>(deckJson);
-        this.name = data.name;
-        this.character = data.character;
-        this.cards = new List<Card>(data.cards);
+        SavedDeck loaded = SavedDeck.LoadFromString(deckJson);
+        this.name = loaded.name;
+        this.character = loaded.character;
+        this.cards = new List<Card>(loaded.cards);
     }
 
     private void SaveToJSON() {
-        DeckData data = new DeckData(name, character, cards.ToArray());
+        DeckData data = new DeckData(name, character, cards);
         string json = JsonUtility.ToJson(data, true);
         if (fileName == null) {
             fileName = $"{System.Guid.NewGuid()}.json";
         }
         System.IO.File.WriteAllText($"{deckDir}/{fileName}", json);
+    }
+
+    public static SavedDeck LoadFromString(string deckJson) {
+        DeckData data = JsonUtility.FromJson<DeckData>(deckJson);
+        SavedDeck deck = new SavedDeck();
+        deck.name = data.name;
+        deck.character = data.GetCharacter();
+        deck.cards = data.GetCards();
+        return deck;
+    }
+
+    public override string ToString() {
+        DeckData data = new DeckData(name, character, cards);
+        var str = JsonUtility.ToJson(data, false);
+        Debug.Log(str);
+        return str;
     }
 
     /// <summary>
@@ -79,12 +97,29 @@ public class SavedDeck
 [System.Serializable]
 public class DeckData {
     public string name;
-    public Character character;
-    public Card[] cards;
+    public int characterId;
+    public int[] cardIds;
 
-    public DeckData(string name, Character character, Card[] cards) {
+    public DeckData(string name, Character character, List<Card> cards) {
         this.name = name;
-        this.character = character;
-        this.cards = cards;
+        this.characterId = character.id;
+        this.cardIds = cards.Select((card) => card.id).ToArray();
+    }
+
+    public Character GetCharacter() {
+        var characters = Resources.LoadAll<Character>("Characters");
+        return Array.Find(characters, (c) => c.id == characterId);
+    }
+
+    public List<Card> GetCards() {
+        var cards = Resources.LoadAll<Card>("Cards");
+        var deckCards = new List<Card>();
+        for (int i = 0; i < cardIds.Length; i++) {
+            var card = System.Array.Find(cards, (c) => c.id == cardIds[i]);
+            if (card)
+                deckCards.Add(card);
+        }
+
+        return deckCards;
     }
 }

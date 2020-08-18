@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905e782ecfdc9ce45bd114a604107cde, type: 3}
   m_Name: Lich
   m_EditorClassIdentifier: 
+  id: 0
   activeName: Monument
   activeDescription: Create a permanent descructable obelisk, if you die, you instead
     teleport to the obelisk and destroy it.
@@ -19,5 +20,5 @@ MonoBehaviour:
   passiveDescription: Each Obelisk you control grants increased mana regeneration,
     max mana, and increases your summon cap by 5
   lores: 0000000002000000
-  avatarPrefab: {fileID: 6112897556631295836, guid: fcc208e53dcaa57449b0c898a32054f0,
+  avatarPrefab: {fileID: 8789311890762768882, guid: b6178670ce67be142ba8a1f0ba533cb3,
     type: 3}

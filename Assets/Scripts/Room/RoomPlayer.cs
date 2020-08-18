@@ -67,6 +67,16 @@ public class RoomPlayer : NetworkRoomPlayer
         Room.RoomPlayers.Add(this);
     }
 
+    public override void OnStartServer() {
+        Room.RoomPlayers.Add(this);
+    }
+
+    [Command]
+    public void AddRoomPlayer() {
+
+        // Room.RoomPlayers.Add();
+    }
+
     public override void OnNetworkDestroy() {
         Room.RoomPlayers.Remove(this);
         UpdateDisplay();
@@ -112,6 +122,18 @@ public class RoomPlayer : NetworkRoomPlayer
         if (!hasAuthority)
             return;
         selectedBuild = availableBuilds[index];
+        CmdSelectCharacterBuild(selectedBuild.ToString());
+    }
+
+    [Command]
+    private void CmdSelectCharacterBuild(string deckJson) {
+        selectedBuild = SavedDeck.LoadFromString(deckJson);
+        RpcSelectCharacterBuild(deckJson);
+    }
+
+    [ClientRpc]
+    private void RpcSelectCharacterBuild(string deckJson) {
+        selectedBuild = SavedDeck.LoadFromString(deckJson);
     }
 
     public SavedDeck GetSelectedBuild() {
@@ -123,7 +145,7 @@ public class RoomPlayer : NetworkRoomPlayer
     }
     
     public void HandleReadyToStart(bool readyToStart) {
-        // if (!isLeader) return;
+        if (!isLeader) return;
         // TODO: Replace this with a countdown
 
         startGameButton.interactable = readyToStart;
@@ -149,7 +171,7 @@ public class RoomPlayer : NetworkRoomPlayer
 
     [Command]
     public void CmdStartGame() {
-        // if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
+        if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
 
         Room.StartGame();
     }

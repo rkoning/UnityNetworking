@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: Death Spell
   m_EditorClassIdentifier: 
+  id: 1
   spellPrefab: {fileID: 3461408214798830859, guid: 87643ccdb82aa774ca66507cc89de9d5,
     type: 3}
   sprite: {fileID: 21300000, guid: dc2b27c43dfd7754b8a42cbf35a06151, type: 3}

@@ -33,6 +33,9 @@ public class GamePlayer : NetworkBehaviour
 
     public override void OnStartClient() {
         DontDestroyOnLoad(gameObject);
+        foreach (var roomPlayer in Room.RoomPlayers) {
+            roomPlayer.gameObject.SetActive(false);
+        }
         if (Room)
             Room.GamePlayers.Add(this);
     }
@@ -58,18 +61,18 @@ public class GamePlayer : NetworkBehaviour
         avatarGameObject.GetComponent<Health>().gamePlayer = this;
         avatarGameObject.GetComponent<Health>().connectionId = connectionToClient.connectionId;
         NetworkServer.Spawn(avatarGameObject, connectionToClient); // Give player authority over avatar object
-        RpcSpawnAvatar(avatarGameObject.GetComponent<NetworkIdentity>().netId, connectionToClient.connectionId);
+        RpcSpawnAvatar(avatarGameObject.GetComponent<NetworkIdentity>().netId, connectionToClient.connectionId, build.ToString());
     }
 
     [ClientRpc]
-    public void RpcSpawnAvatar(uint avatarId, int connectionId) {
+    public void RpcSpawnAvatar(uint avatarId, int connectionId, string buildJson) {
         var healths = FindObjectsOfType<Health>();
         foreach (var health in healths) {
             if (health.GetComponent<NetworkIdentity>().netId == avatarId) {
                 health.gamePlayer = this;
                 avatar = health.GetComponent<Avatar>();
                 var deck = health.GetComponent<Deck>();
-                deck.cards = build.cards;
+                deck.cards = SavedDeck.LoadFromString(buildJson).cards;
                 deckUI.deck = deck;
                 deckUI.Init();
             }
