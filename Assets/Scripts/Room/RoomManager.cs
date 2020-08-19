@@ -48,6 +48,11 @@ public class RoomManager : NetworkRoomManager
 
             NotifyPlayersOfReadyState();
         }
+
+        // If we are in the gameplay scene, check if we can go back to the room scene if all players are gone
+        if (SceneManager.GetActiveScene().path == GameplayScene && RoomPlayers.Count < 1) {
+            SceneManager.LoadScene(RoomScene);
+        }
         base.OnRoomServerDisconnect(conn);
     }
 

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Occultist
   m_EditorClassIdentifier: 
   id: 1
-  activeName: Forbidden Knowledge
+  activeName: Nope
   activeDescription: I have an active ability!!!
-  passiveName: Best left forgotten
+  passiveName: Yikes
   passiveDescription: I have a passive ability!!!
   lores: 0800000004000000
   avatarPrefab: {fileID: 8789311890762768882, guid: b6178670ce67be142ba8a1f0ba533cb3,

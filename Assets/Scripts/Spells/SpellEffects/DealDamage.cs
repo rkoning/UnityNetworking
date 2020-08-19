@@ -8,8 +8,8 @@ public class DealDamage : SpellEffect
 
     public override void HitTarget(Target target)
     {
-        var health = target.GetComponent<Health>();
-        if (health)
+        var health = target.GetComponent<PlayerHealth>();
+        if (health && health != spell.owner.GetComponent<PlayerHealth>())
         {
             health.TakeDamage(damage, spell.owner);
         }

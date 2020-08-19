@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
+  m_Name: Ice Nova
+  m_EditorClassIdentifier: 
+  id: 4
+  spellPrefab: {fileID: 7480357185830753866, guid: a98c18fb1dc1819489fdc960cf90c76b,
+    type: 3}
+  sprite: {fileID: 21300000, guid: 22a052a250bab9e4dbf6fdf7b3e30b06, type: 3}
+  description: Deals frost damage in a ring around the caster
+  manaCost: 2
+  lore: 5

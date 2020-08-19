@@ -5,7 +5,7 @@ public class Avatar : NetworkBehaviour
 {
     public GamePlayer player;
     private CharacterController controller;
-    private Health health;
+    private PlayerHealth health;
 
     [SerializeField] private Animator animator;
 
@@ -31,7 +31,7 @@ public class Avatar : NetworkBehaviour
 
     private void Start()
     {
-        health = GetComponent<Health>();
+        health = GetComponent<PlayerHealth>();
         if (hasAuthority)
         {
             controller = GetComponent<CharacterController>();

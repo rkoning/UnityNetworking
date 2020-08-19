@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: ShotgunSpell
   m_EditorClassIdentifier: 
-  id: 4
+  id: 5
   spellPrefab: {fileID: 153864932133261481, guid: eb06332e2d9787a4d8ac33a84178a458,
     type: 3}
   sprite: {fileID: 21300000, guid: 905b8a75e5ba1254cba8a9ec1f00e33e, type: 3}

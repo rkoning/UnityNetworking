@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: TestCard
   m_EditorClassIdentifier: 
-  id: 5
+  id: 6
   spellPrefab: {fileID: 153864932133261481, guid: ac83cfb3b6bddf54ab21fbf0aa6d3ae3,
     type: 3}
   sprite: {fileID: 21300000, guid: a1a5fc872c71558498cbff8161298dc6, type: 3}

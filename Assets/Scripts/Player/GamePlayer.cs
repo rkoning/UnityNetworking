@@ -58,15 +58,15 @@ public class GamePlayer : NetworkBehaviour
     public void CmdSpawnAvatar() {
         var spawnPoint = NetworkManager.singleton.GetStartPosition();
         var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation);
-        avatarGameObject.GetComponent<Health>().gamePlayer = this;
-        avatarGameObject.GetComponent<Health>().connectionId = connectionToClient.connectionId;
+        avatarGameObject.GetComponent<PlayerHealth>().gamePlayer = this;
+        avatarGameObject.GetComponent<PlayerHealth>().connectionId = connectionToClient.connectionId;
         NetworkServer.Spawn(avatarGameObject, connectionToClient); // Give player authority over avatar object
         RpcSpawnAvatar(avatarGameObject.GetComponent<NetworkIdentity>().netId, connectionToClient.connectionId, build.ToString());
     }
 
     [ClientRpc]
     public void RpcSpawnAvatar(uint avatarId, int connectionId, string buildJson) {
-        var healths = FindObjectsOfType<Health>();
+        var healths = FindObjectsOfType<PlayerHealth>();
         foreach (var health in healths) {
             if (health.GetComponent<NetworkIdentity>().netId == avatarId) {
                 health.gamePlayer = this;
