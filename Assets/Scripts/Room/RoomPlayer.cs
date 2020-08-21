@@ -33,7 +33,7 @@ public class RoomPlayer : NetworkRoomPlayer
     public string DisplayName = "Loading...";
     
     [SyncVar(hook = nameof(HandleReadyStatusChanged))]
-    public bool IsReady = false;
+    public bool IsReady = true;
 
     private bool isLeader;
     public bool IsLeader {
@@ -68,13 +68,8 @@ public class RoomPlayer : NetworkRoomPlayer
     }
 
     public override void OnStartServer() {
+        // if (!hasAuthority)
         // Room.RoomPlayers.Add(this);
-    }
-
-    [Command]
-    public void AddRoomPlayer() {
-
-        // Room.RoomPlayers.Add();
     }
 
     public override void OnNetworkDestroy() {
@@ -145,9 +140,7 @@ public class RoomPlayer : NetworkRoomPlayer
     }
     
     public void HandleReadyToStart(bool readyToStart) {
-        if (!isLeader) return;
-        // TODO: Replace this with a countdown
-
+        // if (!isLeader) return;
         startGameButton.interactable = readyToStart;
     }
 
@@ -162,17 +155,21 @@ public class RoomPlayer : NetworkRoomPlayer
         DisplayName = displayName;
     }
 
+    public void ReadyUp() {
+        CmdReadyUp();
+        CmdChangeReadyState(IsReady);
+    }
     [Command]
     public void CmdReadyUp() {
+        Debug.Log("CmdReadyUp");
         IsReady = !IsReady;
+        Debug.Log($"IsReady? {IsReady}");
         Room.NotifyPlayersOfReadyState();
-        Debug.Log(Room.RoomPlayers.Count);
     }
 
     [Command]
     public void CmdStartGame() {
-        if (Room.RoomPlayers[0].connectionToClient != connectionToClient) return;
-
+        Debug.Log("CmdStartGame");
         Room.StartGame();
     }
 

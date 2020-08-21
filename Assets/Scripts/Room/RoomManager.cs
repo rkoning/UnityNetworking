@@ -63,9 +63,13 @@ public class RoomManager : NetworkRoomManager
     }
 
     private bool IsReadyToStart() {
+        Debug.Log("IsReadyToStart");
+        Debug.Log($"{numPlayers} < {minPlayers}: {numPlayers < minPlayers}");
         if (numPlayers < minPlayers) { return false; }
 
+        Debug.Log($"Players in room: {RoomPlayers.Count}");
         foreach(var player in RoomPlayers) {
+            Debug.Log($"Player {player} IsReady? {player.IsReady}");
             if (!player.IsReady) { return false; }
         }
         return true;
@@ -79,10 +83,10 @@ public class RoomManager : NetworkRoomManager
     /// <returns>The new room-player object.</returns>
     public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnection conn)
     {
-        if (isHeadless) {
-            var rp = Instantiate(roomPlayerPrefab);
-            RoomPlayers.Add((RoomPlayer) rp);
-        }
+        // if (isHeadless) {
+        //     var rp = Instantiate(roomPlayerPrefab);
+        //     RoomPlayers.Add((RoomPlayer) rp);
+        // }
         return base.OnRoomServerCreateRoomPlayer(conn);
     }
 
@@ -125,15 +129,18 @@ public class RoomManager : NetworkRoomManager
     /// <param name="gamePlayer">The game player object.</param>
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer) {
+        Debug.Log("OnRoomServerSceneLoadedForPlayer");
         var rp = roomPlayer.GetComponent<RoomPlayer>();
         PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
         score.index = rp.index;
         gamePlayer.GetComponent<GamePlayer>().build = rp.GetSelectedBuild();
+        rp.Replace(gamePlayer);
         rp.gameObject.SetActive(false);
         return true;
     }
 
     public override void OnRoomClientSceneChanged(NetworkConnection conn) {
+        Debug.Log("OnRoomClientSceneChanged");
         if (SceneManager.GetActiveScene().path == GameplayScene) {
             for (int i = 0; i < RoomPlayers.Count; i++) {
                 RoomPlayers[i].gameObject.SetActive(false);
@@ -148,6 +155,7 @@ public class RoomManager : NetworkRoomManager
     /// </summary>
     public override void OnRoomServerPlayersReady()
     {
+        Debug.Log("OnRoomServerPlayersReady");
         if (isHeadless) {
             base.OnRoomServerPlayersReady();
         } else {
@@ -180,7 +188,10 @@ public class RoomManager : NetworkRoomManager
     #endregion
 
     public void StartGame() {
+        Debug.Log("StartGame");
+        Debug.Log($"In room scene? {SceneManager.GetActiveScene().path == RoomScene}");
         if (SceneManager.GetActiveScene().path == RoomScene) {
+            Debug.Log($"Ready to start? {IsReadyToStart()}");
             if (!IsReadyToStart()) { return; }
             ServerChangeScene(GameplayScene);
         }

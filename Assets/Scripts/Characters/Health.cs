@@ -40,13 +40,20 @@ public class Health : NetworkBehaviour, IPoolableObject {
 
     [Command]
     public void CmdTakeDamage(float damage) {
+        if (IsDead)
+            return;
+        Debug.Log("CmdTakeDamage" + connectionToClient);
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
             IsDead = true;
-            
-            Die();
+            RpcDie();
         }
+    }
+
+    [ClientRpc]
+    public void RpcDie() {
+        Die();
     }
 
     public virtual void Die() {

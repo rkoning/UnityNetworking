@@ -11,9 +11,27 @@ public class PlayerHealth : Health
 
     public GamePlayer gamePlayer;
 
+    public Animator animator;
+
+    public delegate void HealthEvent();
+    public event HealthEvent OnDeath;
+    public event HealthEvent OnRespawn;
+
+    private void Start() {
+        OnDeath += () => {};
+        OnRespawn += () => {};
+    }
+
     private void StartRespawn() {
         CmdPlayerDead();
-        StartCoroutine(WaitThenRespawn(3f));
+        var clips = animator.GetCurrentAnimatorClipInfo(0);
+        StartCoroutine(WaitThenRespawn(clips[0].clip.averageDuration + 3f));
+    }
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.B)) {
+            TakeDamage(100f, null);
+        }
     }
 
     private IEnumerator WaitThenRespawn(float duration) {
@@ -25,15 +43,24 @@ public class PlayerHealth : Health
         transform.rotation = spawnPoint.rotation;
         CmdPlayerAlive();
     }
+
+    public override void Die() {
+        Debug.Log($"Die called, client: {connectionToClient} server: {connectionToServer}, Authority? {hasAuthority}");
+        if (hasAuthority)
+            StartRespawn();
+    }
     
     [Command]
     private void CmdPlayerDead() {
+        Debug.Log("Player dying on server" + connectionToClient);
         RpcPlayerDead();
     }
 
     [ClientRpc]
     private void RpcPlayerDead() {
-        meshRenderer.material.color = deadColor;
+        Debug.Log("Player dying on client" + connectionToServer);
+        animator.SetTrigger("Dying");
+        OnDeath();
     }
 
     [Command]
@@ -43,6 +70,7 @@ public class PlayerHealth : Health
 
     [ClientRpc]
     private void RpcPlayerAlive() {
-        meshRenderer.material.color = initialColor;
+        animator.SetTrigger("Alive");
+        OnRespawn();
     }
 }

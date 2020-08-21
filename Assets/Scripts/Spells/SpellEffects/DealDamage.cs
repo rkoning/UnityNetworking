@@ -6,12 +6,19 @@ public class DealDamage : SpellEffect
 {
     public float damage;
 
-    public override void HitHealth(Health target)
+    public bool hitOnce = true;
+    private List<GameObject> hits;
+
+    public override void Cast() {
+        hits = new List<GameObject>();
+    }
+
+    public override void HitHealth(Health health)
     {
-        var health = target.GetComponent<Health>();
-        if (health)
-        {
+
+        if (hitOnce && !hits.Contains(health.gameObject))
             health.TakeDamage(damage, spell.owner);
-        }
+
+        hits.Add(health.gameObject);
     }
 }

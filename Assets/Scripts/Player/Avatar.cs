@@ -29,6 +29,8 @@ public class Avatar : NetworkBehaviour
 
     private bool didCast = false;
 
+    public Vector3 observerOffset = new Vector3(8f, 4f, 12f);
+
     private void Start()
     {
         health = GetComponent<PlayerHealth>();
@@ -50,8 +52,12 @@ public class Avatar : NetworkBehaviour
         if (!hasAuthority)
             return;
         
-        if (health.IsDead)
+        if (health.IsDead) {
+            playerCamera.transform.position = transform.position + observerOffset;
+            health.OnDeath += () => {};
+            playerCamera.transform.rotation = Quaternion.LookRotation(transform.position - playerCamera.transform.position);
             return;
+        }
 
         
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -77,9 +83,10 @@ public class Avatar : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
         
-        currSpeed = currSpeed / walkSpeed;
-        currSpeed.x -= currSpeed.x > .5f ? 0.5f : 0f;
-        currSpeed.z -= currSpeed.z > .5f ? 0.5f : 0f;
+        currSpeed = currSpeed.normalized;
+        if (!isRunning) {
+            currSpeed /= 2;
+        }
 
         animator.SetFloat("velx", currSpeed.x);
         animator.SetFloat("vely", currSpeed.z);
@@ -91,6 +98,7 @@ public class Avatar : NetworkBehaviour
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            playerCamera.transform.localPosition = Vector3.zero;
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
 

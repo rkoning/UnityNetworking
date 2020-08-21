@@ -40,6 +40,15 @@ public class GamePlayer : NetworkBehaviour
             Room.GamePlayers.Add(this);
     }
 
+    // public override void OnStartServer() {
+    //     DontDestroyOnLoad(gameObject);
+    //     foreach (var roomPlayer in Room.RoomPlayers) {
+    //         roomPlayer.gameObject.SetActive(false);
+    //     }
+    //     if (Room)
+    //         Room.GamePlayers.Add(this);
+    // }
+
     public override void OnStartAuthority() {
         CmdSpawnAvatar();
         hudUI.SetActive(true);
