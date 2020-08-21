@@ -12,8 +12,8 @@ public abstract class SpellEffect : MonoBehaviour {
     public delegate void HitAnyAction(GameObject other);
     public event HitAnyAction OnHitAny;
 
-    public delegate void HitTargetAction(Target target);
-    public event HitTargetAction OnHitTarget;
+    public delegate void HitHealthAction(Health target);
+    public event HitHealthAction OnHitHealth;
 
     /// <summary>
     /// Called by the spell that this effect is on when the spell is instantiated,
@@ -28,7 +28,7 @@ public abstract class SpellEffect : MonoBehaviour {
         OnHold += () => { };
         OnRelease += () => { };
         OnHitAny += (GameObject other) => { };
-        OnHitTarget += (Target t) => { };
+        OnHitHealth += (Health t) => { };
 
         if (parent)
         {
@@ -36,7 +36,7 @@ public abstract class SpellEffect : MonoBehaviour {
             parent.OnHold += Hold;
             parent.OnRelease += Release;
             parent.OnHitAny += HitAny;
-            parent.OnHitTarget += HitTarget;
+            parent.OnHitHealth += HitHealth;
         }
         else
         {
@@ -44,7 +44,7 @@ public abstract class SpellEffect : MonoBehaviour {
             spell.OnHold += Hold;
             spell.OnRelease += Release;
             spell.OnHitAny += HitAny;
-            spell.OnHitTarget += HitTarget;
+            spell.OnHitHealth += HitHealth;
         }
     }
 
@@ -64,8 +64,8 @@ public abstract class SpellEffect : MonoBehaviour {
     {
         OnHitAny(other);
     }
-    public virtual void HitTarget(Target target)
+    public virtual void HitHealth(Health target)
     {
-        OnHitTarget(target);
+        OnHitHealth(target);
     }
 }

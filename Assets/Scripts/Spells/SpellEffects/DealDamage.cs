@@ -6,10 +6,10 @@ public class DealDamage : SpellEffect
 {
     public float damage;
 
-    public override void HitTarget(Target target)
+    public override void HitHealth(Health target)
     {
-        var health = target.GetComponent<PlayerHealth>();
-        if (health && health != spell.owner.GetComponent<PlayerHealth>())
+        var health = target.GetComponent<Health>();
+        if (health)
         {
             health.TakeDamage(damage, spell.owner);
         }

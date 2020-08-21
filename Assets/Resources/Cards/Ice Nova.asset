@@ -17,5 +17,5 @@ MonoBehaviour:
     type: 3}
   sprite: {fileID: 21300000, guid: 22a052a250bab9e4dbf6fdf7b3e30b06, type: 3}
   description: Deals frost damage in a ring around the caster
-  manaCost: 2
+  manaCost: 0.5
   lore: 5

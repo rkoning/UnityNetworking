@@ -1,9 +1,10 @@
 using UnityEngine;
 using Mirror;
 
-public class Health : NetworkBehaviour {
+public class Health : NetworkBehaviour, IPoolableObject {
 
     public float maxHealth;
+
     [SyncVar]
     public float currentHealth;
 
@@ -23,12 +24,23 @@ public class Health : NetworkBehaviour {
         initialColor = meshRenderer.material.color;
         currentHealth = maxHealth;
     }
+
+    public void Init() {
+        meshRenderer = GetComponent<MeshRenderer>();
+        initialColor = meshRenderer.material.color;
+        currentHealth = maxHealth;
+    }
+
     public void TakeDamage(float damage, Avatar source) {
-        if (!hasAuthority) {
+        if (!hasAuthority)
             return;
-        }
-        currentHealth -= damage;
         lastDamagedBy = source;
+        CmdTakeDamage(damage);
+    }
+
+    [Command]
+    public void CmdTakeDamage(float damage) {
+        currentHealth -= damage;
         if (currentHealth <= 0)
         {
             IsDead = true;
@@ -38,6 +50,6 @@ public class Health : NetworkBehaviour {
     }
 
     public virtual void Die() {
-        
+        gameObject.SetActive(false);
     }
 }

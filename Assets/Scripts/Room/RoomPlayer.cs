@@ -68,7 +68,7 @@ public class RoomPlayer : NetworkRoomPlayer
     }
 
     public override void OnStartServer() {
-        Room.RoomPlayers.Add(this);
+        // Room.RoomPlayers.Add(this);
     }
 
     [Command]

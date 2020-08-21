@@ -13,18 +13,12 @@ public class PlayParticle : SpellEffect
 
     private void OnParticleCollision(GameObject other)
     {
-        var target = other.GetComponent<Target>();
+        var target = other.GetComponent<Health>();
         if (target)
         {
-            //HitTarget(target);
-            spell.HitTarget(target);
+            spell.HitHealth(target);
         }
         HitAny(other);
         spell.HitAny(other);
-        /*int numEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
-        for (int i = 0; i < numEvents; i++)
-        {
-            
-        }*/
     }
 }

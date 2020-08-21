@@ -37,8 +37,8 @@ public class ObjectPool : MonoBehaviour
             go.SetActive(false);
             go.GetComponent<Spell>().Init();
         }
-
-        ClientScene.RegisterSpawnHandler(assetId, SpawnObject, UnSpawnObject);
+        if (!ClientScene.prefabs.ContainsKey(assetId))
+            ClientScene.RegisterSpawnHandler(assetId, SpawnObject, UnSpawnObject);
         return assetId;
     }
 
