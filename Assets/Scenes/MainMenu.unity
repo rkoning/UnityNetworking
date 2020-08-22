@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1158,6 +1158,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7480357185830753866, guid: a98c18fb1dc1819489fdc960cf90c76b,
         type: 3}
+    - target: {fileID: 6757201953850522833, guid: 2d5a49e53cae10440ae8f7c07937c8c2,
+        type: 3}
+      propertyPath: networkAddress
+      value: ec2-18-221-68-223.us-east-2.compute.amazonaws.com
+      objectReference: {fileID: 0}
     - target: {fileID: 6757201953850522836, guid: 2d5a49e53cae10440ae8f7c07937c8c2,
         type: 3}
       propertyPath: m_Name

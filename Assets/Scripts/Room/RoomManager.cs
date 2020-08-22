@@ -25,7 +25,7 @@ public class RoomManager : NetworkRoomManager
     public List<RoomPlayer> RoomPlayers { get; } = new List<RoomPlayer>();
     public List<GamePlayer> GamePlayers = new List<GamePlayer>();
 
-    private bool showStartButton;
+    public bool showStartButton;
 
     public override void OnRoomStopServer() {
         RoomPlayers.Clear();
@@ -133,8 +133,9 @@ public class RoomManager : NetworkRoomManager
         var rp = roomPlayer.GetComponent<RoomPlayer>();
         PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
         score.index = rp.index;
+        Debug.Log(rp.GetSelectedBuild());
         gamePlayer.GetComponent<GamePlayer>().build = rp.GetSelectedBuild();
-        rp.Replace(gamePlayer);
+        // rp.Replace(gamePlayer);
         rp.gameObject.SetActive(false);
         return true;
     }

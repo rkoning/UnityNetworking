@@ -7,7 +7,7 @@ public class Avatar : NetworkBehaviour
     private CharacterController controller;
     private PlayerHealth health;
 
-    [SerializeField] private Animator animator;
+    public Animator animator;
 
     public float walkSpeed = 7.5f;
     public float runSpeed = 11.5f;
@@ -30,6 +30,7 @@ public class Avatar : NetworkBehaviour
     private bool didCast = false;
 
     public Vector3 observerOffset = new Vector3(8f, 4f, 12f);
+    public Transform cameraLocation;
 
     private void Start()
     {
@@ -98,7 +99,7 @@ public class Avatar : NetworkBehaviour
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            playerCamera.transform.localPosition = Vector3.zero;
+            playerCamera.transform.localPosition = cameraLocation.transform.localPosition;
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
 

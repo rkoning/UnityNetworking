@@ -8,8 +8,8 @@ public class DeckPanel : MonoBehaviour
     public List<FullDeck> displayedDecks = new List<FullDeck>();
     public GameObject deckPrefab;
 
-    [SerializeField] private DeckBuilder deckbuilder;
-    [SerializeField] private Transform decksContent;
+    public DeckBuilder deckbuilder;
+    public Transform decksContent;
 
     private SavedDeck[] decks;
 

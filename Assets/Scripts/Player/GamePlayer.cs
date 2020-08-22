@@ -27,7 +27,8 @@ public class GamePlayer : NetworkBehaviour
 
     [Header("UI")]
     public GameObject hudUI;
-    [SerializeField] private DeckUI deckUI;
+    public DeckUI deckUI;
+    public HealthUI healthUI;
 
     #region Start & Stop Callbacks
 
@@ -67,6 +68,7 @@ public class GamePlayer : NetworkBehaviour
     public void CmdSpawnAvatar() {
         var spawnPoint = NetworkManager.singleton.GetStartPosition();
         var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation);
+
         avatarGameObject.GetComponent<PlayerHealth>().gamePlayer = this;
         avatarGameObject.GetComponent<PlayerHealth>().connectionId = connectionToClient.connectionId;
         NetworkServer.Spawn(avatarGameObject, connectionToClient); // Give player authority over avatar object
@@ -83,6 +85,7 @@ public class GamePlayer : NetworkBehaviour
                 var deck = health.GetComponent<Deck>();
                 deck.cards = SavedDeck.LoadFromString(buildJson).cards;
                 deckUI.deck = deck;
+                healthUI.health = health;
                 deckUI.Init();
             }
         }

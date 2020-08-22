@@ -6,7 +6,7 @@ using TMPro;
 
 public class CharacterPanel : MonoBehaviour
 {
-    [SerializeField] private Transform characterAnchor;
+    public Transform characterAnchor;
 
     public string charactersFolder = "Characters";
 
@@ -14,14 +14,14 @@ public class CharacterPanel : MonoBehaviour
     private int currentIndex = -1;
     public Character currentCharacter;
 
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private TMP_Text activeNameText;
-    [SerializeField] private TMP_Text activeText;
-    [SerializeField] private TMP_Text passiveNameText;
-    [SerializeField] private TMP_Text passiveText;
-    [SerializeField] private TMP_Text loreText;
+    public TMP_Text nameText;
+    public TMP_Text activeNameText;
+    public TMP_Text activeText;
+    public TMP_Text passiveNameText;
+    public TMP_Text passiveText;
+    public TMP_Text loreText;
 
-    [SerializeField] private DeckBuilder deckBuilder;
+    public DeckBuilder deckBuilder;
 
     private void OnEnable() {
         LoadAllCharacters();
@@ -54,7 +54,7 @@ public class CharacterPanel : MonoBehaviour
 
     public void PreviousCharacter() {
         currentIndex--;
-        currentIndex = currentIndex % (characters.Length - 1);
+        currentIndex = currentIndex % (characters.Length);
         currentCharacter = characters[currentIndex];
         UpdateCharacterInfo(currentCharacter);    
     }

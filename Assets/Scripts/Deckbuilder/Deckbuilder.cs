@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 public class DeckBuilder : MonoBehaviour
 {
     public string mainMenuScene = "MainMenu";
-    [SerializeField] private CardPanel cardPanel;
-    [SerializeField] private DeckPanel deckPanel;
-    [SerializeField] private CharacterPanel characterPanel;
+    public CardPanel cardPanel;
+    public DeckPanel deckPanel;
+    public CharacterPanel characterPanel;
 
 
     private void Start() {

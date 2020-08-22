@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class FullDeck : MonoBehaviour
 {
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private Button editButton;
-    [SerializeField] private Button deleteButton;
+    public TMP_Text nameText;
+    public Button editButton;
+    public Button deleteButton;
     
     public void SetDeck(SavedDeck deck, DeckPanel deckPanel) {
         nameText.text = deck.name;

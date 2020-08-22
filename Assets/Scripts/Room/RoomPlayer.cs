@@ -19,15 +19,15 @@ using UnityEngine.UI;
 public class RoomPlayer : NetworkRoomPlayer
 {
     [Header("Characters")]
-    [SerializeField] private SavedDeck[] availableBuilds;
+    public SavedDeck[] availableBuilds;
     private SavedDeck selectedBuild;
 
     [Header("UI")]
-    [SerializeField] private GameObject lobbyUI = null;
-    [SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
-    [SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
-    [SerializeField] private Button startGameButton = null;
-    [SerializeField] private TMP_Dropdown characterDropdown;
+    public GameObject lobbyUI = null;
+    public TMP_Text[] playerNameTexts = new TMP_Text[4];
+    public TMP_Text[] playerReadyTexts = new TMP_Text[4];
+    public Button startGameButton = null;
+    public TMP_Dropdown characterDropdown;
 
     [SyncVar(hook = nameof(HandleDisplayNameChanged))]
     public string DisplayName = "Loading...";
@@ -72,7 +72,7 @@ public class RoomPlayer : NetworkRoomPlayer
         // Room.RoomPlayers.Add(this);
     }
 
-    public override void OnNetworkDestroy() {
+    public override void OnStopClient() {
         Room.RoomPlayers.Remove(this);
         UpdateDisplay();
     }
@@ -141,6 +141,7 @@ public class RoomPlayer : NetworkRoomPlayer
     
     public void HandleReadyToStart(bool readyToStart) {
         // if (!isLeader) return;
+        // startGameButton.gameObject.SetActive(readyToStart);
         startGameButton.interactable = readyToStart;
     }
 

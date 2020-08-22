@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class FullCard : MonoBehaviour
 {
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private TMP_Text descriptionText;
-    [SerializeField] private TMP_Text loreText;
-    [SerializeField] private TMP_Text manaCostText;
-    [SerializeField] private Image art;
-    [SerializeField] private Image lockedSprite;
-    [SerializeField] private Button addButton;
+    public TMP_Text nameText;
+    public TMP_Text descriptionText;
+    public TMP_Text loreText;
+    public TMP_Text manaCostText;
+    public Image art;
+    public Image lockedSprite;
+    public Button addButton;
 
-    private bool locked;
+    // private bool locked;
 
     public void SetCard(Card card, CardPanel cardPanel) {
         nameText.text = card.name;
@@ -27,12 +27,12 @@ public class FullCard : MonoBehaviour
     }
 
     public void Lock() {
-        locked = true;
+        // locked = true;
         lockedSprite.gameObject.SetActive(true);
     }
     
     public void Unlock() {
-        locked = false;
+        // locked = false;
         lockedSprite.gameObject.SetActive(false);
     }
 }

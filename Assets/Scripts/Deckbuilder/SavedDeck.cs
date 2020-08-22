@@ -69,7 +69,6 @@ public class SavedDeck
     public override string ToString() {
         DeckData data = new DeckData(name, character, cards);
         var str = JsonUtility.ToJson(data, false);
-        Debug.Log(str);
         return str;
     }
 

@@ -25,6 +25,10 @@ public class Health : NetworkBehaviour, IPoolableObject {
         currentHealth = maxHealth;
     }
 
+    public override void OnStartServer() {
+        currentHealth = maxHealth;
+    }
+
     public void Init() {
         meshRenderer = GetComponent<MeshRenderer>();
         initialColor = meshRenderer.material.color;
@@ -35,6 +39,7 @@ public class Health : NetworkBehaviour, IPoolableObject {
         if (!hasAuthority)
             return;
         lastDamagedBy = source;
+        Debug.Log("Sending CmdTakeDamage");
         CmdTakeDamage(damage);
     }
 
@@ -42,7 +47,7 @@ public class Health : NetworkBehaviour, IPoolableObject {
     public void CmdTakeDamage(float damage) {
         if (IsDead)
             return;
-        Debug.Log("CmdTakeDamage" + connectionToClient);
+        Debug.Log($"CmdTakeDamage {connectionToClient} for {damage}");
         currentHealth -= damage;
         if (currentHealth <= 0)
         {

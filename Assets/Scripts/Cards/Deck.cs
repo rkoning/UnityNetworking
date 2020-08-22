@@ -7,7 +7,7 @@ using Mirror;
 
 public class Deck : NetworkBehaviour {
 
-    [SerializeField] private Transform castTransform;
+    public Transform castTransform;
     
     [Header("Mana")]
     public float maxMana = 5f;

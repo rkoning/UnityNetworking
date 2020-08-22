@@ -26,7 +26,7 @@ public class CardPanel : MonoBehaviour {
     public string cardsFolder = "Cards";
 
     [Header("UI Elements")]
-    [SerializeField] private TMP_InputField deckName;
+    public TMP_InputField deckName;
 
     private void OnEnable() {
         LoadAllCards();

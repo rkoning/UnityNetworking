@@ -28,7 +28,7 @@ public class PlayerHealth : Health
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.B)) {
-            TakeDamage(100f, null);
+            TakeDamage(50f, null);
         }
     }
 
