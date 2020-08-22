@@ -6,10 +6,16 @@ public class PlayParticle : SpellEffect
     public new ParticleSystem particleSystem;
     public List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
+    public bool cancelable;
     public override void Cast()
     {
-        Debug.Log($"Play Particle {parent} {spell}");
-        particleSystem.Play();
+        if (particleSystem.isStopped)
+            particleSystem.Play();
+    }
+
+    public override void Release() {
+        if (particleSystem.isPlaying && cancelable)
+            particleSystem.Stop();
     }
 
     private void OnParticleCollision(GameObject other)

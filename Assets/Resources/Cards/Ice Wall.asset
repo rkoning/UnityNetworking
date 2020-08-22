@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
-  m_Name: TestCard
+  m_Name: Ice Wall
   m_EditorClassIdentifier: 
-  id: 8
-  spellPrefab: {fileID: 153864932133261481, guid: ac83cfb3b6bddf54ab21fbf0aa6d3ae3,
+  id: 6
+  spellPrefab: {fileID: 3773645410543152980, guid: 29d8de7d98a38fe4dbe399932cc9275e,
     type: 3}
-  sprite: {fileID: 21300000, guid: a1a5fc872c71558498cbff8161298dc6, type: 3}
-  description: Fires a single bolt of energy
-  manaCost: 1
-  lore: 0
+  sprite: {fileID: 21300000, guid: 53ce16dcffad8024ea24038d9cec3e42, type: 3}
+  description: Summons an impassable wall of ice
+  manaCost: 0
+  lore: 5

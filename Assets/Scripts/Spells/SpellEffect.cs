@@ -16,13 +16,15 @@ public abstract class SpellEffect : MonoBehaviour {
     public delegate void HitHealthAction(Health target);
     public event HitHealthAction OnHitHealth;
 
+    public float duration = 0f;
+
     /// <summary>
     /// Called by the spell that this effect is on when the spell is instantiated,
     /// Registers callbacks for all spell events.
     /// If this effect has a parent effect, events are registered to the parent instead.
     /// </summary>
     /// <param name="spell"></param>
-    public void Register(Spell spell)
+    public virtual void Register(Spell spell)
     {
         this.spell = spell;
         OnCast += () => { };
@@ -69,5 +71,10 @@ public abstract class SpellEffect : MonoBehaviour {
     public virtual void HitHealth(Health target)
     {
         OnHitHealth(target);
+    }
+
+    protected IEnumerator WaitThenDo(float duration, System.Action action) {
+        yield return new WaitForSeconds(duration);
+        action();
     }
 }

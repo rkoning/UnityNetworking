@@ -9,7 +9,7 @@ public class ApplyToGround : SpellEffect {
       RaycastHit hit;
       if (Physics.Raycast(ray, out hit, 10f)) {
          transform.position = hit.point;
-         transform.rotation = Quaternion.identity;
+         transform.rotation = Quaternion.LookRotation(new Vector3(transform.rotation.eulerAngles.x, 0f, transform.rotation.eulerAngles.z));
          base.Cast();
       }
    }

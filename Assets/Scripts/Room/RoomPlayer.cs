@@ -4,6 +4,7 @@ using Mirror;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Components/NetworkRoomPlayer.html
@@ -67,14 +68,13 @@ public class RoomPlayer : NetworkRoomPlayer
         Room.RoomPlayers.Add(this);
     }
 
-    public override void OnStartServer() {
-        // if (!hasAuthority)
-        // Room.RoomPlayers.Add(this);
-    }
-
     public override void OnStopClient() {
         Room.RoomPlayers.Remove(this);
         UpdateDisplay();
+    }
+
+    public void LeaveRoom() {
+        Room.StopClient();
     }
 
     public void HandleReadyStatusChanged(bool oldValue, bool newValue) => UpdateDisplay();

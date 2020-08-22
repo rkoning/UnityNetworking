@@ -60,6 +60,7 @@ public class ObjectPool : MonoBehaviour
     }
 
     public void UnSpawnObject(GameObject spawned) {
+        spawned.transform.SetParent(null);
         spawned.SetActive(false);
     }
 }

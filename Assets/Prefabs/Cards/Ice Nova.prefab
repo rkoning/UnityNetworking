@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
+  anchorForDuration: 1
 --- !u!114 &7480357185830753864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spell: {fileID: 7480357185830753871}
   parent: {fileID: 0}
+  duration: 0
   animationClip: {fileID: -203655887218126122, guid: 79c6fb2c158a99f43bc5bd3f5ab60d9e,
     type: 3}
   overrideName: Cast
@@ -99,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spell: {fileID: 0}
   parent: {fileID: 4230208537721469339}
+  duration: 0
 --- !u!114 &7480357185830753865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spell: {fileID: 0}
   parent: {fileID: 7969463863966675141}
+  duration: 0
   particleSystem: {fileID: 3998384898019348605}
 --- !u!114 &1288440714856764014
 MonoBehaviour:
@@ -128,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spell: {fileID: 7480357185830753871}
   parent: {fileID: 0}
+  duration: 0
 --- !u!114 &8123564962958989256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spell: {fileID: 7480357185830753871}
   parent: {fileID: 1288440714856764014}
+  duration: 0
   damage: 50
   hitOnce: 1
 --- !u!1001 &7480357185996150702

@@ -65,7 +65,6 @@ public class Avatar : NetworkBehaviour
             playerCamera.transform.rotation = Quaternion.LookRotation(transform.position - playerCamera.transform.position);
             return;
         }
-
         
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         Vector3 currSpeed = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
@@ -90,15 +89,18 @@ public class Avatar : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
         
-        currSpeed = currSpeed.normalized;
-        if (!isRunning) {
-            currSpeed /= 2;
+        
+        if (!deck.IsAnchored) {
+            currSpeed = currSpeed.normalized;
+            if (!isRunning) {
+                currSpeed /= 2;
+            }
+
+            animator.SetFloat("velx", currSpeed.x);
+            animator.SetFloat("vely", currSpeed.z);
+
+            controller.Move(moveDirection * Time.deltaTime);
         }
-
-        animator.SetFloat("velx", currSpeed.x);
-        animator.SetFloat("vely", currSpeed.z);
-
-        controller.Move(moveDirection * Time.deltaTime);
 
         if (canMove)
         {

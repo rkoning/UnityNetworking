@@ -48,6 +48,9 @@ public class Deck : NetworkBehaviour {
 
     public bool IsShuffling { get; private set; }
 
+    public bool IsAnchored { get; private set; }
+
+    private Spell currentSpell;
 
     private void Start() {
 
@@ -68,6 +71,10 @@ public class Deck : NetworkBehaviour {
     private void Update() {
         if (!hasAuthority) {
             return;
+        }
+
+        if (currentSpell && currentSpell.Done()) {
+            IsAnchored = false;
         }
 
         float dT = Time.deltaTime;
@@ -167,6 +174,8 @@ public class Deck : NetworkBehaviour {
         var spell = ObjectPool.singleton.GetFromPool(assetId, castTransform.position, castTransform.rotation).GetComponent<Spell>();
         spell.owner = avatar;
         spell.Cast();
+        currentSpell = spell;
+        IsAnchored = spell.anchorForDuration;
         StartCoroutine(Destroy(spell.gameObject, 10.0f));
     }
 

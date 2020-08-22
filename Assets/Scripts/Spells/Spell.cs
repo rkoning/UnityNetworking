@@ -14,6 +14,13 @@ public class Spell : MonoBehaviour, IPoolableObject
     public delegate void HitHealthAction(Health target);
     public event HitHealthAction OnHitHealth;
 
+    private float duration;
+    public bool anchorForDuration;
+
+    private float spellEnd;
+
+    public bool parentToCaster;
+
     public void Init()
     {
         // Register event defaults
@@ -30,11 +37,16 @@ public class Spell : MonoBehaviour, IPoolableObject
         foreach(var effect in GetComponents<SpellEffect>())
         {
             effect.Register(this);
+            duration += effect.duration;
         }
     }
 
     public void Cast()
     {
+        spellEnd = Time.fixedTime + duration;
+        if (parentToCaster) {
+            transform.SetParent(owner.deck.castTransform);
+        }
         OnCast();
     }
 
@@ -56,5 +68,9 @@ public class Spell : MonoBehaviour, IPoolableObject
     public void HitHealth(Health target)
     {
         OnHitHealth(target);
+    }
+
+    public bool Done() {
+        return Time.fixedTime > spellEnd;
     }
 }

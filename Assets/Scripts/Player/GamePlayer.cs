@@ -59,6 +59,9 @@ public class GamePlayer : NetworkBehaviour
         Room.GamePlayers.Remove(this);
     }
 
+    public override void OnStopServer() {
+    }
+
     [Server]
     public void SetDisplayName(string displayName) {
         this.displayName = displayName;

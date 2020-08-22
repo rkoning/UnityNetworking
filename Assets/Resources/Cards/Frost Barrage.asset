@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
-  m_Name: TestCard
+  m_Name: Frost Barrage
   m_EditorClassIdentifier: 
-  id: 8
-  spellPrefab: {fileID: 153864932133261481, guid: ac83cfb3b6bddf54ab21fbf0aa6d3ae3,
+  id: 4
+  spellPrefab: {fileID: 6701233578615732269, guid: 00766b9d76149454eb9e06a7c6681029,
     type: 3}
-  sprite: {fileID: 21300000, guid: a1a5fc872c71558498cbff8161298dc6, type: 3}
-  description: Fires a single bolt of energy
-  manaCost: 1
-  lore: 0
+  sprite: {fileID: 21300000, guid: 2a75ecd424acf144ea3bdcee295be3e3, type: 3}
+  description: Fires a spray of ice shards while channeling
+  manaCost: 0
+  lore: 5

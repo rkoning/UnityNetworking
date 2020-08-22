@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: Ice Nova
   m_EditorClassIdentifier: 
-  id: 4
+  id: 5
   spellPrefab: {fileID: 7480357185830753866, guid: a98c18fb1dc1819489fdc960cf90c76b,
     type: 3}
   sprite: {fileID: 21300000, guid: 22a052a250bab9e4dbf6fdf7b3e30b06, type: 3}
