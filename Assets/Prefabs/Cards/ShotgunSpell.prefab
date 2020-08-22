@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 153864932133261487}
   - component: {fileID: 153864932133261486}
   - component: {fileID: 6286261640498264405}
+  - component: {fileID: 5729901920671025194}
   - component: {fileID: 7201600752132247651}
   - component: {fileID: 4676044187629818385}
   - component: {fileID: -5521686394879031575}
@@ -50,7 +51,7 @@ ParticleSystem:
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -4829,6 +4830,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
+--- !u!114 &5729901920671025194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153864932133261481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8bc9801b7cb1e74ab750a5c54bbc9cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spell: {fileID: 6286261640498264405}
+  parent: {fileID: 0}
+  animationClip: {fileID: -203655887218126122, guid: 145ec2a45ddb9f4438ed31d7d1ee7a50,
+    type: 3}
+  overrideName: Cast
+  performAtPercent: 0.5
 --- !u!114 &7201600752132247651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4842,7 +4861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spell: {fileID: 6286261640498264405}
-  parent: {fileID: 0}
+  parent: {fileID: 5729901920671025194}
   particleSystem: {fileID: 153864932133261487}
 --- !u!114 &4676044187629818385
 MonoBehaviour:
@@ -4859,6 +4878,7 @@ MonoBehaviour:
   spell: {fileID: 0}
   parent: {fileID: 7201600752132247651}
   damage: 10
+  hitOnce: 1
 --- !u!114 &-5521686394879031575
 MonoBehaviour:
   m_ObjectHideFlags: 0

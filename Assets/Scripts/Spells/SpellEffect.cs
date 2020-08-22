@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -50,6 +51,7 @@ public abstract class SpellEffect : MonoBehaviour {
 
     public virtual void Cast()
     {
+        Debug.Log($"Base Cast {parent} {spell}");
         OnCast();
     }
     public virtual void Hold()

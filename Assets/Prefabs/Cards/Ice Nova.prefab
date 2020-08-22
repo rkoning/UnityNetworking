@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7480357185830753870}
   - component: {fileID: 7480357185830753871}
   - component: {fileID: 7480357185830753864}
+  - component: {fileID: 4230208537721469339}
   - component: {fileID: 7969463863966675141}
   - component: {fileID: 7480357185830753865}
   - component: {fileID: 1288440714856764014}
@@ -66,6 +67,24 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
+--- !u!114 &4230208537721469339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7480357185830753866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8bc9801b7cb1e74ab750a5c54bbc9cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spell: {fileID: 7480357185830753871}
+  parent: {fileID: 0}
+  animationClip: {fileID: -203655887218126122, guid: 79c6fb2c158a99f43bc5bd3f5ab60d9e,
+    type: 3}
+  overrideName: Cast
+  performAtPercent: 0.68
 --- !u!114 &7969463863966675141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spell: {fileID: 0}
-  parent: {fileID: 0}
+  parent: {fileID: 4230208537721469339}
 --- !u!114 &7480357185830753865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8364b0837a01c4792bc9300956f405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spell: {fileID: 7480357185830753871}
+  spell: {fileID: 0}
   parent: {fileID: 7969463863966675141}
   particleSystem: {fileID: 3998384898019348605}
 --- !u!114 &1288440714856764014
@@ -124,6 +143,7 @@ MonoBehaviour:
   spell: {fileID: 7480357185830753871}
   parent: {fileID: 1288440714856764014}
   damage: 50
+  hitOnce: 1
 --- !u!1001 &7480357185996150702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -136,11 +156,6 @@ PrefabInstance:
       propertyPath: spell
       value: 
       objectReference: {fileID: 7480357185830753871}
-    - target: {fileID: 2421706338904189470, guid: d3b04768c83040b419f8960119e0bced,
-        type: 3}
-      propertyPath: occurOnce
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5814864941146802128, guid: d3b04768c83040b419f8960119e0bced,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -206,21 +221,11 @@ PrefabInstance:
       propertyPath: spell
       value: 
       objectReference: {fileID: 7480357185830753871}
-    - target: {fileID: 6831341380900113348, guid: d3b04768c83040b419f8960119e0bced,
-        type: 3}
-      propertyPath: occurOnce
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7552051312638091039, guid: d3b04768c83040b419f8960119e0bced,
         type: 3}
       propertyPath: spell
       value: 
       objectReference: {fileID: 7480357185830753871}
-    - target: {fileID: 7552051312638091039, guid: d3b04768c83040b419f8960119e0bced,
-        type: 3}
-      propertyPath: occurOnce
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3b04768c83040b419f8960119e0bced, type: 3}
 --- !u!4 &3998384898019348606 stripped

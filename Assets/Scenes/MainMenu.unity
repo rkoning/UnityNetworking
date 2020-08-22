@@ -1129,7 +1129,7 @@ PrefabInstance:
     - target: {fileID: 6757201953850522833, guid: 2d5a49e53cae10440ae8f7c07937c8c2,
         type: 3}
       propertyPath: spawnPrefabs.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6757201953850522833, guid: 2d5a49e53cae10440ae8f7c07937c8c2,
         type: 3}
@@ -1163,6 +1163,12 @@ PrefabInstance:
       propertyPath: networkAddress
       value: ec2-18-221-68-223.us-east-2.compute.amazonaws.com
       objectReference: {fileID: 0}
+    - target: {fileID: 6757201953850522833, guid: 2d5a49e53cae10440ae8f7c07937c8c2,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 8789311890762768882, guid: 0ff2e845fd771fa4197e0a8fcf0ef863,
+        type: 3}
     - target: {fileID: 6757201953850522836, guid: 2d5a49e53cae10440ae8f7c07937c8c2,
         type: 3}
       propertyPath: m_Name

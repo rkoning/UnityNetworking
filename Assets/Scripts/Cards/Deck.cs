@@ -99,7 +99,8 @@ public class Deck : NetworkBehaviour {
             return;
         }
         if (currentCard >= deckSize) {
-            StartShuffle();
+            if (hand.Count < 1)  // Auto Shuffle if the deck and hand are empty
+                StartShuffle();
             return;
         }
         Card c = cards[currentCard];
@@ -166,7 +167,7 @@ public class Deck : NetworkBehaviour {
         var spell = ObjectPool.singleton.GetFromPool(assetId, castTransform.position, castTransform.rotation).GetComponent<Spell>();
         spell.owner = avatar;
         spell.Cast();
-        StartCoroutine(Destroy(spell.gameObject, 2.0f));
+        StartCoroutine(Destroy(spell.gameObject, 10.0f));
     }
 
     private IEnumerator Destroy(GameObject go, float after) {

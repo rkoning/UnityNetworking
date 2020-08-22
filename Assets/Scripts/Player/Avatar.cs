@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
@@ -28,12 +29,17 @@ public class Avatar : NetworkBehaviour
     public Deck deck;
 
     private bool didCast = false;
+    public AnimationClip currentCastAnimation;
+    private AnimatorOverrideController overrideController;
 
     public Vector3 observerOffset = new Vector3(8f, 4f, 12f);
     public Transform cameraLocation;
 
     private void Start()
     {
+
+        overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        animator.runtimeAnimatorController = overrideController;
         health = GetComponent<PlayerHealth>();
         if (hasAuthority)
         {
@@ -137,5 +143,10 @@ public class Avatar : NetworkBehaviour
     private void CastSpell(int index) {
         deck.Cast(index);
         didCast = true;
+    }
+
+    public void SetCastAnimation(AnimationClip clip) {
+        overrideController[currentCastAnimation.name] = clip;
+        // currentCastAnimation = clip;
     }
 }

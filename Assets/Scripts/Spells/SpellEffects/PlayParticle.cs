@@ -8,6 +8,7 @@ public class PlayParticle : SpellEffect
 
     public override void Cast()
     {
+        Debug.Log($"Play Particle {parent} {spell}");
         particleSystem.Play();
     }
 

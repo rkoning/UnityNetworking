@@ -4,6 +4,7 @@ using UnityEngine;
 public class ApplyToGround : SpellEffect {
    
    public override void Cast() {
+      Debug.Log($"Apply to Ground {parent} {spell}");
       Ray ray = new Ray(transform.position, Vector3.down);
       RaycastHit hit;
       if (Physics.Raycast(ray, out hit, 10f)) {

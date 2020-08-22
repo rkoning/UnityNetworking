@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 2674675664712504316}
   - component: {fileID: 8333019513802926575}
   m_Layer: 0
-  m_Name: Avatar
+  m_Name: WizardAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -321,6 +321,8 @@ MonoBehaviour:
   playerCamera: {fileID: 8863428531330430442}
   canMove: 1
   deck: {fileID: 0}
+  currentCastAnimation: {fileID: -203655887218126122, guid: fbfcdf41a38fea347be1a298c97ecaaa,
+    type: 3}
   observerOffset: {x: 8, y: 4, z: 12}
   cameraLocation: {fileID: 2593736081462753144}
 --- !u!143 &8789311890762768889
