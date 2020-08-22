@@ -24,8 +24,6 @@ public class PlayerHealth : Health
 
     private void StartRespawn() {
         CmdPlayerDead();
-        var clips = animator.GetCurrentAnimatorClipInfo(0);
-        StartCoroutine(WaitThenRespawn(clips[0].clip.averageDuration + 3f));
     }
 
     private void Update() {
@@ -41,7 +39,7 @@ public class PlayerHealth : Health
         var spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
-        CmdPlayerAlive();
+        RpcPlayerAlive();
     }
 
     public override void Die() {
@@ -54,6 +52,8 @@ public class PlayerHealth : Health
     private void CmdPlayerDead() {
         Debug.Log("Player dying on server" + connectionToClient);
         RpcPlayerDead();
+        var clips = animator.GetCurrentAnimatorClipInfo(0);
+        StartCoroutine(WaitThenRespawn(clips[0].clip.averageDuration + 3f));
     }
 
     [ClientRpc]
