@@ -7,6 +7,7 @@ public class PlayParticle : SpellEffect
     public List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
     public bool cancelable;
+    
     public override void Cast()
     {
         if (particleSystem.isStopped)
@@ -16,6 +17,10 @@ public class PlayParticle : SpellEffect
     public override void Release() {
         if (particleSystem.isPlaying && cancelable)
             particleSystem.Stop();
+    }
+
+    public override bool Done() {
+        return particleSystem.isStopped;
     }
 
     private void OnParticleCollision(GameObject other)

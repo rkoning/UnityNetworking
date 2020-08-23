@@ -35,7 +35,7 @@ public class ObjectPool : MonoBehaviour
             go.name = go.name.Replace("(Clone)", "") + i.ToString();
             prefabPool.Enqueue(go);
             go.SetActive(false);
-            go.GetComponent<Spell>().Init();
+            go.GetComponent<IPoolableObject>().Init();
         }
         
         if (!ClientScene.prefabs.ContainsKey(assetId))

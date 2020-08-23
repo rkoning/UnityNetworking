@@ -26,6 +26,7 @@ public class Health : NetworkBehaviour, IPoolableObject {
     }
 
     public override void OnStartServer() {
+        Debug.Log(hasAuthority);
         currentHealth = maxHealth;
     }
 

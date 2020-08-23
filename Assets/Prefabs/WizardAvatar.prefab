@@ -377,7 +377,7 @@ MonoBehaviour:
   syncInterval: 0.1
   castTransform: {fileID: 7417264318301962585}
   maxMana: 5
-  currentMana: 0
+  currentMana: 5
   manaRegen: 0.3
   cards:
   - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}

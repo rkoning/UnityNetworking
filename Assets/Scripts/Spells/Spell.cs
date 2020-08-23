@@ -14,12 +14,13 @@ public class Spell : MonoBehaviour, IPoolableObject
     public delegate void HitHealthAction(Health target);
     public event HitHealthAction OnHitHealth;
 
-    private float duration;
     public bool anchorForDuration;
 
     private float spellEnd;
 
     public bool parentToCaster;
+
+    private SpellEffect[] effects;
 
     public void Init()
     {
@@ -34,16 +35,15 @@ public class Spell : MonoBehaviour, IPoolableObject
         OnHitHealth += (Health target) => { };
 
         // Register all spell effects to effect events
-        foreach(var effect in GetComponents<SpellEffect>())
+        effects = GetComponents<SpellEffect>();
+        foreach(var effect in effects)
         {
             effect.Register(this);
-            duration += effect.duration;
         }
     }
 
     public void Cast()
     {
-        spellEnd = Time.fixedTime + duration;
         if (parentToCaster) {
             transform.SetParent(owner.deck.castTransform);
         }
@@ -71,6 +71,11 @@ public class Spell : MonoBehaviour, IPoolableObject
     }
 
     public bool Done() {
-        return Time.fixedTime > spellEnd;
+        foreach (var effect in effects) {
+            if (!effect.Done()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

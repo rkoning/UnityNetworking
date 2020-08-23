@@ -16,8 +16,6 @@ public abstract class SpellEffect : MonoBehaviour {
     public delegate void HitHealthAction(Health target);
     public event HitHealthAction OnHitHealth;
 
-    public float duration = 0f;
-
     /// <summary>
     /// Called by the spell that this effect is on when the spell is instantiated,
     /// Registers callbacks for all spell events.
@@ -53,7 +51,6 @@ public abstract class SpellEffect : MonoBehaviour {
 
     public virtual void Cast()
     {
-        Debug.Log($"Base Cast {parent} {spell}");
         OnCast();
     }
     public virtual void Hold()
@@ -73,8 +70,13 @@ public abstract class SpellEffect : MonoBehaviour {
         OnHitHealth(target);
     }
 
+    public virtual bool Done() {
+        return true;
+    }
+
     protected IEnumerator WaitThenDo(float duration, System.Action action) {
         yield return new WaitForSeconds(duration);
         action();
     }
+
 }

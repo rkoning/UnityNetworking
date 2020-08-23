@@ -74,6 +74,8 @@ public class Deck : NetworkBehaviour {
         }
 
         if (currentSpell && currentSpell.Done()) {
+            Debug.Log("Spell Done");
+            currentSpell = null;
             IsAnchored = false;
         }
 
@@ -149,6 +151,10 @@ public class Deck : NetworkBehaviour {
     }
 
     public void Cast(int handIndex) {
+        if (currentSpell) {
+            return;
+        }
+
         if (hand.Count <= handIndex || currentMana < hand[handIndex].manaCost) {
             return;
             // TODO: play fizzle sound
@@ -158,6 +164,18 @@ public class Deck : NetworkBehaviour {
         System.Guid spellAssetId = hand[handIndex].spellPrefab.GetComponent<NetworkIdentity>().assetId;
         hand.RemoveAt(handIndex);
         CmdCast(spellAssetId);
+    }
+
+    public void Hold() {
+        if (currentSpell) {
+            currentSpell.Hold();
+        }
+    }
+
+    public void Release() {
+        if (currentSpell) {
+            currentSpell.Release();
+        }
     }
 
     [Command]

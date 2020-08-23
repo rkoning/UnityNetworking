@@ -35,6 +35,11 @@ public class Avatar : NetworkBehaviour
     public Vector3 observerOffset = new Vector3(8f, 4f, 12f);
     public Transform cameraLocation;
 
+    private ButtonState cast = new ButtonState("Cast0");
+    public bool CastDown { get { return cast.Down; } }
+    public bool CastHeld { get { return cast.Held; } }
+    public bool CastReleased { get { return cast.Released; } }
+
     private void Start()
     {
 
@@ -112,14 +117,22 @@ public class Avatar : NetworkBehaviour
         }
 
         didCast = false;
-        if (Input.GetMouseButtonDown(0))
-        {
+        cast.Evaluate();
+
+        if (cast.Down) {
             CastSpell(0);
+        }
+
+        if (cast.Held) {
+            deck.Hold();
+        }
+
+        if (cast.Released) {
+            deck.Release();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
             CastSpell(0);
-
         }
         if (Input.GetKeyDown(KeyCode.Alpha2)) {
             CastSpell(1);
@@ -150,5 +163,29 @@ public class Avatar : NetworkBehaviour
     public void SetCastAnimation(AnimationClip clip) {
         overrideController[currentCastAnimation.name] = clip;
         // currentCastAnimation = clip;
+    }
+
+    private class ButtonState {
+        private string buttonId;
+        private bool down;
+        private bool held;
+        private bool up;
+        private bool released;
+
+        public bool Down { get { return down; } }
+        public bool Held { get { return held; } }
+        public bool Up { get { return up; } }
+        public bool Released { get { return released; } }
+
+        public ButtonState(string buttonId) {
+            this.buttonId = buttonId;
+        }
+
+        public void Evaluate() {
+           down = Input.GetButtonDown(buttonId);
+           held = Input.GetButton(buttonId);
+           up = !held;
+           released = Input.GetButtonUp(buttonId);
+        }
     }
 }
