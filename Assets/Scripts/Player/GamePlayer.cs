@@ -85,9 +85,11 @@ public class GamePlayer : NetworkBehaviour
             if (health.GetComponent<NetworkIdentity>().netId == avatarId) {
                 health.gamePlayer = this;
                 avatar = health.GetComponent<Avatar>();
+                avatar.gamePlayer = this;
                 var deck = health.GetComponent<Deck>();
-                deck.cards = SavedDeck.LoadFromString(buildJson).cards;
+                deck.LoadCards(SavedDeck.LoadFromString(buildJson).cards);
                 deckUI.deck = deck;
+                avatar.deck = deck;
                 healthUI.health = health;
                 deckUI.Init();
             }
@@ -95,4 +97,23 @@ public class GamePlayer : NetworkBehaviour
     }
 
     #endregion
+
+    public void RegisterPrefab(GameObject prefab, int count) {
+        CmdRegisterPrefab(prefab.name, count);
+    }
+
+    [Command]
+    public void CmdRegisterPrefab(string name, int count) {
+        ObjectPool.singleton.RegisterPrefab(name, count);
+    }
+
+    public void GetFromPool(string name, Vector3 position, Quaternion rotation) {
+        CmdGetFromPool(name, position, rotation);
+    }
+
+    [Command]
+    public void CmdGetFromPool(string name, Vector3 position, Quaternion rotation) {
+        var go = ObjectPool.singleton.GetFromPool(name, position, rotation);
+        go.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
+    }
 }

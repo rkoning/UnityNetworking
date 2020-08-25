@@ -310,7 +310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  player: {fileID: 0}
+  gamePlayer: {fileID: 0}
   animator: {fileID: 1860462970936701956}
   walkSpeed: 7.5
   runSpeed: 11.5
@@ -379,27 +379,7 @@ MonoBehaviour:
   maxMana: 5
   currentMana: 5
   manaRegen: 0.3
-  cards:
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 9efe8c6433cf0b54cbef0024ea37c714, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
-  - {fileID: 11400000, guid: 0a3dc4dc54892ca4983311bfa53007f9, type: 2}
+  cards: []
   currentCard: 0
   hand: []
   handSize: 5

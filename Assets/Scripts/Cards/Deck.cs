@@ -52,13 +52,13 @@ public class Deck : NetworkBehaviour {
 
     private Spell currentSpell;
 
-    private void Start() {
-
+    public void LoadCards(List<Card> cards) {
         avatar = GetComponent<Avatar>();
         avatar.deck = this;
-        deckSize = cards.Count;
+        this.cards = cards;
+        deckSize = this.cards.Count;
         for (int i = 0; i < deckSize; i++) {
-            ObjectPool.singleton.RegisterPrefab(cards[i].spellPrefab, 10);
+            avatar.gamePlayer.RegisterPrefab(this.cards[i].spellPrefab, 10);
         }
         if (!hasAuthority) {
             return;
@@ -161,9 +161,9 @@ public class Deck : NetworkBehaviour {
         }
 
         currentMana -= hand[handIndex].manaCost;
-        System.Guid spellAssetId = hand[handIndex].spellPrefab.GetComponent<NetworkIdentity>().assetId;
+        string name = hand[handIndex].spellPrefab.GetComponent<NetworkIdentity>().name;
         hand.RemoveAt(handIndex);
-        CmdCast(spellAssetId);
+        CmdCast(name);
     }
 
     public void Hold() {
@@ -179,17 +179,18 @@ public class Deck : NetworkBehaviour {
     }
 
     [Command]
-    private void CmdCast(System.Guid spellAssetId) {
-        // if (handIndex >= hand.Count)
-        //     return;
-        // System.Guid spellAssetId = hand[handIndex].spellPrefab.GetComponent<NetworkIdentity>().assetId;
-        RpcCast(spellAssetId); 
+    private void CmdCast(string name) {
+        var go = ObjectPool.singleton.GetFromPool(name, castTransform.position, castTransform.rotation);
+        var netId = go.GetComponent<NetworkIdentity>();
+        netId.AssignClientAuthority(connectionToClient);
+
+        RpcCast(netId.netId); 
     }
 
     [ClientRpc]
-    private void RpcCast(System.Guid assetId)
+    private void RpcCast(uint netId)
     {
-        var spell = ObjectPool.singleton.GetFromPool(assetId, castTransform.position, castTransform.rotation).GetComponent<Spell>();
+        Spell spell = ObjectPool.singleton.spawnedObjects[netId].GetComponent<Spell>();
         spell.owner = avatar;
         spell.Cast();
         currentSpell = spell;

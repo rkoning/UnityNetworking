@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Mirror;
 
-public class Spell : MonoBehaviour, IPoolableObject
+public class Spell : NetworkBehaviour, IPoolableObject
 {
     public Avatar owner;
     public delegate void CastAction();
@@ -42,6 +43,10 @@ public class Spell : MonoBehaviour, IPoolableObject
         }
     }
 
+    public override void OnStartClient() {
+        ObjectPool.singleton.spawnedObjects.Add(GetComponent<NetworkIdentity>().netId, gameObject);
+    }
+    
     public void Cast()
     {
         if (parentToCaster) {

@@ -4,7 +4,7 @@ using Mirror;
 
 public class Avatar : NetworkBehaviour
 {
-    public GamePlayer player;
+    public GamePlayer gamePlayer;
     private CharacterController controller;
     private PlayerHealth health;
 
@@ -95,7 +95,7 @@ public class Avatar : NetworkBehaviour
         }
         
         
-        if (!deck.IsAnchored) {
+        if (deck && !deck.IsAnchored) {
             currSpeed = currSpeed.normalized;
             if (!isRunning) {
                 currSpeed /= 2;

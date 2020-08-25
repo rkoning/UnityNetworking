@@ -1,11 +1,15 @@
 using UnityEngine;
 using Mirror;
 
-public class SpellProjectile : NetworkBehaviour {
+public class SpellProjectile : NetworkBehaviour, IPoolableObject {
    public new Rigidbody rigidbody;
    public SpellEffect onHitEffect;
 
    public bool dieOnHit;
+
+   public void Init() {
+
+   }
 
    [ServerCallback]
    private void OnCollisionEnter(Collision other) {
