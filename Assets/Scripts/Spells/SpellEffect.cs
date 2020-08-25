@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
+using Mirror;
 
-public abstract class SpellEffect : MonoBehaviour {
+public abstract class SpellEffect : NetworkBehaviour {
     public Spell spell;
     public SpellEffect parent;
 

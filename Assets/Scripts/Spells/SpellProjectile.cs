@@ -1,16 +1,13 @@
 using UnityEngine;
+using Mirror;
 
-public class SpellProjectile : MonoBehaviour, IPoolableObject {
+public class SpellProjectile : NetworkBehaviour {
    public new Rigidbody rigidbody;
    public SpellEffect onHitEffect;
 
    public bool dieOnHit;
-   public void Init() {
-      if (!rigidbody) {
-         rigidbody = GetComponent<Rigidbody>();
-      }
-   }
 
+   [ServerCallback]
    private void OnCollisionEnter(Collision other) {
       var h = other.gameObject.GetComponent<Health>();
       if (h) {

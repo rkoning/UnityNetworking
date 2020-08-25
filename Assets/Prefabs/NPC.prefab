@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 6358851935596371351}
   - component: {fileID: 6358851935596371336}
   - component: {fileID: 4403300855815514717}
-  - component: {fileID: 7403548073509480843}
+  - component: {fileID: 295332915}
+  - component: {fileID: 295332916}
+  - component: {fileID: 3008161994403593601}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -112,7 +114,29 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &7403548073509480843
+--- !u!195 &295332915
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358851935596371337}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &295332916
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,12 +145,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 6358851935596371337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 371325baf48cc9a468df48e5794d3611, type: 3}
+  m_Script: {fileID: 11500000, guid: f34cfe513a70e7d46bc1ed21c00dc4ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 100
-  currentHealth: 0
-  IsDead: 0
-  deadColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &3008161994403593601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358851935596371337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
