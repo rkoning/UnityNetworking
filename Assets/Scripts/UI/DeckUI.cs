@@ -1,8 +1,10 @@
-﻿using System;
+﻿using System.Net.Mime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class DeckUI : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class DeckUI : MonoBehaviour
     public TMP_Text manaRegenText;
     public TMP_Text shufflingText;
     private bool initialized;
+
+
     public void Init() {
         initialized = true;
         for (int i = 0; i < deck.handSize; i++) {
@@ -39,6 +43,7 @@ public class DeckUI : MonoBehaviour
             if (deck.hand.Count > i) {
                 cardsInHand[i].gameObject.SetActive(true);
                 cardsInHand[i].SetCard(deck.hand[i], deck.hand[i].manaCost < deck.currentMana);
+                cardsInHand[i].Selected(deck.selectedIndex == i);
             } else {
                 cardsInHand[i].gameObject.SetActive(false);
             }

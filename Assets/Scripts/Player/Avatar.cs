@@ -35,10 +35,15 @@ public class Avatar : NetworkBehaviour
     public Vector3 observerOffset = new Vector3(8f, 4f, 12f);
     public Transform cameraLocation;
 
-    private ButtonState cast = new ButtonState("Cast0");
+    private ButtonState cast = new ButtonState("Cast");
     public bool CastDown { get { return cast.Down; } }
     public bool CastHeld { get { return cast.Held; } }
     public bool CastReleased { get { return cast.Released; } }
+
+    private ButtonState cancel = new ButtonState("CancelCast");
+    public bool CancelDown { get { return cancel.Down; } }
+    public bool CancelHeld { get { return cancel.Held; } }
+    public bool CancelReleased { get { return cancel.Released; } }
 
     private void Start()
     {
@@ -120,7 +125,7 @@ public class Avatar : NetworkBehaviour
         cast.Evaluate();
 
         if (cast.Down) {
-            CastSpell(0);
+            Cast();
         }
 
         if (cast.Held) {
@@ -130,21 +135,26 @@ public class Avatar : NetworkBehaviour
         if (cast.Released) {
             deck.Release();
         }
+        
+        cancel.Evaluate();
+        if (cancel.Down) {
+            CancelSpell();
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) {
-            CastSpell(0);
+            SelectSpell(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2)) {
-            CastSpell(1);
+            SelectSpell(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3)) {
-            CastSpell(2);
+            SelectSpell(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4)) {
-            CastSpell(3);
+            SelectSpell(3);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5)) {
-            CastSpell(4);
+            SelectSpell(4);
         }
 
         if (didCast) {
@@ -155,9 +165,17 @@ public class Avatar : NetworkBehaviour
         }
     }
 
-    private void CastSpell(int index) {
-        deck.Cast(index);
+    private void SelectSpell(int index) {
+        deck.SelectSpell(index);
+    }
+
+    private void Cast() {
+        deck.Cast();
         didCast = true;
+    }
+
+    private void CancelSpell() {
+        deck.Cancel();
     }
 
     public void SetCastAnimation(AnimationClip clip) {

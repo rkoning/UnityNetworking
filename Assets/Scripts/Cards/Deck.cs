@@ -51,6 +51,8 @@ public class Deck : NetworkBehaviour {
     public bool IsAnchored { get; private set; }
 
     private Spell currentSpell;
+    public Card selectedCard;
+    public int selectedIndex = -1;
 
     public void LoadCards(List<Card> cards) {
         avatar = GetComponent<Avatar>();
@@ -74,7 +76,6 @@ public class Deck : NetworkBehaviour {
         }
 
         if (currentSpell && currentSpell.Done()) {
-            Debug.Log("Spell Done");
             currentSpell = null;
             IsAnchored = false;
         }
@@ -136,11 +137,11 @@ public class Deck : NetworkBehaviour {
     }
 
     public void Shuffle() {
-        RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+        RNGCryptoServiceProvider rngesus = new RNGCryptoServiceProvider();
         int n = cards.Count;
         while (n > 1) {
             byte[] box = new byte[1];
-            do provider.GetBytes(box);
+            do rngesus.GetBytes(box);
             while (!(box[0] < n * (Byte.MaxValue / n)));
             int k = box[0] % n;
             n--;
@@ -150,20 +151,22 @@ public class Deck : NetworkBehaviour {
         }
     }
 
-    public void Cast(int handIndex) {
-        if (currentSpell) {
+    public void Cast() {
+        if (selectedCard == null || currentSpell) {
             return;
         }
 
-        if (hand.Count <= handIndex || currentMana < hand[handIndex].manaCost) {
+        if (currentMana < selectedCard.manaCost) {
             return;
             // TODO: play fizzle sound
         }
 
-        currentMana -= hand[handIndex].manaCost;
-        string name = hand[handIndex].spellPrefab.GetComponent<NetworkIdentity>().name;
-        hand.RemoveAt(handIndex);
+        currentMana -= selectedCard.manaCost;
+        string name = selectedCard.spellPrefab.GetComponent<NetworkIdentity>().name;
+        hand.Remove(selectedCard);
         CmdCast(name);
+        selectedIndex = -1;
+        selectedCard = null;
     }
 
     public void Hold() {
@@ -176,6 +179,18 @@ public class Deck : NetworkBehaviour {
         if (currentSpell) {
             currentSpell.Release();
         }
+    }
+
+    public void Cancel() {
+        selectedIndex = -1;
+        selectedCard = null;
+    }
+
+    public void SelectSpell(int index) {
+        if (hand.Count <= index)
+            return;
+        selectedIndex = index;
+        selectedCard = hand[index];
     }
 
     [Command]

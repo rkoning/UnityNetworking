@@ -8,11 +8,16 @@ public class CardUI : MonoBehaviour
 {
     public bool canCast;
     public Image thumbnail;
+    public Image selectedHighlight;
     public TMP_Text manaCostText;
 
     public void SetCard(Card card, bool canCast) {
         this.thumbnail.sprite = card.sprite;
         this.manaCostText.text = card.manaCost.ToString();
         this.canCast = canCast;
+    }
+
+    public void Selected(bool state) {
+        selectedHighlight.gameObject.SetActive(state);
     }
 }
