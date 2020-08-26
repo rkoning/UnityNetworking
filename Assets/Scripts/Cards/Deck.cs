@@ -64,7 +64,7 @@ public class Deck : NetworkBehaviour {
         if (!hasAuthority) {
             return;
         }
-        Shuffle();
+        FullShuffle();
         // Draw up to handSize initially
         Draw(initialHandSize);
     }
@@ -117,6 +117,16 @@ public class Deck : NetworkBehaviour {
         currentCard++;
     }
 
+    public void AddCard(Card card) {
+        cards.Add(card);
+        avatar.gamePlayer.RegisterPrefab(card.spellPrefab, 1);
+    }
+
+    public void AddCard(Card card, int index) {
+        cards.Insert(index, card);
+        avatar.gamePlayer.RegisterPrefab(card.spellPrefab, 1);
+    }
+
     public void StartShuffle() {
         if (!IsShuffling) {
             IsShuffling = true;
@@ -128,27 +138,37 @@ public class Deck : NetworkBehaviour {
 
     private IEnumerator WaitThenShuffle(float delay) {
         yield return new WaitForSeconds(delay);
-        Shuffle();
+        FullShuffle();
         currentCard = 0;
         shuffling = null;
         IsShuffling = false;
         Draw(initialHandSize);
     }
 
-    public void Shuffle() {
+    public void Shuffle(int current) {
+        int n = current + 1;
         RNGCryptoServiceProvider rngesus = new RNGCryptoServiceProvider();
-        int n = cards.Count;
-        while (n > 1) {
+        while (n < cards.Count - 1) {
             byte[] box = new byte[1];
             do rngesus.GetBytes(box);
             while (!(box[0] < n * (Byte.MaxValue / n)));
             int k = box[0] % n;
-            n--;
+            n++;
             Card value = cards[k];
             cards[k] = cards[n];
             cards[n] = value;
         }
     }
+    
+    /// <summary>
+    /// Shuffles the remaining cards in the deck
+    /// </summary>
+    public void Shuffle() => Shuffle(currentCard);
+    
+    /// <summary>
+    /// Shuffles all cards in the deck
+    /// </summary>
+    public void FullShuffle() => Shuffle(0);
 
     public void Cast() {
         if (selectedCard == null || currentSpell) {

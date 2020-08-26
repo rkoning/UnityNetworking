@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
@@ -45,6 +46,9 @@ public class Avatar : NetworkBehaviour
     public bool CancelHeld { get { return cancel.Held; } }
     public bool CancelReleased { get { return cancel.Released; } }
 
+
+    public Vector3 lookPoint;
+
     private void Start()
     {
 
@@ -76,6 +80,13 @@ public class Avatar : NetworkBehaviour
             return;
         }
         
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit)) {
+            this.lookPoint = hit.point;
+        } else {
+            this.lookPoint = transform.position + transform.forward * 1000f;
+        }
+
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         Vector3 currSpeed = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 

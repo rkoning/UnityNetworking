@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
-  m_Name: Fusillade
+  m_Name: Call To Arms
   m_EditorClassIdentifier: 
-  id: 1
-  spellPrefab: {fileID: 246611139360357666, guid: b0524ae6c9cf22044a8bb28b7ac0b4ca,
+  id: 2
+  spellPrefab: {fileID: 6389626219630241475, guid: 27aad184e37f9f84d881ba332dba83e5,
     type: 3}
-  sprite: {fileID: 21300000, guid: 14707f6b1966deb4a8c5b9950656f90f, type: 3}
-  description: Fires a Divine Strike for each Divine Strike you have in your deck
-  manaCost: 3
+  sprite: {fileID: 21300000, guid: 667075dadf53f2948b94fdcfbc246102, type: 3}
+  description: Shuffle two Divine Strikes into your deck
+  manaCost: 2
   lore: 3
   consume: 0
   collectable: 1
