@@ -55,7 +55,7 @@ public class Avatar : NetworkBehaviour
         else
         {
             // Disable the camera if this isn't the local player
-            playerCamera.gameObject.SetActive(false);
+            playerCamera.enabled = false;
         }
     }
 

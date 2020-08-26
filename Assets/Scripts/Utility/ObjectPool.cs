@@ -20,7 +20,6 @@ public class ObjectPool : NetworkBehaviour
         singleton = this;
     }
 
-    [Server]
     public void RegisterPrefab(string name, int count) {
         GameObject prefab = Resources.Load<GameObject>($"{spawnablesDirectory}/{name}");
         bool existing = pool.ContainsKey(name);

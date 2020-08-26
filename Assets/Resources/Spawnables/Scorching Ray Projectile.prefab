@@ -4712,8 +4712,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 54ad0ab1a95f4d4459f38c20db1e73a6, type: 2}
-  - {fileID: 2100000, guid: f2398d750275d9748ae22ec2b9468c7f, type: 2}
+  - {fileID: 2100000, guid: 2404677c1611fdf48be3e823b617f53e, type: 2}
+  - {fileID: 2100000, guid: 2404677c1611fdf48be3e823b617f53e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4751,7 +4751,7 @@ ParticleSystemRenderer:
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
-  m_VertexStreams: 0003040508
+  m_VertexStreams: 000304050802
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -4773,6 +4773,8 @@ GameObject:
   - component: {fileID: 6140675164073771281}
   - component: {fileID: 8817000829791013862}
   - component: {fileID: 2170104203492926221}
+  - component: {fileID: 1246507844246550889}
+  - component: {fileID: 166444282050284528}
   m_Layer: 0
   m_Name: Scorching Ray Projectile
   m_TagString: Untagged
@@ -9503,11 +9505,11 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 1
+  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
-  m_VertexStreams: 000304
+  m_VertexStreams: 000302
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -9558,6 +9560,7 @@ MonoBehaviour:
   syncInterval: 0.1
   rigidbody: {fileID: 4858914904540576353}
   onHitEffect: {fileID: 0}
+  localEffect: {fileID: 0}
   dieOnHit: 0
 --- !u!114 &8817000829791013862
 MonoBehaviour:
@@ -9593,6 +9596,45 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &1246507844246550889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3461781548250034003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147240680192f034abd222ba9928ee28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  spell: {fileID: 0}
+  parent: {fileID: 0}
+  CastTo: 0
+  HoldTo: 1
+  ReleaseTo: 2
+  HitAnyTo: 0
+  HitHealthTo: 4
+--- !u!114 &166444282050284528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3461781548250034003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e8364b0837a01c4792bc9300956f405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  spell: {fileID: 0}
+  parent: {fileID: 1246507844246550889}
+  particleSystem: {fileID: 0}
+  cancelable: 0
 --- !u!1 &7084368573252072814
 GameObject:
   m_ObjectHideFlags: 0

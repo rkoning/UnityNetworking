@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Scorching Ray
   m_EditorClassIdentifier: 
   id: 9
-  spellPrefab: {fileID: 7625321498144972563, guid: 101899a57195aff49a79f50fb5c5a7fb,
+  spellPrefab: {fileID: 7625321498144972563, guid: 498db0becbf205246bf7e5b6b0c1b29f,
     type: 3}
   sprite: {fileID: 21300000, guid: f95b2008af4d8ed43826a8dec2c9ae47, type: 3}
   description: Fires up to 3 projectiles that deal fire damage based on charge time
