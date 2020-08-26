@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
-  m_Name: Death Spell
+  m_Name: Divine Strike
   m_EditorClassIdentifier: 
-  id: 1
-  spellPrefab: {fileID: 3461408214798830859, guid: 87643ccdb82aa774ca66507cc89de9d5,
+  id: 0
+  spellPrefab: {fileID: 2384420120996120151, guid: 791f07cd4ba866841b004c3f0eab8cb2,
     type: 3}
-  sprite: {fileID: 21300000, guid: dc2b27c43dfd7754b8a42cbf35a06151, type: 3}
-  description: Ooky Spooky
-  manaCost: 8
-  lore: 2
+  sprite: {fileID: 21300000, guid: 45f9b163592813046a99d3d3f9323686, type: 3}
+  description: Summons a single flying sword that deals radiant damage. Consumed
+    on cast
+  manaCost: 1
+  lore: 3
+  consume: 1
+  collectable: 1

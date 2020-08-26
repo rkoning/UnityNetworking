@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -17,17 +18,16 @@ public class Deck : NetworkBehaviour {
     [Header("Deck")]
     public List<Card> cards;
     public int currentCard;
-    private int deckSize;
 
     public int DeckSize {
         get {
-            return deckSize;
+            return cards.Count;
         }
     }
 
     public int RemainingCards {
         get {
-            return deckSize - currentCard;
+            return currentCard < DeckSize ? DeckSize - currentCard : 0;
         }
     }
 
@@ -58,8 +58,7 @@ public class Deck : NetworkBehaviour {
         avatar = GetComponent<Avatar>();
         avatar.deck = this;
         this.cards = cards;
-        deckSize = this.cards.Count;
-        for (int i = 0; i < deckSize; i++) {
+        for (int i = 0; i < DeckSize; i++) {
             avatar.gamePlayer.RegisterPrefab(this.cards[i].spellPrefab, 10);
         }
         if (!hasAuthority) {
@@ -108,7 +107,7 @@ public class Deck : NetworkBehaviour {
         if (IsShuffling || hand.Count > handSize) {
             return;
         }
-        if (currentCard >= deckSize) {
+        if (currentCard >= DeckSize) {
             if (hand.Count < 1)  // Auto Shuffle if the deck and hand are empty
                 StartShuffle();
             return;
@@ -165,6 +164,10 @@ public class Deck : NetworkBehaviour {
         string name = selectedCard.spellPrefab.GetComponent<NetworkIdentity>().name;
         hand.Remove(selectedCard);
         CmdCast(name);
+
+        if (selectedCard.consume) {
+            cards.Remove(selectedCard);
+        }
         selectedIndex = -1;
         selectedCard = null;
     }

@@ -75,6 +75,9 @@ public class RoomPlayer : NetworkRoomPlayer
 
     public void LeaveRoom() {
         Room.StopClient();
+        if (isServer)
+            NetworkServer.DisconnectAll();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void HandleReadyStatusChanged(bool oldValue, bool newValue) => UpdateDisplay();

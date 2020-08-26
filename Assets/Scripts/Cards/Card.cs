@@ -11,4 +11,8 @@ public class Card : ScriptableObject
     public string description;
     public float manaCost;
     public Lore lore;
+
+    public bool consume;
+    public bool collectable = true;
 }
+
