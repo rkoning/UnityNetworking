@@ -26,7 +26,7 @@ public class Health : NetworkBehaviour, IPoolableObject {
     }
 
     public override void OnStartServer() {
-        Debug.Log(hasAuthority);
+        ObjectPool.Register(GetComponent<NetworkIdentity>().netId, gameObject);
         currentHealth = maxHealth;
     }
 
@@ -37,15 +37,6 @@ public class Health : NetworkBehaviour, IPoolableObject {
     }
 
     public void TakeDamage(float damage, Avatar source) {
-        if (!hasAuthority)
-            return;
-        lastDamagedBy = source;
-        Debug.Log("Sending CmdTakeDamage");
-        CmdTakeDamage(damage);
-    }
-
-    [Command]
-    public void CmdTakeDamage(float damage) {
         if (IsDead)
             return;
         Debug.Log($"CmdTakeDamage {connectionToClient} for {damage}");

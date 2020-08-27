@@ -72,6 +72,7 @@ public class Spell : NetworkBehaviour, IPoolableObject
 
     public void HitHealth(Health target)
     {
+        Debug.Log(target);
         OnHitHealth(target);
     }
 

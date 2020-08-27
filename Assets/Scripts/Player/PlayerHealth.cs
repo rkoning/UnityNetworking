@@ -26,12 +26,6 @@ public class PlayerHealth : Health
         CmdPlayerDead();
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.B)) {
-            TakeDamage(50f, null);
-        }
-    }
-
     private IEnumerator WaitThenRespawn(float duration) {
         yield return new WaitForSeconds(duration);
         IsDead = false;

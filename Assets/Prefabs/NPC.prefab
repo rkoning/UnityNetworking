@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 295332915}
   - component: {fileID: 295332916}
   - component: {fileID: 3008161994403593601}
+  - component: {fileID: -5044610882809592424}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -168,3 +169,21 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &-5044610882809592424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358851935596371337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 371325baf48cc9a468df48e5794d3611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  maxHealth: 20
+  currentHealth: 0
+  IsDead: 0
+  deadColor: {r: 1, g: 0, b: 0, a: 1}

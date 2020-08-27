@@ -58,8 +58,9 @@ public class Deck : NetworkBehaviour {
         avatar = GetComponent<Avatar>();
         avatar.deck = this;
         this.cards = cards;
-        for (int i = 0; i < DeckSize; i++) {
-            avatar.gamePlayer.RegisterPrefab(this.cards[i].spellPrefab, 10);
+        var byType = this.cards.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+        foreach(var kvp in byType) {
+            avatar.gamePlayer.RegisterPrefab(kvp.Key.spellPrefab, kvp.Value);
         }
         if (!hasAuthority) {
             return;

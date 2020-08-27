@@ -15,10 +15,12 @@ public class DealDamage : SpellEffect
 
     public override void HitHealth(Health health)
     {
-
-        if (hitOnce && !hits.Contains(health.gameObject))
-            health.TakeDamage(damage, spell.owner);
-
+        if (hitOnce) {
+            if (!hits.Contains(health.gameObject))
+                spell.owner.gamePlayer.DealDamage(health, damage);
+        } else {
+            spell.owner.gamePlayer.DealDamage(health, damage);
+        }
         hits.Add(health.gameObject);
     }
 }

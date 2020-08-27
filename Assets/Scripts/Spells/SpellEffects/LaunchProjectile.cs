@@ -9,7 +9,7 @@ public class LaunchProjectile : SpellEffect {
    public float castForce;
 
    public override void Register(Spell spell) {
-      ObjectPool.singleton.RegisterPrefab(projectilePrefab.name, maxProjectiles);
+      ObjectPool.RegisterPrefab(projectilePrefab.name, maxProjectiles);
       base.Register(spell);
    }
 
@@ -25,5 +25,4 @@ public class LaunchProjectile : SpellEffect {
       spellProjectile.onHitEffect = this;
       spellProjectile.rigidbody.AddForce(transform.forward * castForce);
    }
-
 }

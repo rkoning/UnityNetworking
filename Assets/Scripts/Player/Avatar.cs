@@ -58,8 +58,8 @@ public class Avatar : NetworkBehaviour
         if (hasAuthority)
         {
             controller = GetComponent<CharacterController>();
-            // Cursor.lockState = CursorLockMode.Locked;
-            // Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
          }
         else
         {

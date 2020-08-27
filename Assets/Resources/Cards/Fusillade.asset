@@ -17,7 +17,7 @@ MonoBehaviour:
     type: 3}
   sprite: {fileID: 21300000, guid: 14707f6b1966deb4a8c5b9950656f90f, type: 3}
   description: Fires a Divine Strike for each Divine Strike you have in your deck
-  manaCost: 3
+  manaCost: 0
   lore: 3
   consume: 0
   collectable: 1

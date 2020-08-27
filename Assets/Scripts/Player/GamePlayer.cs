@@ -104,7 +104,7 @@ public class GamePlayer : NetworkBehaviour
 
     [Command]
     public void CmdRegisterPrefab(string name, int count) {
-        ObjectPool.singleton.RegisterPrefab(name, count);
+        ObjectPool.RegisterPrefab(name, count);
     }
 
     public void GetFromPool(string name, Vector3 position, Quaternion rotation) {
@@ -115,5 +115,16 @@ public class GamePlayer : NetworkBehaviour
     public void CmdGetFromPool(string name, Vector3 position, Quaternion rotation) {
         var go = ObjectPool.singleton.GetFromPool(name, position, rotation);
         go.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
+    }
+
+    public void DealDamage(Health other, float amount) {
+        Debug.Log(other.GetComponent<NetworkIdentity>().netId);
+        CmdDealDamage(other.GetComponent<NetworkIdentity>().netId, amount);
+    }
+
+    [Command]
+    public void CmdDealDamage(uint netId, float amount) {
+        Debug.Log("CmdDealDamage");
+        ObjectPool.singleton.spawnedObjects[netId].GetComponent<Health>().TakeDamage(amount, avatar);
     }
 }
