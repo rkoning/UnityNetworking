@@ -18,6 +18,9 @@ public class DeckUI : MonoBehaviour
     public TMP_Text currentManaText;
     public TMP_Text manaRegenText;
     public TMP_Text shufflingText;
+    public TMP_Text selectedText;
+    public TMP_Text castingText;
+
     private bool initialized;
 
 
@@ -27,11 +30,19 @@ public class DeckUI : MonoBehaviour
             var card = Instantiate(cardPrefab, handPanel).GetComponent<CardUI>();
             card.gameObject.SetActive(false);
             cardsInHand.Add(card);
-        }    
+        } 
     }
+
     private void Update() {
         if (!initialized)
             return;
+
+        if (deck.IsCasting()) {
+            castingText.gameObject.SetActive(true);
+            castingText.text = deck.castingCard.name;
+        } else {
+            castingText.gameObject.SetActive(false);
+        }
         cardsInDeckText.text = deck.RemainingCards.ToString() + " " + deck.DeckSize.ToString();
         currentManaText.text = deck.currentMana.ToString("0.0");
         manaRegenText.text = deck.manaRegen.ToString("0.0") + "/sec";
@@ -43,10 +54,17 @@ public class DeckUI : MonoBehaviour
             if (deck.hand.Count > i) {
                 cardsInHand[i].gameObject.SetActive(true);
                 cardsInHand[i].SetCard(deck.hand[i], deck.hand[i].manaCost < deck.currentMana);
-                cardsInHand[i].Selected(deck.selectedIndex == i);
+                if (deck.selectedIndex == i) {
+                    selectedText.gameObject.SetActive(true);
+                    selectedText.text = deck.hand[i].name;
+                    cardsInHand[i].Selected(true);
+                }
             } else {
                 cardsInHand[i].gameObject.SetActive(false);
             }
+        }
+        if (deck.selectedIndex < 0) {
+            selectedText.gameObject.SetActive(false);
         }
     }
 }

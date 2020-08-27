@@ -51,6 +51,8 @@ public class Deck : NetworkBehaviour {
     public bool IsAnchored { get; private set; }
 
     private Spell currentSpell;
+    public Card castingCard;
+
     public Card selectedCard;
     public int selectedIndex = -1;
 
@@ -76,6 +78,7 @@ public class Deck : NetworkBehaviour {
         }
 
         if (currentSpell && currentSpell.Done()) {
+            castingCard = null;
             currentSpell = null;
             IsAnchored = false;
         }
@@ -98,7 +101,7 @@ public class Deck : NetworkBehaviour {
         }
     }
 
-    public void Draw(int numCards) {
+    public void Draw(int numCards) { 
         for (int i = 0; i < numCards; i++) {
             Draw();
         }
@@ -184,6 +187,7 @@ public class Deck : NetworkBehaviour {
         currentMana -= selectedCard.manaCost;
         string name = selectedCard.spellPrefab.GetComponent<NetworkIdentity>().name;
         hand.Remove(selectedCard);
+        castingCard = selectedCard;
         CmdCast(name);
 
         if (selectedCard.consume) {
@@ -209,6 +213,11 @@ public class Deck : NetworkBehaviour {
         selectedIndex = -1;
         selectedCard = null;
     }
+
+    public bool IsCasting() {
+        return currentSpell != null;
+    }
+
 
     public void SelectSpell(int index) {
         if (hand.Count <= index)
