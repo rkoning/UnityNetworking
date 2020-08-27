@@ -8,7 +8,7 @@ public class DealDamage : SpellEffect
 
     public bool hitOnce = true;
     private List<GameObject> hits;
-
+ 
     public override void Cast() {
         hits = new List<GameObject>();
     }

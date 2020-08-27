@@ -13,16 +13,13 @@ public class Health : NetworkBehaviour, IPoolableObject {
 
     protected Avatar lastDamagedBy;
 
-    protected MeshRenderer meshRenderer;
-
-    protected Color initialColor;
-    public Color deadColor = Color.red;
+    public delegate void DeathEvent();
+    public event DeathEvent onDeath;
 
     private void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
-        initialColor = meshRenderer.material.color;
         currentHealth = maxHealth;
+        onDeath += () => {};
     }
 
     public override void OnStartServer() {
@@ -31,15 +28,12 @@ public class Health : NetworkBehaviour, IPoolableObject {
     }
 
     public void Init() {
-        meshRenderer = GetComponent<MeshRenderer>();
-        initialColor = meshRenderer.material.color;
         currentHealth = maxHealth;
     }
 
     public void TakeDamage(float damage, Avatar source) {
         if (IsDead)
             return;
-        Debug.Log($"CmdTakeDamage {connectionToClient} for {damage}");
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
@@ -54,6 +48,6 @@ public class Health : NetworkBehaviour, IPoolableObject {
     }
 
     public virtual void Die() {
-        gameObject.SetActive(false);
+        onDeath();
     }
 }
