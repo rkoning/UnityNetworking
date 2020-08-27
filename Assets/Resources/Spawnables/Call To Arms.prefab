@@ -9519,7 +9519,7 @@ GameObject:
   - component: {fileID: 2795417168812703141}
   - component: {fileID: 1013967272906377699}
   - component: {fileID: 4020326979572086687}
-  - component: {fileID: 5604201386483850614}
+  - component: {fileID: 3589521551150377118}
   - component: {fileID: 5075615864488118080}
   - component: {fileID: 4905030842157699138}
   m_Layer: 0
@@ -9575,9 +9575,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   owner: {fileID: 0}
-  anchorForDuration: 0
+  anchorForDuration: 1
+  blockForDuration: 1
   parentToCaster: 0
---- !u!114 &5604201386483850614
+--- !u!114 &3589521551150377118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9586,13 +9587,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6389626219630241475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f665c5d25da3c4f920237511ceac8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4dd2f2e0c8bf0f5439f069cf18a42585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
   spell: {fileID: 0}
-  parent: {fileID: 5075615864488118080}
+  parent: {fileID: 0}
 --- !u!114 &5075615864488118080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9608,7 +9609,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   spell: {fileID: 0}
-  parent: {fileID: 0}
+  parent: {fileID: 3589521551150377118}
   particleSystem: {fileID: 7793245060987724329}
   cancelable: 0
 --- !u!114 &4905030842157699138

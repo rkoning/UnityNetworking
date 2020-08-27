@@ -49,6 +49,7 @@ public class Deck : NetworkBehaviour {
     public bool IsShuffling { get; private set; }
 
     public bool IsAnchored { get; private set; }
+    public bool IsBlocked { get; private set; }
 
     private Spell currentSpell;
     public Card castingCard;
@@ -81,6 +82,7 @@ public class Deck : NetworkBehaviour {
             castingCard = null;
             currentSpell = null;
             IsAnchored = false;
+            IsBlocked = false;
         }
 
         float dT = Time.deltaTime;
@@ -175,7 +177,8 @@ public class Deck : NetworkBehaviour {
     public void FullShuffle() => Shuffle(0);
 
     public void Cast() {
-        if (selectedCard == null || currentSpell) {
+        // Blocking spells prevent additional casts during their duration
+        if (selectedCard == null || (currentSpell && IsBlocked)) {
             return;
         }
 
@@ -243,6 +246,7 @@ public class Deck : NetworkBehaviour {
         spell.Cast();
         currentSpell = spell;
         IsAnchored = spell.anchorForDuration;
+        IsBlocked = spell.blockForDuration;
         StartCoroutine(Destroy(spell.gameObject, 10.0f));
     }
 

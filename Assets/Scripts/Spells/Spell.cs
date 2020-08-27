@@ -16,6 +16,7 @@ public class Spell : NetworkBehaviour, IPoolableObject
     public event HitHealthAction OnHitHealth;
 
     public bool anchorForDuration;
+    public bool blockForDuration;
 
     private float spellEnd;
 
