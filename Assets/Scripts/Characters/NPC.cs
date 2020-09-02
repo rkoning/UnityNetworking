@@ -34,7 +34,7 @@ public class NPC : NetworkBehaviour {
    }
 
    private void Update() {
-      if (dead) {
+      if (!isServer || dead) {
          return;
       }
       Vector3 worldDeltaPosition = agent.nextPosition - transform.position;

@@ -35,7 +35,7 @@ public class Spell : NetworkBehaviour, IPoolableObject
 
         OnHitAny += (GameObject other) => { };
         OnHitHealth += (Health target) => { };
-
+ 
         // Register all spell effects to effect events
         effects = GetComponents<SpellEffect>();
         foreach(var effect in effects)
@@ -44,10 +44,15 @@ public class Spell : NetworkBehaviour, IPoolableObject
         }
     }
 
+    [ClientRpc]
+    public void RpcInit() {
+        Init();
+    }
+
     public override void OnStartClient() {
         ObjectPool.singleton.spawnedObjects.Add(GetComponent<NetworkIdentity>().netId, gameObject);
     }
-    
+
     public void Cast()
     {
         if (parentToCaster) {

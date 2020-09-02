@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthUI : MonoBehaviour {
-   public Health health;
+   public PlayerHealth health;
 
    public Image healthBar;
 

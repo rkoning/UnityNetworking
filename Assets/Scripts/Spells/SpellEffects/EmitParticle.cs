@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Mirror;
 
 public class EmitParticle : SpellEffect
 {
@@ -11,6 +12,16 @@ public class EmitParticle : SpellEffect
     
     public override void Cast()
     {
+        CmdCast();
+    }
+
+    [Command]
+    public void CmdCast() {
+        RpcCast();
+    }
+
+    [ClientRpc]
+    public void RpcCast() {
         particleSystem.Emit(numParticles);
     }
 

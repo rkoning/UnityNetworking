@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using Mirror;
 
-public class Deck : NetworkBehaviour {
+public class Deck : MonoBehaviour {
 
     public Transform castTransform;
     
@@ -57,15 +57,16 @@ public class Deck : NetworkBehaviour {
     public Card selectedCard;
     public int selectedIndex = -1;
 
+    private void Start() {
+        avatar = GetComponent<Avatar>();
+    }
+    
     public void LoadCards(List<Card> cards) {
         avatar = GetComponent<Avatar>();
         avatar.deck = this;
         this.cards = cards;
-        var byType = this.cards.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
-        foreach(var kvp in byType) {
-            avatar.gamePlayer.RegisterPrefab(kvp.Key.spellPrefab, kvp.Value);
-        }
-        if (!hasAuthority) {
+
+        if (!avatar.gamePlayer.hasAuthority) {
             return;
         }
         FullShuffle();
@@ -74,7 +75,7 @@ public class Deck : NetworkBehaviour {
     }
 
     private void Update() {
-        if (!hasAuthority) {
+        if (!avatar.initialized || !avatar.gamePlayer.hasAuthority) {
             return;
         }
 
@@ -191,13 +192,22 @@ public class Deck : NetworkBehaviour {
         string name = selectedCard.spellPrefab.GetComponent<NetworkIdentity>().name;
         hand.Remove(selectedCard);
         castingCard = selectedCard;
-        CmdCast(name);
+        avatar.gamePlayer.Cast(name);
 
         if (selectedCard.consume) {
             cards.Remove(selectedCard);
         }
         selectedIndex = -1;
         selectedCard = null;
+    }
+
+    public void AfterCast(Spell spell) {
+        spell.owner = avatar;
+        spell.Init();
+        spell.Cast();
+        currentSpell = spell;
+        IsAnchored = spell.anchorForDuration;
+        IsBlocked = spell.blockForDuration;
     }
 
     public void Hold() {
@@ -229,30 +239,5 @@ public class Deck : NetworkBehaviour {
         selectedCard = hand[index];
     }
 
-    [Command]
-    private void CmdCast(string name) {
-        var go = ObjectPool.singleton.GetFromPool(name, castTransform.position, castTransform.rotation);
-        var netId = go.GetComponent<NetworkIdentity>();
-        netId.AssignClientAuthority(connectionToClient);
 
-        RpcCast(netId.netId); 
-    }
-
-    [ClientRpc]
-    private void RpcCast(uint netId)
-    {
-        Spell spell = ObjectPool.singleton.spawnedObjects[netId].GetComponent<Spell>();
-        spell.owner = avatar;
-        spell.Cast();
-        currentSpell = spell;
-        IsAnchored = spell.anchorForDuration;
-        IsBlocked = spell.blockForDuration;
-        StartCoroutine(Destroy(spell.gameObject, 10.0f));
-    }
-
-    private IEnumerator Destroy(GameObject go, float after) {
-        yield return new WaitForSeconds(after);
-        ObjectPool.singleton.UnSpawnObject(go);
-        NetworkServer.UnSpawn(go);
-    }
 }

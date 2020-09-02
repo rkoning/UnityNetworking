@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Mirror;
 using System.Collections;
+using System.Linq;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
@@ -9,8 +11,24 @@ using System.Collections;
 
 public class GamePlayer : NetworkBehaviour
 {
+
+    [SyncVar(hook = nameof(OnMaxHealthChanged))]
+    public float maxHealth;
+
+    [SyncVar(hook = nameof(OnCurrentHealthChanged))]
+    public float currentHealth;
+
+    [SyncVar(hook = nameof(OnIsDeadChanged))]
+    public bool IsDead = false;
+
     [SyncVar]
     public string displayName = "Loading...";
+
+    [SyncVar]
+    public string buildJson;
+
+    [SyncVar]
+    public string initBuild;
 
     private RoomManager room;
     public RoomManager Room {
@@ -22,7 +40,6 @@ public class GamePlayer : NetworkBehaviour
 
     [Header("Character")]
     public SavedDeck build;
-
     private Avatar avatar;
 
     [Header("UI")]
@@ -33,7 +50,6 @@ public class GamePlayer : NetworkBehaviour
     #region Start & Stop Callbacks
 
     public override void OnStartClient() {
-        DontDestroyOnLoad(gameObject);
         foreach (var roomPlayer in Room.RoomPlayers) {
             roomPlayer.gameObject.SetActive(false);
         }
@@ -41,25 +57,73 @@ public class GamePlayer : NetworkBehaviour
             Room.GamePlayers.Add(this);
     }
 
-    // public override void OnStartServer() {
-    //     DontDestroyOnLoad(gameObject);
-    //     foreach (var roomPlayer in Room.RoomPlayers) {
-    //         roomPlayer.gameObject.SetActive(false);
-    //     }
-    //     if (Room)
-    //         Room.GamePlayers.Add(this);
-    // }
+    public override void OnStartServer() {
+        // Get the chosen buildJson and deserialize it.
+        build = SavedDeck.LoadFromString(buildJson);
+        // Spawn the build.character.avatarPrefab with client authority
+        var spawnPoint = NetworkManager.singleton.GetStartPosition();
+        build = SavedDeck.LoadFromString(buildJson);
+        var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation);
+        avatarGameObject.GetComponent<Avatar>().playerNetId = netId;
+        NetworkServer.Spawn(avatarGameObject, connectionToClient);
 
-    public override void OnStartAuthority() {
-        CmdSpawnAvatar();
-        hudUI.SetActive(true);
+        // // setup the avatar
+        // avatar = avatarGameObject.GetComponent<Avatar>();
+        // avatar.Init(this);
     }
 
+    public override void OnStartAuthority() { 
+        build = SavedDeck.LoadFromString(buildJson);
+        var byType = build.cards.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+        foreach(var kvp in byType) {
+            RegisterPrefab(kvp.Key.spellPrefab, kvp.Value);
+        }
+        this.buildJson = build.ToString();
+        CmdAvatarSpawned();
+    }
+
+    [Command]
+    public void CmdAvatarSpawned() {
+        Debug.Log("CmdAvatarSpawned");
+        RpcAvatarSpawned();
+    }
+
+    [ClientRpc]
+    public void RpcAvatarSpawned() {
+        Debug.Log("RpcAvatarSpawned");
+        var avatars = FindObjectsOfType<Avatar>();
+        var players = new List<GamePlayer>(FindObjectsOfType<GamePlayer>());
+
+        var playerDictionary = players.ToDictionary(x => x.netId, x => x);
+        foreach(Avatar a in avatars) {
+            if (playerDictionary.ContainsKey(a.playerNetId)) {
+                // map the other players to their respective avatars
+                if (a.initialized == true)
+                    continue;
+                a.Init(playerDictionary[a.playerNetId]);
+                playerDictionary[a.playerNetId].avatar = a;
+
+                // get the buildJson of this gamePlayer and call LoadCards() to initialize the deck
+                a.deck.LoadCards(SavedDeck.LoadFromString(playerDictionary[a.playerNetId].buildJson).cards);
+                if (a.hasAuthority) {
+                    // This will only happen on the local player
+                    hudUI.SetActive(true);
+                    // link healthUI to health
+                    healthUI.health = avatar.health;
+                    // link deckUI to deck
+                    deckUI.deck = avatar.deck;
+                    deckUI.Init();
+                }
+                continue;
+            }
+            // we should never get here, so spit out a warning
+            Debug.LogWarning($"Warning, avatar with connectionId: {netIdentity.connectionToClient} does not have a gamePlayer");
+        }
+        // look up all avatars in the scene and match them with their gameplayers
+    }
+    
     public override void OnStopClient() {
         Room.GamePlayers.Remove(this);
-    }
-
-    public override void OnStopServer() {
     }
 
     [Server]
@@ -67,34 +131,58 @@ public class GamePlayer : NetworkBehaviour
         this.displayName = displayName;
     }
 
-    [Command]
-    public void CmdSpawnAvatar() {
-        var spawnPoint = NetworkManager.singleton.GetStartPosition();
-        var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation);
+    // private void ChangeBuild(string buildJson) {
+    //     Debug.Log("ChangeBuild");
+    //     Debug.Log(hasAuthority + " " + isLocalPlayer + " " + isServer);
+    //     if (avatar) {
+    //         Destroy(avatar);
+    //     }
+    //     var spawnPoint = NetworkManager.singleton.GetStartPosition();
+    //     build = SavedDeck.LoadFromString(buildJson);
+    //     var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation, transform);
+        
+    //     GetComponent<NetworkTransformChild>().target = avatarGameObject.transform;
+    //     SetupPlayer();
+    // }
 
-        avatarGameObject.GetComponent<PlayerHealth>().gamePlayer = this;
-        avatarGameObject.GetComponent<PlayerHealth>().connectionId = connectionToClient.connectionId;
-        NetworkServer.Spawn(avatarGameObject, connectionToClient); // Give player authority over avatar object
-        RpcSpawnAvatar(avatarGameObject.GetComponent<NetworkIdentity>().netId, connectionToClient.connectionId, build.ToString());
-    }
+    // public void SetupPlayer() {
+    //     Debug.Log("SetupPlayer");
+    //     Debug.Log(hasAuthority + " " + isLocalPlayer + " " + isServer);
+    //     // Avatar is going to be the first child of this gameObject
+    //     avatar = GetComponentInChildren<Avatar>();
+    //     // // call Init() on avatar to setup health and deck
+    //     avatar.Init(this);
+    //     // get the buildJson of this gamePlayer and call LoadCards() to initialize the deck
+    //     var byType = build.cards.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+    //     foreach(var kvp in byType) {
+    //         RegisterPrefab(kvp.Key.spellPrefab, kvp.Value);
+    //     }
+    //     this.buildJson = build.ToString();
+    //     hudUI.SetActive(true);
 
-    [ClientRpc]
-    public void RpcSpawnAvatar(uint avatarId, int connectionId, string buildJson) {
-        var healths = FindObjectsOfType<PlayerHealth>();
-        foreach (var health in healths) {
-            if (health.GetComponent<NetworkIdentity>().netId == avatarId) {
-                health.gamePlayer = this;
-                avatar = health.GetComponent<Avatar>();
-                avatar.gamePlayer = this;
-                var deck = health.GetComponent<Deck>();
-                deck.LoadCards(SavedDeck.LoadFromString(buildJson).cards);
-                deckUI.deck = deck;
-                avatar.deck = deck;
-                healthUI.health = health;
-                deckUI.Init();
-            }
-        }
-    }
+    //     avatar.deck.LoadCards(SavedDeck.LoadFromString(buildJson).cards);
+    //     if (hasAuthority) {
+    //         // link healthUI to health
+    //         healthUI.health = avatar.health;
+    //         // link deckUI to deck
+    //         deckUI.deck = avatar.deck;
+    //         deckUI.Init();
+    //     }
+    // }
+
+    // [Command]
+    // public void CmdSpawnAvatar() {
+    //     // NetworkServer.Spawn(avatarGameObject, connectionToClient); // Give player authority over avatar object
+    //     RpcSpawnAvatar(build.ToString());
+    // }
+
+    // [ClientRpc]
+    // public void RpcSpawnAvatar(string buildJson) {
+    //     var spawnPoint = NetworkManager.singleton.GetStartPosition();
+    //     build = SavedDeck.LoadFromString(buildJson);
+    //     var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation, transform);
+    //     SetupPlayer();
+    // }
 
     #endregion
 
@@ -124,7 +212,82 @@ public class GamePlayer : NetworkBehaviour
 
     [Command]
     public void CmdDealDamage(uint netId, float amount) {
-        Debug.Log("CmdDealDamage");
         ObjectPool.singleton.spawnedObjects[netId].GetComponent<Health>().TakeDamage(amount, avatar);
+    }
+
+    public void ApplyStatus(Health health, StatusFactory factory) {
+        CmdApplyStatus(health.GetComponent<NetworkIdentity>().netId, factory.name);
+    }
+
+    [Command]
+    public void CmdApplyStatus(uint netId, string factoryName) {
+        StatusFactory fact = Resources.Load<StatusFactory>($"StatusEffects/{factoryName}");
+        ObjectPool.singleton.spawnedObjects[netId].GetComponent<Health>().ApplyStatus(fact, avatar);
+    }
+
+    public void Cast(string name) {
+        Debug.Log($"CmdCast called from: {avatar.playerNetId}");
+        CmdCast(name);
+    }
+
+    [Command]
+    private void CmdCast(string name) {
+        var go = ObjectPool.singleton.GetFromPool(name, avatar.deck.castTransform.position, avatar.deck.castTransform.rotation);
+        var netId = go.GetComponent<NetworkIdentity>();
+        Debug.Log($"Client Authority assigned to: {avatar.playerNetId}");
+        netId.AssignClientAuthority(avatar.gamePlayer.connectionToClient);
+
+        RpcCast(netId.netId); 
+    }
+
+    [ClientRpc]
+    private void RpcCast(uint netId)
+    {
+        Spell spell = ObjectPool.singleton.spawnedObjects[netId].GetComponent<Spell>();
+        avatar.deck.AfterCast(spell);
+    }
+
+    public void OnCurrentHealthChanged(float oldValue, float newValue) {
+        avatar.health.currentHealth = newValue;
+    }
+    public void OnMaxHealthChanged(float oldValue, float newValue) {
+        avatar.health.maxHealth = newValue;
+    }
+    public void OnIsDeadChanged(bool oldValue, bool newValue) {
+        avatar.health.IsDead = newValue;
+    }
+
+    public void PlayerDead() {
+        CmdPlayerDead();
+    }
+
+    [Command]
+    public void CmdPlayerDead() {
+        Debug.Log("Player dying on server" + connectionToClient);
+        RpcPlayerDead();
+        // var clips = animator.GetCurrentAnimatorClipInfo(0);
+        StartCoroutine(WaitThenRespawn(5f));
+    }
+
+    [ClientRpc]
+    private void RpcPlayerDead() {
+        // animator.SetTrigger("Dying");
+        avatar.health.Death();
+    }
+
+    private IEnumerator WaitThenRespawn(float duration) {
+        yield return new WaitForSeconds(duration);
+        IsDead = false;
+        currentHealth = maxHealth;
+        var spawnPoint = NetworkManager.singleton.GetStartPosition();
+        avatar.transform.position = spawnPoint.position;
+        avatar.transform.rotation = spawnPoint.rotation;
+        RpcPlayerAlive();
+    }
+
+    [ClientRpc]
+    private void RpcPlayerAlive() {
+        // animator.SetTrigger("Alive");
+        avatar.health.Respawn();
     }
 }

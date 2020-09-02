@@ -1,14 +1,12 @@
 using UnityEngine;
 using Mirror;
 
-public class Health : NetworkBehaviour, IPoolableObject {
+public class Health : MonoBehaviour {
 
     public float maxHealth;
 
-    [SyncVar]
     public float currentHealth;
 
-    [SyncVar]
     public bool IsDead = false;
 
     protected Avatar lastDamagedBy;
@@ -22,13 +20,20 @@ public class Health : NetworkBehaviour, IPoolableObject {
         onDeath += () => {};
     }
 
-    public override void OnStartServer() {
-        ObjectPool.Register(GetComponent<NetworkIdentity>().netId, gameObject);
-        currentHealth = maxHealth;
-    }
+    // public override void OnStartServer() {
+    //     ObjectPool.Register(GetComponent<NetworkIdentity>().netId, gameObject);
+    //     currentHealth = maxHealth;
+    // }
 
     public void Init() {
-        currentHealth = maxHealth;
+        // currentHealth = maxHealth;
+        // if (isServer) {
+        //     RpcInit();
+        // }
+    }
+
+    public void RpcInit() {
+        Init();
     }
 
     public void TakeDamage(float damage, Avatar source) {
@@ -38,14 +43,19 @@ public class Health : NetworkBehaviour, IPoolableObject {
         if (currentHealth <= 0)
         {
             IsDead = true;
-            RpcDie();
+            // RpcDie();
         }
     }
 
-    [ClientRpc]
-    public void RpcDie() {
-        Die();
+    public void ApplyStatus(StatusFactory factory, Avatar source) {
+        Status s = factory.GetStatus(this, source);
+        s.Apply();
     }
+
+    // [ClientRpc]
+    // public void RpcDie() {
+    //     Die();
+    // }
 
     public virtual void Die() {
         onDeath();

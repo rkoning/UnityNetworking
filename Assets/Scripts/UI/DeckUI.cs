@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +57,8 @@ public class DeckUI : MonoBehaviour
                     selectedText.gameObject.SetActive(true);
                     selectedText.text = deck.hand[i].name;
                     cardsInHand[i].Selected(true);
+                } else {
+                    cardsInHand[i].Selected(false);
                 }
             } else {
                 cardsInHand[i].gameObject.SetActive(false);

@@ -129,13 +129,15 @@ public class RoomManager : NetworkRoomManager
     /// <param name="gamePlayer">The game player object.</param>
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer) {
-        Debug.Log("OnRoomServerSceneLoadedForPlayer");
         var rp = roomPlayer.GetComponent<RoomPlayer>();
         PlayerScore score = gamePlayer.GetComponent<PlayerScore>();
         score.index = rp.index;
-        Debug.Log(rp.GetSelectedBuild());
-        gamePlayer.GetComponent<GamePlayer>().build = rp.GetSelectedBuild();
+        var gp = gamePlayer.GetComponent<GamePlayer>();
+        gp.build = rp.GetSelectedBuild();
+        gp.buildJson = gp.build.ToString();
+
         // rp.Replace(gamePlayer);
+
         rp.gameObject.SetActive(false);
         return true;
     }

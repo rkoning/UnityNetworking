@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// [System.Serializable]
 public class SavedDeck
 {
     public string name;

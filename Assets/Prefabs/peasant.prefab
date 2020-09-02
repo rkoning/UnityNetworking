@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 20
+  maxHealth: 20000
   currentHealth: 0
   IsDead: 0
 --- !u!136 &626607394608524431

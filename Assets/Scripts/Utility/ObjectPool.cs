@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Runtime.InteropServices.ComTypes;
+using System;
+using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
+using System.Collections;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Guides/NetworkBehaviour.html
@@ -11,7 +14,7 @@ public class ObjectPool : NetworkBehaviour
 {
     public int maxPoolSize = 10;
     public Dictionary<string, Queue<GameObject>> pool = new Dictionary<string, Queue<GameObject>>();
-
+    public Dictionary<System.Guid, string> poolNames = new Dictionary<System.Guid, string>();
     public Dictionary<uint, GameObject> spawnedObjects = new Dictionary<uint, GameObject>();
     public static string spawnablesDirectory = "Spawnables";
     public static ObjectPool singleton;
@@ -31,7 +34,7 @@ public class ObjectPool : NetworkBehaviour
             prefabPool = new Queue<GameObject>();
             singleton.pool.Add(name, prefabPool);
         }
-
+        singleton.poolNames[prefab.GetComponent<NetworkIdentity>().assetId] = name;
         for (int i = 0; i < count && prefabPool.Count < singleton.maxPoolSize; i++) {
             var go = Instantiate(prefab);
             go.name = go.name.Replace("(Clone)", "") + i.ToString();
@@ -39,10 +42,16 @@ public class ObjectPool : NetworkBehaviour
             go.SetActive(false);
             go.GetComponent<IPoolableObject>().Init();
         }
+
+        ClientScene.RegisterPrefab(prefab, SpawnHandler, UnspawnHandler);
     }
 
     public static void Register(uint netId, GameObject obj) {
         singleton.spawnedObjects.Add(netId, obj);
+    }
+
+    public GameObject GetFromPool(System.Guid assetId, Vector3 position, Quaternion rotation) {
+        return GetFromPool(poolNames[assetId], position, rotation);
     }
 
     public GameObject GetFromPool(string name, Vector3 position, Quaternion rotation) {
@@ -58,11 +67,19 @@ public class ObjectPool : NetworkBehaviour
         return go;
     }
 
-    // public GameObject SpawnObject(Vector3 position, System.Guid assetId) {
-    //     return GetFromPool(assetId, position, Quaternion.identity);
-    // }
+    IEnumerator Despawn(GameObject gameObject, float delay) {
+        yield return new WaitForSeconds(delay);
+        NetworkServer.UnSpawn(gameObject);
+    }
 
-    public void UnSpawnObject(GameObject spawned) {
+    public static GameObject SpawnHandler(SpawnMessage msg) {
+        return singleton.GetFromPool(msg.assetId, msg.position, msg.rotation);
+    }
+
+    public static void UnspawnHandler(GameObject spawned) {
+        Debug.Log("Unspawning");
+        if (spawned == null)
+            return;
         spawned.transform.SetParent(null);
         spawned.SetActive(false);
     }

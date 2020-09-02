@@ -144,7 +144,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7352690850191977559}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &274184509890102620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,13 +188,13 @@ GameObject:
   - component: {fileID: 8789311890762768887}
   - component: {fileID: 8789311890762768886}
   - component: {fileID: 8789311890762768885}
-  - component: {fileID: 8789311890762768884}
   - component: {fileID: 8789311890762768883}
   - component: {fileID: 8789311890762768889}
-  - component: {fileID: -8896844582423495940}
   - component: {fileID: 839979194922824885}
-  - component: {fileID: 2674675664712504316}
   - component: {fileID: 8333019513802926575}
+  - component: {fileID: 5724961448253769660}
+  - component: {fileID: 8257568336931435201}
+  - component: {fileID: 2854606670598795738}
   m_Layer: 0
   m_Name: WizardAvatar
   m_TagString: Untagged
@@ -280,22 +280,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8789311890762768884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8789311890762768882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  m_AssetId: 
-  hasSpawned: 0
 --- !u!114 &8789311890762768883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +294,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  playerNetId: 0
   gamePlayer: {fileID: 0}
+  health: {fileID: 0}
   animator: {fileID: 1860462970936701956}
   walkSpeed: 7.5
   runSpeed: 11.5
@@ -325,6 +311,7 @@ MonoBehaviour:
     type: 3}
   observerOffset: {x: 8, y: 4, z: 12}
   cameraLocation: {fileID: 2593736081462753144}
+  lookPoint: {x: 0, y: 0, z: 0}
 --- !u!143 &8789311890762768889
 CharacterController:
   m_ObjectHideFlags: 0
@@ -343,7 +330,66 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-8896844582423495940
+--- !u!114 &839979194922824885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8789311890762768882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 032d38c621d63f247a1f7aa77d9297c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castTransform: {fileID: 7417264318301962585}
+  maxMana: 5
+  currentMana: 5
+  manaRegen: 0.3
+  cards: []
+  currentCard: 0
+  hand: []
+  handSize: 5
+  initialHandSize: 3
+  drawDelay: 2
+  shuffleTime: 5
+  castingCard: {fileID: 0}
+  selectedCard: {fileID: 0}
+  selectedIndex: -1
+--- !u!114 &8333019513802926575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8789311890762768882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bf979a0aec1ed4e88d15c9962e45c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatar: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 0
+  IsDead: 0
+  animator: {fileID: 1860462970936701956}
+--- !u!114 &5724961448253769660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8789311890762768882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &8257568336931435201
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -361,32 +407,7 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
---- !u!114 &839979194922824885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8789311890762768882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 032d38c621d63f247a1f7aa77d9297c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  castTransform: {fileID: 7417264318301962585}
-  maxMana: 5
-  currentMana: 5
-  manaRegen: 0.3
-  cards: []
-  currentCard: 0
-  hand: []
-  handSize: 5
-  initialHandSize: 3
-  drawDelay: 2
-  shuffleTime: 5
---- !u!114 &2674675664712504316
+--- !u!114 &2854606670598795738
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -401,27 +422,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   clientAuthority: 1
-  animator: {fileID: 1860462970936701956}
---- !u!114 &8333019513802926575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8789311890762768882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69bf979a0aec1ed4e88d15c9962e45c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  maxHealth: 100
-  currentHealth: 0
-  IsDead: 0
-  deadColor: {r: 1, g: 0, b: 0, a: 1}
-  connectionId: 0
-  gamePlayer: {fileID: 0}
   animator: {fileID: 1860462970936701956}
 --- !u!1001 &5240822856689093013
 PrefabInstance:

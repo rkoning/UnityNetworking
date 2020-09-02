@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class PlayerHealth : Health
+public class PlayerHealth : MonoBehaviour
 {
-    [SyncVar]
-    public int connectionId;
+    public Avatar avatar;
 
-    public GamePlayer gamePlayer;
+    public float maxHealth;
+
+    public float currentHealth;
+
+    public bool IsDead = false;
 
     public Animator animator;
 
@@ -23,48 +26,26 @@ public class PlayerHealth : Health
     }
 
     private void StartRespawn() {
-        CmdPlayerDead();
+        avatar.gamePlayer.PlayerDead();
+        // CmdPlayerDead();
     }
 
-    private IEnumerator WaitThenRespawn(float duration) {
-        yield return new WaitForSeconds(duration);
-        IsDead = false;
-        currentHealth = maxHealth;
-        var spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
-        RpcPlayerAlive();
-    }
-
-    public override void Die() {
-        Debug.Log($"Die called, client: {connectionToClient} server: {connectionToServer}, Authority? {hasAuthority}");
-        if (hasAuthority)
+    public void TakeDamage(float damage, Avatar source) {
+        if (IsDead)
+            return;
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            // IsDead = true;
             StartRespawn();
-    }
-    
-    [Command]
-    private void CmdPlayerDead() {
-        Debug.Log("Player dying on server" + connectionToClient);
-        RpcPlayerDead();
-        var clips = animator.GetCurrentAnimatorClipInfo(0);
-        StartCoroutine(WaitThenRespawn(clips[0].clip.averageDuration + 3f));
+        }
     }
 
-    [ClientRpc]
-    private void RpcPlayerDead() {
-        Debug.Log("Player dying on client" + connectionToServer);
-        animator.SetTrigger("Dying");
+    public void Death() {
         OnDeath();
     }
 
-    [Command]
-    private void CmdPlayerAlive() {
-        RpcPlayerAlive();
-    }
-
-    [ClientRpc]
-    private void RpcPlayerAlive() {
-        animator.SetTrigger("Alive");
+    public void Respawn() {
         OnRespawn();
     }
 }

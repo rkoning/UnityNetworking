@@ -1,13 +1,16 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 public class Avatar : NetworkBehaviour
 {
+    [SyncVar]
+    public uint playerNetId;
+    
     public GamePlayer gamePlayer;
     private CharacterController controller;
-    private PlayerHealth health;
+    public PlayerHealth health;
 
     public Animator animator;
 
@@ -23,7 +26,7 @@ public class Avatar : NetworkBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
-    
+
     [HideInInspector]
     public bool canMove = true;
 
@@ -48,29 +51,35 @@ public class Avatar : NetworkBehaviour
 
 
     public Vector3 lookPoint;
+    
+    public bool initialized { get; private set; }
 
-    private void Start()
+    public void Init(GamePlayer gamePlayer)
     {
+        this.gamePlayer = gamePlayer;
+        health = GetComponent<PlayerHealth>();
+        deck = GetComponent<Deck>();
 
         overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = overrideController;
-        health = GetComponent<PlayerHealth>();
-        if (hasAuthority)
+        if (gamePlayer.hasAuthority)
         {
             controller = GetComponent<CharacterController>();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-         }
+        }
         else
         {
             // Disable the camera if this isn't the local player
             playerCamera.enabled = false;
+            playerCamera.GetComponent<AudioListener>().enabled = false;
         }
+        initialized = true;
     }
 
     private void Update()
     {
-        if (!hasAuthority)
+        if (!initialized || !gamePlayer.hasAuthority)
             return;
         
         if (health.IsDead) {

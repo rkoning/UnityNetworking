@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6268030054527251904}
   - component: {fileID: 3859206430758321978}
   - component: {fileID: 8552315999717976758}
+  - component: {fileID: 5649167275725598403}
   m_Layer: 0
   m_Name: Projectile Particle
   m_TagString: Untagged
@@ -4830,6 +4831,20 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &5649167275725598403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209356425635596663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4edf8ba9f9c2dbf4a94e7cc73b1ad23c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spell: {fileID: 7625321498144972566}
+  occurOnce: 0
 --- !u!1 &611381391841542504
 GameObject:
   m_ObjectHideFlags: 0
@@ -14446,6 +14461,7 @@ GameObject:
   - component: {fileID: 7625321498144972561}
   - component: {fileID: 4765581438756968342}
   - component: {fileID: 7362440863605041574}
+  - component: {fileID: 5962810133986206062}
   - component: {fileID: -7098627905253182209}
   m_Layer: 0
   m_Name: Scorching Ray
@@ -14486,6 +14502,7 @@ MonoBehaviour:
   syncInterval: 0.1
   owner: {fileID: 0}
   anchorForDuration: 0
+  blockForDuration: 0
   parentToCaster: 1
 --- !u!114 &7625321498144972561
 MonoBehaviour:
@@ -14582,9 +14599,26 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   spell: {fileID: 0}
-  parent: {fileID: 4765581438756968342}
+  parent: {fileID: 0}
   damage: 8
   hitOnce: 0
+--- !u!114 &5962810133986206062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7625321498144972563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a2185690281f8849bd463332a986ec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  spell: {fileID: 0}
+  parent: {fileID: 0}
+  statusFactory: {fileID: 11400000, guid: 8c93b6058256e6d4e96d215d55887e89, type: 2}
 --- !u!114 &-7098627905253182209
 MonoBehaviour:
   m_ObjectHideFlags: 0

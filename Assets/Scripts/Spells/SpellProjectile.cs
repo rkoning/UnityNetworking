@@ -11,6 +11,10 @@ public class SpellProjectile : NetworkBehaviour, IPoolableObject {
 
    public void Init() { }
 
+   public void RpcInit() {
+
+   }
+   
    [ServerCallback]
    private void OnCollisionEnter(Collision other) {
       var h = other.gameObject.GetComponent<Health>();

@@ -1377,7 +1377,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  maxHealth: 0
+  currentHealth: 0
+  IsDead: 0
   displayName: Loading...
+  buildJson: 
+  initBuild: 
   hudUI: {fileID: 8537316417355801523}
   deckUI: {fileID: 3898028849077292535}
   healthUI: {fileID: 3370529124967733811}
@@ -1573,7 +1578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8744901288330428513
 RectTransform:
   m_ObjectHideFlags: 0
