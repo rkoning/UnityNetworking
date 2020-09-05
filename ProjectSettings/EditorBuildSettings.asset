@@ -38,10 +38,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Town.unity
     guid: dc97e07aa2d5ae943b8437710bd727f9
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DeckBuilder.unity
     guid: 7bc5c811fffb79943b64436f1412e188
   m_configObjects: {}

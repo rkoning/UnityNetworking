@@ -12,15 +12,6 @@ using System.Linq;
 public class GamePlayer : NetworkBehaviour
 {
 
-    [SyncVar(hook = nameof(OnMaxHealthChanged))]
-    public float maxHealth;
-
-    [SyncVar(hook = nameof(OnCurrentHealthChanged))]
-    public float currentHealth;
-
-    [SyncVar(hook = nameof(OnIsDeadChanged))]
-    public bool IsDead = false;
-
     [SyncVar]
     public string displayName = "Loading...";
 
@@ -131,59 +122,6 @@ public class GamePlayer : NetworkBehaviour
         this.displayName = displayName;
     }
 
-    // private void ChangeBuild(string buildJson) {
-    //     Debug.Log("ChangeBuild");
-    //     Debug.Log(hasAuthority + " " + isLocalPlayer + " " + isServer);
-    //     if (avatar) {
-    //         Destroy(avatar);
-    //     }
-    //     var spawnPoint = NetworkManager.singleton.GetStartPosition();
-    //     build = SavedDeck.LoadFromString(buildJson);
-    //     var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation, transform);
-        
-    //     GetComponent<NetworkTransformChild>().target = avatarGameObject.transform;
-    //     SetupPlayer();
-    // }
-
-    // public void SetupPlayer() {
-    //     Debug.Log("SetupPlayer");
-    //     Debug.Log(hasAuthority + " " + isLocalPlayer + " " + isServer);
-    //     // Avatar is going to be the first child of this gameObject
-    //     avatar = GetComponentInChildren<Avatar>();
-    //     // // call Init() on avatar to setup health and deck
-    //     avatar.Init(this);
-    //     // get the buildJson of this gamePlayer and call LoadCards() to initialize the deck
-    //     var byType = build.cards.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
-    //     foreach(var kvp in byType) {
-    //         RegisterPrefab(kvp.Key.spellPrefab, kvp.Value);
-    //     }
-    //     this.buildJson = build.ToString();
-    //     hudUI.SetActive(true);
-
-    //     avatar.deck.LoadCards(SavedDeck.LoadFromString(buildJson).cards);
-    //     if (hasAuthority) {
-    //         // link healthUI to health
-    //         healthUI.health = avatar.health;
-    //         // link deckUI to deck
-    //         deckUI.deck = avatar.deck;
-    //         deckUI.Init();
-    //     }
-    // }
-
-    // [Command]
-    // public void CmdSpawnAvatar() {
-    //     // NetworkServer.Spawn(avatarGameObject, connectionToClient); // Give player authority over avatar object
-    //     RpcSpawnAvatar(build.ToString());
-    // }
-
-    // [ClientRpc]
-    // public void RpcSpawnAvatar(string buildJson) {
-    //     var spawnPoint = NetworkManager.singleton.GetStartPosition();
-    //     build = SavedDeck.LoadFromString(buildJson);
-    //     var avatarGameObject = GameObject.Instantiate(build.character.avatarPrefab, spawnPoint.position, spawnPoint.rotation, transform);
-    //     SetupPlayer();
-    // }
-
     #endregion
 
     public void RegisterPrefab(GameObject prefab, int count) {
@@ -206,8 +144,8 @@ public class GamePlayer : NetworkBehaviour
     }
 
     public void DealDamage(Health other, float amount) {
-        Debug.Log(other.GetComponent<NetworkIdentity>().netId);
-        CmdDealDamage(other.GetComponent<NetworkIdentity>().netId, amount);
+        if (hasAuthority)
+            CmdDealDamage(other.GetComponent<NetworkIdentity>().netId, amount);
     }
 
     [Command]
@@ -216,7 +154,8 @@ public class GamePlayer : NetworkBehaviour
     }
 
     public void ApplyStatus(Health health, StatusFactory factory) {
-        CmdApplyStatus(health.GetComponent<NetworkIdentity>().netId, factory.name);
+        if (hasAuthority)
+            CmdApplyStatus(health.GetComponent<NetworkIdentity>().netId, factory.name);
     }
 
     [Command]
@@ -258,27 +197,21 @@ public class GamePlayer : NetworkBehaviour
     }
 
     public void PlayerDead() {
-        CmdPlayerDead();
+        if (hasAuthority)
+            CmdPlayerDead();
     }
 
     [Command]
     public void CmdPlayerDead() {
         Debug.Log("Player dying on server" + connectionToClient);
-        RpcPlayerDead();
         // var clips = animator.GetCurrentAnimatorClipInfo(0);
         StartCoroutine(WaitThenRespawn(5f));
     }
 
-    [ClientRpc]
-    private void RpcPlayerDead() {
-        // animator.SetTrigger("Dying");
-        avatar.health.Death();
-    }
 
     private IEnumerator WaitThenRespawn(float duration) {
         yield return new WaitForSeconds(duration);
-        IsDead = false;
-        currentHealth = maxHealth;
+        avatar.health.currentHealth = avatar.health.maxHealth;
         var spawnPoint = NetworkManager.singleton.GetStartPosition();
         avatar.transform.position = spawnPoint.position;
         avatar.transform.rotation = spawnPoint.rotation;
@@ -287,7 +220,6 @@ public class GamePlayer : NetworkBehaviour
 
     [ClientRpc]
     private void RpcPlayerAlive() {
-        // animator.SetTrigger("Alive");
         avatar.health.Respawn();
     }
 }

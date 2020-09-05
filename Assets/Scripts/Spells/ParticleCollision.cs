@@ -13,7 +13,6 @@ public class ParticleCollision : MonoBehaviour {
     }
 
     private void OnParticleCollision(GameObject other) {
-        Debug.Log(other + " was hit");
         if (occurOnce) { // if the Hit effects are only supposed to occur once, check if we have already hit this
             if (hits.Contains(other))
                 return;
@@ -24,7 +23,6 @@ public class ParticleCollision : MonoBehaviour {
         var target = other.GetComponent<Health>();
         if (target)
         {
-            Debug.Log("Hit Target " + target);
             spell.HitHealth(target);
         }
         spell.HitAny(other);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Mirror;
 
 public class Charge : SpellEffect {
    public float maxChargeTime;
@@ -52,5 +53,9 @@ public class Charge : SpellEffect {
 
    public override bool Done() {
       return !chargeStarted;
+   }
+
+   public override void CleanUp() {
+      onChargeCanceled.Invoke();
    }
 }

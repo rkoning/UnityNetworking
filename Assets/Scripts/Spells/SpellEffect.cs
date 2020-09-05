@@ -10,6 +10,7 @@ public abstract class SpellEffect : NetworkBehaviour {
     public event CastAction OnCast;
     public event CastAction OnHold;
     public event CastAction OnRelease;
+    public event CastAction OnDone;
     public delegate void HitAnyAction(GameObject other);
     public event HitAnyAction OnHitAny;
 
@@ -28,6 +29,7 @@ public abstract class SpellEffect : NetworkBehaviour {
         OnCast += () => { };
         OnHold += () => { };
         OnRelease += () => { };
+        OnDone += () => { };
         OnHitAny += (GameObject other) => { };
         OnHitHealth += (Health t) => { };
 
@@ -38,6 +40,7 @@ public abstract class SpellEffect : NetworkBehaviour {
             parent.OnRelease += Release;
             parent.OnHitAny += HitAny;
             parent.OnHitHealth += HitHealth;
+            parent.OnDone += CleanUp;
         }
         else
         {
@@ -46,6 +49,7 @@ public abstract class SpellEffect : NetworkBehaviour {
             spell.OnRelease += Release;
             spell.OnHitAny += HitAny;
             spell.OnHitHealth += HitHealth;
+            spell.OnDone += CleanUp;
         }
     }
 
@@ -68,6 +72,10 @@ public abstract class SpellEffect : NetworkBehaviour {
     public virtual void HitHealth(Health target)
     {
         OnHitHealth(target);
+    }
+
+    public virtual void CleanUp() {
+        OnDone();
     }
 
     public virtual bool Done() {

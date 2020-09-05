@@ -11,16 +11,16 @@ public class BurningStatusData {
    public float duration = 5f;
    public GameObject effectPrefab;
 }
-
+ 
 public class BurningStatus: Status<BurningStatusData> {
 
    private GameObject effectObject;
 
    public override void Apply() {
-      Debug.Log("Applied!");
       target.StartCoroutine(ApplyOvertime(data.duration));
       effectObject = GameObject.Instantiate(data.effectPrefab, target.transform.position + Vector3.up, target.transform.rotation, target.transform);
       NetworkServer.Spawn(effectObject);
+      base.Apply();
    }
 
    public override void PerTick() {
@@ -28,6 +28,7 @@ public class BurningStatus: Status<BurningStatusData> {
    }
 
    public override void Unapply() {
+      base.Unapply();
       NetworkServer.Destroy(effectObject);
    }
 

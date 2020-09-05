@@ -58,6 +58,14 @@ public class Avatar : NetworkBehaviour
     {
         this.gamePlayer = gamePlayer;
         health = GetComponent<PlayerHealth>();
+        health.OnDeath += () => {
+            animator.SetTrigger("Dying");
+            this.gamePlayer.PlayerDead();
+        };
+
+        health.OnRespawn += () => {
+            animator.SetTrigger("Alive");
+        };
         deck = GetComponent<Deck>();
 
         overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
@@ -84,7 +92,6 @@ public class Avatar : NetworkBehaviour
         
         if (health.IsDead) {
             playerCamera.transform.position = transform.position + observerOffset;
-            health.OnDeath += () => {};
             playerCamera.transform.rotation = Quaternion.LookRotation(transform.position - playerCamera.transform.position);
             return;
         }

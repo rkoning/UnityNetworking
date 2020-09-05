@@ -16,11 +16,17 @@ public class StatusFactory<DataType, StatusType>: StatusFactory
 }
 
 public abstract class Status {
-    public abstract void Apply();
+    public delegate void UnapplyEvent();
+    public event UnapplyEvent OnUnapply;
+    public virtual void Apply() {
+        OnUnapply += () => {};
+    }
 
     public abstract void PerTick();
 
-    public abstract void Unapply();
+    public virtual void Unapply() {
+        OnUnapply();
+    }
 
     public IEnumerator ApplyOvertime(float duration) {
       float delta = duration / 25f; // for now default tick time is 0.25 sec     

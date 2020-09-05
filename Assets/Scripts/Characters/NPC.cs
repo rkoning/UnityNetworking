@@ -16,12 +16,12 @@ public class NPC : NetworkBehaviour {
       agent = GetComponent<NavMeshAgent>();
       animator = GetComponent<Animator>();
       health = GetComponent<Health>();
-      health.onDeath += () => {
+      health.OnDeath += () => {
          animator.SetTrigger("Dying");
          GetComponent<Collider>().enabled = false;
          dead = true;
       };
-      agent.updatePosition = false;
+      // agent.updatePosition = false;
       InvokeRepeating("GetRandomPath", 0f, 12f);
    }
 

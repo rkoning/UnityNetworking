@@ -42,8 +42,6 @@ public class ObjectPool : NetworkBehaviour
             go.SetActive(false);
             go.GetComponent<IPoolableObject>().Init();
         }
-
-        ClientScene.RegisterPrefab(prefab, SpawnHandler, UnspawnHandler);
     }
 
     public static void Register(uint netId, GameObject obj) {

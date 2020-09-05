@@ -80,6 +80,7 @@ public class Deck : MonoBehaviour {
         }
 
         if (currentSpell && currentSpell.Done()) {
+            currentSpell.Despawn();
             castingCard = null;
             currentSpell = null;
             IsAnchored = false;

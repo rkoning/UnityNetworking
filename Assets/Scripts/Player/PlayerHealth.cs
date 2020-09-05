@@ -4,48 +4,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : Health
 {
     public Avatar avatar;
 
-    public float maxHealth;
-
-    public float currentHealth;
-
-    public bool IsDead = false;
-
     public Animator animator;
 
-    public delegate void HealthEvent();
-    public event HealthEvent OnDeath;
     public event HealthEvent OnRespawn;
 
-    private void Start() {
-        OnDeath += () => {};
+    protected override void Start() {
+        base.Start();
         OnRespawn += () => {};
     }
-
-    private void StartRespawn() {
-        avatar.gamePlayer.PlayerDead();
-        // CmdPlayerDead();
-    }
-
-    public void TakeDamage(float damage, Avatar source) {
-        if (IsDead)
-            return;
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            // IsDead = true;
-            StartRespawn();
-        }
-    }
-
-    public void Death() {
-        OnDeath();
+    
+    public override void OnCurrentHealthChanged(float oldValue, float newValue) {
+        base.OnCurrentHealthChanged(oldValue, newValue);
+        if (oldValue <= 0 && newValue > 0)
+            OnRespawn();
     }
 
     public void Respawn() {
+        currentHealth = maxHealth;
+        IsDead = false;
         OnRespawn();
     }
 }

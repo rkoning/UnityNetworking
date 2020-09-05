@@ -1,63 +1,66 @@
 using UnityEngine;
 using Mirror;
+using System.Collections.Generic;
 
-public class Health : MonoBehaviour {
+public class Health : NetworkBehaviour {
 
+    [SyncVar]
     public float maxHealth;
 
+    [SyncVar(hook = nameof(OnCurrentHealthChanged))]
     public float currentHealth;
 
+    [SyncVar]
     public bool IsDead = false;
 
     protected Avatar lastDamagedBy;
 
-    public delegate void DeathEvent();
-    public event DeathEvent onDeath;
+    public delegate void HealthEvent();
+    public event HealthEvent OnDeath;
+    public event HealthEvent OnDamaged;
 
-    private void Start()
+    private List<StatusFactory> currentEffects = new List<StatusFactory>();
+
+    protected virtual void Start()
     {
+        OnDeath += () => {};
+        OnDamaged += () => {};
+    }
+
+    public override void OnStartServer() {
+        ObjectPool.Register(GetComponent<NetworkIdentity>().netId, gameObject);
         currentHealth = maxHealth;
-        onDeath += () => {};
     }
 
-    // public override void OnStartServer() {
-    //     ObjectPool.Register(GetComponent<NetworkIdentity>().netId, gameObject);
-    //     currentHealth = maxHealth;
-    // }
-
-    public void Init() {
-        // currentHealth = maxHealth;
-        // if (isServer) {
-        //     RpcInit();
-        // }
-    }
-
-    public void RpcInit() {
-        Init();
-    }
-
-    public void TakeDamage(float damage, Avatar source) {
+    [Server]
+    public virtual void TakeDamage(float damage, Avatar source) {
         if (IsDead)
             return;
         currentHealth -= damage;
+        OnDamaged();
         if (currentHealth <= 0)
         {
             IsDead = true;
-            // RpcDie();
+            Die();
         }
     }
 
+    [Server]
     public void ApplyStatus(StatusFactory factory, Avatar source) {
+        if (currentEffects.Contains(factory))
+            return;
         Status s = factory.GetStatus(this, source);
+        currentEffects.Add(factory);
+        s.OnUnapply += () => currentEffects.Remove(factory);
         s.Apply();
     }
 
-    // [ClientRpc]
-    // public void RpcDie() {
-    //     Die();
-    // }
+    public virtual void OnCurrentHealthChanged(float oldValue, float newValue) {
+        if (newValue <= 0)
+            Die();
+    } 
 
     public virtual void Die() {
-        onDeath();
+        OnDeath();
     }
 }

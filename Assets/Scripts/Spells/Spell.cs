@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using Mirror;
 
 public class Spell : NetworkBehaviour, IPoolableObject
@@ -8,6 +9,7 @@ public class Spell : NetworkBehaviour, IPoolableObject
     public event CastAction OnCast;
     public event CastAction OnHold;
     public event CastAction OnRelease;
+    public event CastAction OnDone;
 
     public delegate void HitAnyAction(GameObject other);
     public event HitAnyAction OnHitAny;
@@ -33,6 +35,7 @@ public class Spell : NetworkBehaviour, IPoolableObject
 
         OnRelease += () => { };
 
+        OnDone += () => { };
         OnHitAny += (GameObject other) => { };
         OnHitHealth += (Health target) => { };
  
@@ -78,7 +81,6 @@ public class Spell : NetworkBehaviour, IPoolableObject
 
     public void HitHealth(Health target)
     {
-        Debug.Log(target);
         OnHitHealth(target);
     }
 
@@ -88,6 +90,34 @@ public class Spell : NetworkBehaviour, IPoolableObject
                 return false;
             }
         }
+        CmdDone();
         return true;
+    }
+
+    [Command]
+    public void CmdDone() {
+        RpcDone();
+    }
+
+    [ClientRpc]
+    public void RpcDone() {
+        OnDone();
+    }
+
+    public void Despawn() {
+        if (hasAuthority)
+            CmdDespawn();
+    }
+
+    [Command]
+    public void CmdDespawn() {
+        StartCoroutine(WaitThenDespawn(5f));
+    }
+
+    private IEnumerator WaitThenDespawn(float duration) {
+        yield return new WaitForSeconds(duration);
+        transform.SetParent(null);
+        gameObject.SetActive(false);
+        NetworkServer.UnSpawn(gameObject);
     }
 }
