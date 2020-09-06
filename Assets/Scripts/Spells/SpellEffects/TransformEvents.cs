@@ -17,11 +17,16 @@ public class TransformEvents : SpellEffect
     private Dictionary<EventTransform, Action> mapping = new Dictionary<EventTransform, Action>();
 
     public override void Register(Spell spell) {
-        mapping.Add(EventTransform.Cast, base.Cast);
-        mapping.Add(EventTransform.Hold, base.Hold);
-        mapping.Add(EventTransform.Release, base.Release);
-        mapping.Add(EventTransform.HitAny, () => base.HitAny(null));
-        mapping.Add(EventTransform.HitHealth, () => base.HitHealth(null));
+        if (!mapping.ContainsKey(EventTransform.Cast))
+            mapping.Add(EventTransform.Cast, base.Cast);
+        if (!mapping.ContainsKey(EventTransform.Hold))
+            mapping.Add(EventTransform.Hold, base.Hold);
+        if (!mapping.ContainsKey(EventTransform.Release))
+            mapping.Add(EventTransform.Release, base.Release);
+        if (!mapping.ContainsKey(EventTransform.HitAny))
+            mapping.Add(EventTransform.HitAny, () => base.HitAny(null));
+        if (!mapping.ContainsKey(EventTransform.HitHealth))
+            mapping.Add(EventTransform.HitHealth, () => base.HitHealth(null));
 
         base.Register(spell);
     }

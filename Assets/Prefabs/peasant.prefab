@@ -114,7 +114,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 81112db0868bc33468b08bcbb8ac2824, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  maxHealth: 20000
+  maxHealth: 100
   currentHealth: 0
   IsDead: 0
 --- !u!136 &626607394608524431

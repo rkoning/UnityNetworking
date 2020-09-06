@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
   m_Name: Scorching Ray
   m_EditorClassIdentifier: 
-  id: 9
+  id: 7
   spellPrefab: {fileID: 7625321498144972563, guid: 498db0becbf205246bf7e5b6b0c1b29f,
     type: 3}
   sprite: {fileID: 21300000, guid: f95b2008af4d8ed43826a8dec2c9ae47, type: 3}

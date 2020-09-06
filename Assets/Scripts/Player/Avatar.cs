@@ -126,7 +126,6 @@ public class Avatar : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
         
-        
         if (deck && !deck.IsAnchored) {
             currSpeed = currSpeed.normalized;
             if (!isRunning) {

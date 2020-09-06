@@ -21,7 +21,7 @@ public class NPC : NetworkBehaviour {
          GetComponent<Collider>().enabled = false;
          dead = true;
       };
-      // agent.updatePosition = false;
+      agent.updatePosition = false;
       InvokeRepeating("GetRandomPath", 0f, 12f);
    }
 

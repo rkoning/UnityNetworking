@@ -298,8 +298,8 @@ MonoBehaviour:
   gamePlayer: {fileID: 0}
   health: {fileID: 0}
   animator: {fileID: 1860462970936701956}
-  walkSpeed: 7.5
-  runSpeed: 11.5
+  walkSpeed: 2
+  runSpeed: 7.5
   jumpSpeed: 8
   gravity: 20
   lookSpeed: 2
@@ -368,10 +368,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bf979a0aec1ed4e88d15c9962e45c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatar: {fileID: 0}
+  syncMode: 0
+  syncInterval: 0.1
   maxHealth: 100
   currentHealth: 0
   IsDead: 0
+  avatar: {fileID: 0}
   animator: {fileID: 1860462970936701956}
 --- !u!114 &5724961448253769660
 MonoBehaviour:

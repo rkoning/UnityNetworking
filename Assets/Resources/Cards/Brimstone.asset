@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da26ac5651286414b882476108d2e032, type: 3}
-  m_Name: Frost Barrage
+  m_Name: Brimstone
   m_EditorClassIdentifier: 
-  id: 4
-  spellPrefab: {fileID: 6701233578615732269, guid: 00766b9d76149454eb9e06a7c6681029,
+  id: 8
+  spellPrefab: {fileID: 1446393471054127882, guid: a523831f22c17cd4eb70decb20b0730c,
     type: 3}
-  sprite: {fileID: 21300000, guid: 2a75ecd424acf144ea3bdcee295be3e3, type: 3}
-  description: Fires a spray of ice shards
+  sprite: {fileID: 21300000, guid: 9f0df7f4f439502489a329bd35aca4b6, type: 3}
+  description: Rains bolts of fire down upon a location for a duration
   manaCost: 2
   lore: 5
   consume: 0
