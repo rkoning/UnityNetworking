@@ -208,7 +208,6 @@ public class GamePlayer : NetworkBehaviour
         StartCoroutine(WaitThenRespawn(5f));
     }
 
-
     private IEnumerator WaitThenRespawn(float duration) {
         yield return new WaitForSeconds(duration);
         avatar.health.currentHealth = avatar.health.maxHealth;

@@ -97,10 +97,10 @@ public class Avatar : NetworkBehaviour
         }
         
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit)) {
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit)) {
             this.lookPoint = hit.point;
         } else {
-            this.lookPoint = transform.position + transform.forward * 1000f;
+            this.lookPoint = playerCamera.transform.position + playerCamera.transform.forward * 1000f;
         }
 
         bool isRunning = Input.GetKey(KeyCode.LeftShift);

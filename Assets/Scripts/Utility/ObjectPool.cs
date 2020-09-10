@@ -40,7 +40,7 @@ public class ObjectPool : NetworkBehaviour
             go.name = go.name.Replace("(Clone)", "") + i.ToString();
             prefabPool.Enqueue(go);
             go.SetActive(false);
-            go.GetComponent<IPoolableObject>().Init();
+            // go.GetComponent<IPoolableObject>().Init();
         }
     }
 

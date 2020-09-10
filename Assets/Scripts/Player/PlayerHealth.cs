@@ -19,7 +19,7 @@ public class PlayerHealth : Health
     
     public override void OnCurrentHealthChanged(float oldValue, float newValue) {
         base.OnCurrentHealthChanged(oldValue, newValue);
-        if (oldValue <= 0 && newValue > 0)
+        if (oldValue <= 0 && newValue > 0 && OnRespawn != null)
             OnRespawn();
     }
 

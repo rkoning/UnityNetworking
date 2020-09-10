@@ -1,28 +1,15 @@
 using UnityEngine;
-using Mirror;
-using UnityEngine.AI;
 
-public class NPC : NetworkBehaviour {
-
-   private NavMeshAgent agent;
-   private Health health;
-
-   private Animator animator;
-   Vector2 smoothDeltaPosition = Vector2.zero;
-   Vector2 velocity = Vector2.zero;
-   private bool dead;
-
+public class VillagerController : NPCController {
    public override void OnStartServer() {
-      agent = GetComponent<NavMeshAgent>();
-      animator = GetComponent<Animator>();
-      health = GetComponent<Health>();
+      base.OnStartServer();
       health.OnDeath += () => {
          animator.SetTrigger("Dying");
          GetComponent<Collider>().enabled = false;
          dead = true;
       };
       agent.updatePosition = false;
-      InvokeRepeating("GetRandomPath", 0f, 12f);
+      InvokeRepeating(nameof(GetRandomPath), 0f, 12f);
    }
 
    private void GetRandomPath() {
@@ -34,7 +21,7 @@ public class NPC : NetworkBehaviour {
    }
 
    private void Update() {
-      if (!isServer || dead) {
+      if (!isServer || dead || !agent) {
          return;
       }
       Vector3 worldDeltaPosition = agent.nextPosition - transform.position;

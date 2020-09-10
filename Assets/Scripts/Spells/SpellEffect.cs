@@ -35,6 +35,7 @@ public abstract class SpellEffect : NetworkBehaviour {
 
         if (parent)
         {
+            Debug.Log("Registered OnCast to parent effect");
             parent.OnCast += Cast;
             parent.OnHold += Hold;
             parent.OnRelease += Release;

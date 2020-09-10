@@ -58,6 +58,7 @@ public class Spell : NetworkBehaviour, IPoolableObject
 
     public void Cast()
     {
+        Debug.Log("Spell Cast()");
         if (parentToCaster) {
             transform.SetParent(owner.deck.castTransform);
         }
