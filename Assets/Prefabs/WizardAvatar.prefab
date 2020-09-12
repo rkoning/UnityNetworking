@@ -314,20 +314,20 @@ MonoBehaviour:
     baseValue: 1
     bonus: 0
     multiplier: 1
-  drawSpeed:
-    baseValue: 1
-    bonus: 0
-    multiplier: 1
   castSpeed:
     baseValue: 1
     bonus: 0
     multiplier: 1
-  armor:
-    baseValue: 0
+  drawSpeed:
+    baseValue: 1
+    bonus: 0
+    multiplier: 1
+  shuffleSpeed:
+    baseValue: 1
     bonus: 0
     multiplier: 1
   maxArmor:
-    baseValue: 0
+    baseValue: 20
     bonus: 0
     multiplier: 1
   maxHealth:
@@ -386,7 +386,7 @@ MonoBehaviour:
   handSize: 5
   initialHandSize: 3
   drawDelay: 2
-  shuffleTime: 5
+  shuffleSpeed: 0
   castingCard: {fileID: 0}
   selectedCard: {fileID: 0}
   selectedIndex: -1
@@ -404,8 +404,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  armor: 0
-  maxArmor: 0
+  armor: 20
+  maxArmor: 20
   maxHealth: 100
   currentHealth: 0
   IsDead: 0

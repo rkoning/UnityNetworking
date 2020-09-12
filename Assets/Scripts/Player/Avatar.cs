@@ -27,7 +27,7 @@ public class Avatar : NetworkBehaviour
 
 
     [Header("Health Attributes")]
-    public AvatarAttribute armor;
+    // public AvatarAttribute armor;
     public AvatarAttribute maxArmor;
     public AvatarAttribute maxHealth;
 
@@ -214,7 +214,7 @@ public class Avatar : NetworkBehaviour
 
     private void SetAttributeValues() {
         health.maxHealth = maxHealth.CurrentValue;
-        health.armor = armor.CurrentValue;
+        // health.armor = armor.CurrentValue;
         health.maxArmor = maxArmor.CurrentValue;
 
         deck.drawDelay = 1 / drawSpeed.CurrentValue;
