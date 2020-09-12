@@ -7,7 +7,7 @@ public class Health : NetworkBehaviour {
     [SyncVar]
     public float armor;
 
-    [SyncVar]
+    [SyncVar(hook = nameof(OnMaxArmorChanged))]
     public float maxArmor;
 
     [SyncVar(hook = nameof(OnMaxHealthChanged))]
@@ -97,6 +97,11 @@ public class Health : NetworkBehaviour {
         if (currentHealth > newValue)
             currentHealth = newValue;           
     } 
+
+    public virtual void OnMaxArmorChanged(float oldValue, float newValue) {
+        if (armor > newValue)
+            armor = newValue;
+    }
 
     public virtual void Die() {
 
