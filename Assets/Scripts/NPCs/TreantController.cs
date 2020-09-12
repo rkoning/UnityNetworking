@@ -8,8 +8,8 @@ public class TreantController : NPCController
     public override void OnStartServer()
     {
         base.OnStartServer();
-        health.OnDamaged += () => animator.SetTrigger("Take Damage");
-        health.OnDeath += () => animator.SetTrigger("Die");
+        health.OnDamaged += (float damage) => animator.SetTrigger("Take Damage");
+        health.OnDeath += (float damage) => animator.SetTrigger("Die");
         InvokeRepeating(nameof(GetRandomPath), 0f, 12f);
     }
 

@@ -14,9 +14,25 @@ public class Avatar : NetworkBehaviour
 
     public Animator animator;
 
-    public float walkSpeed = 7.5f;
-    public float runSpeed = 11.5f;
-    public float jumpSpeed = 8f;
+    [Header("Movement Attributes")]
+    public AvatarAttribute moveSpeed;
+    public AvatarAttribute jumpSpeed;
+
+    [Header("Spell Casting Attributes")]
+    public AvatarAttribute manaRegen;
+    public AvatarAttribute maxMana;
+    public AvatarAttribute castSpeed;
+    public AvatarAttribute drawSpeed;
+    public AvatarAttribute shuffleSpeed;
+
+
+    [Header("Health Attributes")]
+    public AvatarAttribute armor;
+    public AvatarAttribute maxArmor;
+    public AvatarAttribute maxHealth;
+
+    public float runModifier = 2f;
+
     public float gravity = 20f;
 
     public float lookSpeed = 2.0f;
@@ -58,12 +74,12 @@ public class Avatar : NetworkBehaviour
     {
         this.gamePlayer = gamePlayer;
         health = GetComponent<PlayerHealth>();
-        health.OnDeath += () => {
+        health.OnDeath += (float damage) => {
             animator.SetTrigger("Dying");
             this.gamePlayer.PlayerDead();
         };
 
-        health.OnRespawn += () => {
+        health.OnRespawn += (float damage) => {
             animator.SetTrigger("Alive");
         };
         deck = GetComponent<Deck>();
@@ -96,6 +112,7 @@ public class Avatar : NetworkBehaviour
             return;
         }
         
+        SetAttributeValues();
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit)) {
             this.lookPoint = hit.point;
@@ -106,7 +123,11 @@ public class Avatar : NetworkBehaviour
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         Vector3 currSpeed = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 
-        currSpeed = canMove ? (isRunning ? currSpeed * runSpeed : currSpeed * walkSpeed) : Vector3.zero;
+        currSpeed = canMove ? 
+            (isRunning ?
+                currSpeed * moveSpeed.CurrentValue * runModifier :
+                currSpeed * moveSpeed.CurrentValue) 
+            : Vector3.zero;
         float moveDirectionY = moveDirection.y;
 
         moveDirection = transform.forward * currSpeed.z + transform.right * currSpeed.x;
@@ -114,7 +135,7 @@ public class Avatar : NetworkBehaviour
         if (Input.GetButton("Jump") && controller.isGrounded)
         {
             animator.SetTrigger("isJumping");
-            moveDirection.y = jumpSpeed;
+            moveDirection.y = jumpSpeed.CurrentValue;
         }
         else
         {
@@ -191,6 +212,17 @@ public class Avatar : NetworkBehaviour
         }
     }
 
+    private void SetAttributeValues() {
+        health.maxHealth = maxHealth.CurrentValue;
+        health.armor = armor.CurrentValue;
+        health.maxArmor = maxArmor.CurrentValue;
+
+        deck.drawDelay = 1 / drawSpeed.CurrentValue;
+        deck.manaRegen = manaRegen.CurrentValue;
+        deck.maxMana = maxMana.CurrentValue;
+        deck.shuffleSpeed = shuffleSpeed.CurrentValue;
+    }
+
     private void SelectSpell(int index) {
         deck.SelectSpell(index);
     }
@@ -230,6 +262,19 @@ public class Avatar : NetworkBehaviour
            held = Input.GetButton(buttonId);
            up = !held;
            released = Input.GetButtonUp(buttonId);
+        }
+    }
+}
+
+[System.Serializable]
+public class AvatarAttribute {
+    public float baseValue = 1f;
+    public float bonus = 0f;
+    public float multiplier = 1f;
+
+    public float CurrentValue {
+        get {
+            return (baseValue + bonus) * multiplier;
         }
     }
 }

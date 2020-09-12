@@ -3,7 +3,7 @@ using UnityEngine;
 public class VillagerController : NPCController {
    public override void OnStartServer() {
       base.OnStartServer();
-      health.OnDeath += () => {
+      health.OnDeath += (float damage) => {
          animator.SetTrigger("Dying");
          GetComponent<Collider>().enabled = false;
          dead = true;

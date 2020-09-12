@@ -41,7 +41,7 @@ public class Deck : MonoBehaviour {
     private Avatar avatar;
 
     [Header("Shuffle")]
-    public float shuffleTime;
+    public float shuffleSpeed;
     public float RemainingShuffleTime { get; private set; }
 
     private Coroutine shuffling;
@@ -139,8 +139,8 @@ public class Deck : MonoBehaviour {
         if (!IsShuffling) {
             IsShuffling = true;
             hand.Clear();
-            RemainingShuffleTime = shuffleTime;
-            shuffling = StartCoroutine(WaitThenShuffle(shuffleTime));
+            RemainingShuffleTime = shuffleSpeed;
+            shuffling = StartCoroutine(WaitThenShuffle(shuffleSpeed));
         }
     }
 

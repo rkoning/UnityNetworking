@@ -5,6 +5,12 @@ using System.Collections.Generic;
 public class Health : NetworkBehaviour {
 
     [SyncVar]
+    public float armor;
+    
+    [SyncVar]
+    public float maxArmor;
+
+    [SyncVar(hook = nameof(OnMaxHealthChanged))]
     public float maxHealth;
 
     [SyncVar(hook = nameof(OnCurrentHealthChanged))]
@@ -15,16 +21,23 @@ public class Health : NetworkBehaviour {
 
     protected Avatar lastDamagedBy;
 
-    public delegate void HealthEvent();
+    public delegate void HealthEvent(float damage);
+
     public event HealthEvent OnDeath;
     public event HealthEvent OnDamaged;
+    public event HealthEvent OnHealthDamaged;
+    public event HealthEvent OnArmorBroken;
+    public event HealthEvent OnArmorDamaged;
 
     private List<StatusFactory> currentEffects = new List<StatusFactory>();
 
     protected virtual void Start()
     {
-        OnDeath += () => {};
-        OnDamaged += () => {};
+        OnDeath += (float damage) => {};
+        OnDamaged += (float damage) => {};
+        OnHealthDamaged += (float damage) => {};
+        OnArmorBroken += (float damage) => {};
+        OnArmorDamaged += (float damage) => {};
     }
 
     public override void OnStartServer() {
@@ -36,11 +49,31 @@ public class Health : NetworkBehaviour {
     public virtual void TakeDamage(float damage, Avatar source) {
         if (IsDead)
             return;
-        currentHealth -= damage;
-        OnDamaged();
+        if (armor > 0) {
+            float armorDamageTaken = damage - armor;
+            if (armorDamageTaken > 0) {
+                // if enough damage was dealt to bypass the current armor
+                // destroy armor
+                armor = 0;
+                OnArmorBroken(damage);
+                // damage health for the remainder
+                currentHealth -= armorDamageTaken;
+                OnHealthDamaged(armorDamageTaken);
+            } else {
+                // if armor absorbs all of the incoming damage, damage armor only
+                armor -= damage;
+                OnArmorDamaged(damage);
+            }
+        } else {
+            currentHealth -= damage;
+            OnHealthDamaged(damage);
+        }
+
+        OnDamaged(damage);
         if (currentHealth <= 0)
         {
             IsDead = true;
+            OnDeath(damage);
             Die();
         }
     }
@@ -60,7 +93,12 @@ public class Health : NetworkBehaviour {
             Die();
     } 
 
+    public virtual void OnMaxHealthChanged(float oldValue, float newValue) {
+        if (currentHealth < newValue)
+            currentHealth = newValue;           
+    } 
+
     public virtual void Die() {
-        OnDeath();
+
     }
 }

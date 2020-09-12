@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Mirror;
+﻿using UnityEngine;
 
 public class PlayerHealth : Health
 {
@@ -14,18 +10,18 @@ public class PlayerHealth : Health
 
     protected override void Start() {
         base.Start();
-        OnRespawn += () => {};
+        OnRespawn += (float damage) => {};
     }
     
     public override void OnCurrentHealthChanged(float oldValue, float newValue) {
         base.OnCurrentHealthChanged(oldValue, newValue);
         if (oldValue <= 0 && newValue > 0 && OnRespawn != null)
-            OnRespawn();
+            OnRespawn(newValue);
     }
 
     public void Respawn() {
         currentHealth = maxHealth;
         IsDead = false;
-        OnRespawn();
+        OnRespawn(currentHealth);
     }
 }

@@ -298,9 +298,43 @@ MonoBehaviour:
   gamePlayer: {fileID: 0}
   health: {fileID: 0}
   animator: {fileID: 1860462970936701956}
-  walkSpeed: 2
-  runSpeed: 7.5
-  jumpSpeed: 8
+  moveSpeed:
+    baseValue: 2.5
+    bonus: 0
+    multiplier: 1
+  jumpSpeed:
+    baseValue: 7
+    bonus: 0
+    multiplier: 1
+  manaRegen:
+    baseValue: 1
+    bonus: 0
+    multiplier: 1
+  maxMana:
+    baseValue: 1
+    bonus: 0
+    multiplier: 1
+  drawSpeed:
+    baseValue: 1
+    bonus: 0
+    multiplier: 1
+  castSpeed:
+    baseValue: 1
+    bonus: 0
+    multiplier: 1
+  armor:
+    baseValue: 0
+    bonus: 0
+    multiplier: 1
+  maxArmor:
+    baseValue: 0
+    bonus: 0
+    multiplier: 1
+  maxHealth:
+    baseValue: 100
+    bonus: 0
+    multiplier: 1
+  runModifier: 2
   gravity: 20
   lookSpeed: 2
   lookXLimit: 45
@@ -370,6 +404,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  armor: 0
+  maxArmor: 0
   maxHealth: 100
   currentHealth: 0
   IsDead: 0
