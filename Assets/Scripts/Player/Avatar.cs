@@ -3,7 +3,7 @@ using UnityEngine;
 using Mirror;
 using System;
 
-public class Avatar : NetworkBehaviour
+public class Avatar : BaseAvatar
 {
     [SyncVar]
     public uint playerNetId;
@@ -14,22 +14,14 @@ public class Avatar : NetworkBehaviour
 
     public Animator animator;
 
-    [Header("Movement Attributes")]
-    public AvatarAttribute moveSpeed;
-    public AvatarAttribute jumpSpeed;
+    public CharacterAttribute jumpSpeed;
 
-    [Header("Spell Casting Attributes")]
-    public AvatarAttribute manaRegen;
-    public AvatarAttribute maxMana;
-    public AvatarAttribute castSpeed;
-    public AvatarAttribute drawSpeed;
-    public AvatarAttribute shuffleSpeed;
+    [Header("Casting Attributes")]
+    public CharacterAttribute manaRegen;
+    public CharacterAttribute maxMana;
+    public CharacterAttribute drawSpeed;
+    public CharacterAttribute shuffleSpeed;
 
-
-    [Header("Health Attributes")]
-    // public AvatarAttribute armor;
-    public AvatarAttribute maxArmor;
-    public AvatarAttribute maxHealth;
 
     public float runModifier = 2f;
 
@@ -112,7 +104,7 @@ public class Avatar : NetworkBehaviour
             return;
         }
         
-        SetAttributeValues();
+        SetAttributes();
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit)) {
             this.lookPoint = hit.point;
@@ -212,9 +204,8 @@ public class Avatar : NetworkBehaviour
         }
     }
 
-    private void SetAttributeValues() {
+    private void SetAttributes() {
         health.maxHealth = maxHealth.CurrentValue;
-        // health.armor = armor.CurrentValue;
         health.maxArmor = maxArmor.CurrentValue;
 
         deck.drawDelay = 1 / drawSpeed.CurrentValue;
@@ -238,7 +229,6 @@ public class Avatar : NetworkBehaviour
 
     public void SetCastAnimation(AnimationClip clip) {
         overrideController[currentCastAnimation.name] = clip;
-        // currentCastAnimation = clip;
     }
 
     private class ButtonState {
@@ -262,19 +252,6 @@ public class Avatar : NetworkBehaviour
            held = Input.GetButton(buttonId);
            up = !held;
            released = Input.GetButtonUp(buttonId);
-        }
-    }
-}
-
-[System.Serializable]
-public class AvatarAttribute {
-    public float baseValue = 1f;
-    public float bonus = 0f;
-    public float multiplier = 1f;
-
-    public float CurrentValue {
-        get {
-            return (baseValue + bonus) * multiplier;
         }
     }
 }

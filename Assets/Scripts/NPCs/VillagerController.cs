@@ -20,7 +20,7 @@ public class VillagerController : NPCController {
       agent.SetDestination(transform.position + new Vector3(randomPoint.x, 0f, randomPoint.y));
    }
 
-   private void Update() {
+   protected override void Update() {
       if (!isServer || dead || !agent) {
          return;
       }

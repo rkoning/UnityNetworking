@@ -2,7 +2,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.AI;
 
-public class NPCController : NetworkBehaviour, IPoolableObject {
+public class NPCController : BaseAvatar, IPoolableObject {
 
    protected NavMeshAgent agent;
    protected Health health;
@@ -16,7 +16,6 @@ public class NPCController : NetworkBehaviour, IPoolableObject {
 
    }
 
-   
    public void RpcInit() {
       
    }
@@ -44,4 +43,13 @@ public class NPCController : NetworkBehaviour, IPoolableObject {
       health = GetComponent<Health>();
    }
 
+   protected virtual void Update() {
+      SetAttributes();
+   }
+
+
+   protected virtual void SetAttributes() {
+      health.maxArmor = maxArmor.CurrentValue;
+      health.maxHealth = maxHealth.CurrentValue;
+   }
 }

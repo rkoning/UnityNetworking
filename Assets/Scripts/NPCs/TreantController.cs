@@ -21,8 +21,14 @@ public class TreantController : NPCController
         agent.SetDestination(transform.position + new Vector3(randomPoint.x, 0f, randomPoint.y));
     }
 
-    private void Update()
+    protected override void SetAttributes() {
+        base.SetAttributes();
+        agent.speed = moveSpeed.CurrentValue;
+    }
+
+    protected override void Update()
     {
+        base.Update();
         if (!isServer || health.IsDead || !agent) {
             return;
         }
@@ -30,6 +36,7 @@ public class TreantController : NPCController
         // root.Evaluate();
         float forwardSpeed = Vector3.Project(agent.desiredVelocity, transform.right).magnitude;
         animator.SetBool("Walk Forward", forwardSpeed > 0);
+
 
         // if enemy nearby
             // move to enemy

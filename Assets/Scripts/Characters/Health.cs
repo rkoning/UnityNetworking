@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Health : NetworkBehaviour {
 
+    
     [SyncVar]
     public float armor;
 

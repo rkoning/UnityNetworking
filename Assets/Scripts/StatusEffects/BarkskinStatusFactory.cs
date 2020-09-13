@@ -15,17 +15,14 @@ public class BarkskinStatusData {
 public class BarkskinStatus: Status<BarkskinStatusData> {
 
    private GameObject effectObject;
-   private Avatar targetPlayer;
+   private BaseAvatar targetAvatar;
 
    public override void Apply() {
       target.StartCoroutine(ApplyOvertime(data.duration));
-      targetPlayer = target.GetComponent<Avatar>();
-      if (targetPlayer)
-         targetPlayer.maxArmor.bonus += data.armorAdded;
-      else 
-         target.maxArmor += data.armorAdded;
+      targetAvatar = target.GetComponent<BaseAvatar>();
+      targetAvatar.maxArmor.bonus += data.armorAdded;
       target.armor += data.armorAdded;
-      // target.OnArmorBroken.
+
       effectObject = GameObject.Instantiate(data.effectPrefab, target.transform.position + Vector3.up, target.transform.rotation, target.transform);
       NetworkServer.Spawn(effectObject);
       base.Apply();
@@ -35,10 +32,8 @@ public class BarkskinStatus: Status<BarkskinStatusData> {
 
    public override void Unapply() {
       base.Unapply();
-      if (targetPlayer)
-         targetPlayer.maxArmor.bonus -= data.armorAdded;
-      else 
-         target.maxArmor -= data.armorAdded;
+      targetAvatar.maxArmor.bonus -= data.armorAdded;
+
       NetworkServer.Destroy(effectObject);
    }
 
