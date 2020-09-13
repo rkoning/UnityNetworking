@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class TargetPoint : SpellEffect {
    public float maxRange = 100f;
+   public LayerMask mask;
+
    public override void Cast() {
-      if ((spell.owner.lookPoint - spell.owner.transform.position).sqrMagnitude > maxRange * maxRange)
-         return;
-      transform.position = spell.owner.lookPoint;
-      transform.rotation = Quaternion.identity;
-      base.Cast();
+      var head = spell.owner.playerCamera.transform;
+      RaycastHit hit;
+      if (Physics.Raycast(head.position, head.forward, out hit, maxRange, mask)) {
+         transform.position = hit.point;
+         transform.rotation = Quaternion.identity;
+         base.Cast();
+      }
    }
 }

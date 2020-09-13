@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class AffectSelf : SpellEffect {
     public override void Cast()
     {

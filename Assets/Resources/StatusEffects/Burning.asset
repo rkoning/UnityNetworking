@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Burning
   m_EditorClassIdentifier: 
   data:
+    name: Burning
+    sprite: {fileID: 21300000, guid: cb40e2202b4d7a446b6eb50d9aa741be, type: 3}
     damagePerTick: 1
     duration: 5
     effectPrefab: {fileID: 4717614756098710601, guid: ac477f42f0a44a440b983c6ca42d52fa,

@@ -1,15 +1,44 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class HealthUI : MonoBehaviour {
-   public PlayerHealth health;
+
+   private PlayerHealth health;
+
+   public PlayerHealth Health {
+      get { return health; }
+      set {
+         health = value;
+         health.OnStatusApplied += (Status status) => {
+            StatusData data = status.GetData();
+            Debug.Log(data.name + " Added");
+            var chip = GameObject.Instantiate(statusChipPrefab, statusEffectParent).GetComponent<StatusChip>();
+            chip.SetSprite(data.sprite);
+            currentStatuses.Add(data.name, chip);
+         };
+
+         health.OnStatusRemoved += (Status status) => {
+            StatusData data = status.GetData();
+            Debug.Log(data.name + " Removed");
+            var chip = currentStatuses[data.name];
+            Destroy(chip.gameObject);
+            currentStatuses.Remove(data.name);            
+         };
+      }
+   }
 
    public TMP_Text healthText;
    public Image healthBar;
 
    public TMP_Text armorText;
    public Image armorBar;
+
+   public RectTransform statusEffectParent;
+
+   private Dictionary<string, StatusChip> currentStatuses = new Dictionary<string, StatusChip>();
+   public GameObject statusChipPrefab;
 
    private void Update() {
       if (!health)

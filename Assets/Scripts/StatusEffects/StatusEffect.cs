@@ -5,9 +5,10 @@ public abstract class StatusFactory: ScriptableObject {
     public abstract Status GetStatus(Health target, Avatar source);
 }
 
-public class StatusFactory<DataType, StatusType>: StatusFactory
-    where StatusType: Status<DataType>, new() {
-    public DataType data;
+public class StatusFactory<T, StatusType>: StatusFactory 
+    where T : StatusData
+    where StatusType: Status<T>, new() {
+    public T data;
 
     public override Status GetStatus(Health target, Avatar source)
     {
@@ -15,7 +16,13 @@ public class StatusFactory<DataType, StatusType>: StatusFactory
     }
 }
 
+public abstract class StatusData {
+    public string name;
+    public Sprite sprite;
+}
+
 public abstract class Status {
+    public abstract StatusData GetData();
     public delegate void UnapplyEvent();
     public event UnapplyEvent OnUnapply;
     public virtual void Apply() {
@@ -47,8 +54,12 @@ public abstract class Status {
     }
 }
 
-public abstract class Status<DataType>: Status {
-    public DataType data;
+public abstract class Status<T>: Status where T : StatusData {
+    public T data;
     public Health target;
     public Avatar source;
+
+    public override StatusData GetData() {
+        return data;
+    }
 }

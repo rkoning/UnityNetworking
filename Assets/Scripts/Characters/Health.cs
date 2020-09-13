@@ -30,7 +30,16 @@ public class Health : NetworkBehaviour {
     public event HealthEvent OnArmorBroken;
     public event HealthEvent OnArmorDamaged;
 
+    public delegate void StatusEffectEvent(Status status);
+
+    public event StatusEffectEvent OnStatusApplied;
+    public event StatusEffectEvent OnStatusRemoved;
+
     private List<StatusFactory> currentEffects = new List<StatusFactory>();
+
+    public List<StatusFactory> CurrentStatusEffects {
+        get { return currentEffects; }
+    }
 
     protected virtual void Start()
     {
@@ -39,6 +48,8 @@ public class Health : NetworkBehaviour {
         OnHealthDamaged += (float damage) => {};
         OnArmorBroken += (float damage) => {};
         OnArmorDamaged += (float damage) => {};
+        OnStatusApplied += (Status data) => {};
+        OnStatusRemoved += (Status data) => {};
     }
 
     public override void OnStartServer() {
@@ -85,8 +96,13 @@ public class Health : NetworkBehaviour {
             return;
         Status s = factory.GetStatus(this, source);
         currentEffects.Add(factory);
-        s.OnUnapply += () => currentEffects.Remove(factory);
+        s.OnUnapply += () =>  {
+            Debug.Log("OnUnapply");
+            currentEffects.Remove(factory);
+            OnStatusRemoved(s);
+        };
         s.Apply();
+        OnStatusApplied(s);
     }
 
     public virtual void OnCurrentHealthChanged(float oldValue, float newValue) {

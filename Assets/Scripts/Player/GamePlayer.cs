@@ -100,7 +100,7 @@ public class GamePlayer : NetworkBehaviour
                     // This will only happen on the local player
                     hudUI.SetActive(true);
                     // link healthUI to health
-                    healthUI.health = avatar.health;
+                    healthUI.Health = avatar.health;
                     // link deckUI to deck
                     deckUI.deck = avatar.deck;
                     deckUI.Init();

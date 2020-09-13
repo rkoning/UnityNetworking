@@ -19,6 +19,14 @@ public class Deck : MonoBehaviour {
     public List<Card> cards;
     public int currentCard;
 
+    public delegate void CardEvent(Card current);
+    public event CardEvent OnCardDrawn;
+    public event CardEvent OnCardAdded;
+    public event CardEvent OnCardConsumed;
+
+    public delegate void ShuffleEvent();
+    public event ShuffleEvent OnShuffle;
+    
     public int DeckSize {
         get {
             return cards.Count;
@@ -59,6 +67,10 @@ public class Deck : MonoBehaviour {
 
     private void Start() {
         avatar = GetComponent<Avatar>();
+        OnCardAdded += (Card c) => {};
+        OnCardConsumed += (Card c) => {};
+        OnCardDrawn += (Card c) => {};
+        OnShuffle += () => {};
     }
     
     public void LoadCards(List<Card> cards) {
@@ -121,11 +133,13 @@ public class Deck : MonoBehaviour {
             return;
         }
         Card c = cards[currentCard];
+        OnCardDrawn(c);
         hand.Add(c);
         currentCard++;
     }
 
     public void AddCard(Card card) {
+        OnCardAdded(card);
         cards.Add(card);
         avatar.gamePlayer.RegisterPrefab(card.spellPrefab, 1);
     }
@@ -154,6 +168,7 @@ public class Deck : MonoBehaviour {
     }
 
     public void Shuffle(int current) {
+        OnShuffle();
         int n = current + 1;
         RNGCryptoServiceProvider rngesus = new RNGCryptoServiceProvider();
         while (n < cards.Count - 1) {
@@ -196,6 +211,7 @@ public class Deck : MonoBehaviour {
         avatar.gamePlayer.Cast(name);
 
         if (selectedCard.consume) {
+            OnCardConsumed(selectedCard);
             cards.Remove(selectedCard);
         }
         selectedIndex = -1;

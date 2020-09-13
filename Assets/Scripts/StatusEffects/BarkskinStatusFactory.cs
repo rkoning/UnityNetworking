@@ -6,7 +6,7 @@ using Mirror;
 public class BarkskinStatusFactory: StatusFactory<BarkskinStatusData, BarkskinStatus> {}
 
 [System.Serializable]
-public class BarkskinStatusData {
+public class BarkskinStatusData : StatusData {
    public float armorAdded = 50f;
    public float duration = 20f;
    public GameObject effectPrefab;
@@ -24,6 +24,7 @@ public class BarkskinStatus: Status<BarkskinStatusData> {
       target.armor += data.armorAdded;
 
       effectObject = GameObject.Instantiate(data.effectPrefab, target.transform.position + Vector3.up, target.transform.rotation, target.transform);
+      effectObject.GetComponent<NetworkTransformChild>().target = target.transform;
       NetworkServer.Spawn(effectObject);
       base.Apply();
    }
