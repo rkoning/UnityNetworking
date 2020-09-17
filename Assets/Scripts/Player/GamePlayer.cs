@@ -112,7 +112,7 @@ public class GamePlayer : NetworkBehaviour
         }
         // look up all avatars in the scene and match them with their gameplayers
     }
-    
+
     public override void OnStopClient() {
         Room.GamePlayers.Remove(this);
     }
