@@ -10,6 +10,6 @@ public class Summon : SpellEffect {
    }
 
    public override void Cast() {
-      spell.owner.gamePlayer.GetFromPool(prefab.name, transform.position, transform.rotation);
+      spell.owner.GetFromPool(prefab.name, transform.position, transform.rotation);
    }
 }

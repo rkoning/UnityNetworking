@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public abstract class StatusFactory: ScriptableObject {
-    public abstract Status GetStatus(Health target, Avatar source);
+    public abstract Status GetStatus(Health target, BaseAvatar source);
 }
 
 public class StatusFactory<T, StatusType>: StatusFactory 
@@ -10,7 +10,7 @@ public class StatusFactory<T, StatusType>: StatusFactory
     where StatusType: Status<T>, new() {
     public T data;
 
-    public override Status GetStatus(Health target, Avatar source)
+    public override Status GetStatus(Health target, BaseAvatar source)
     {
         return new StatusType { data = this.data, target = target };
     }

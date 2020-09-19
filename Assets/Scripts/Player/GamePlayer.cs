@@ -100,7 +100,7 @@ public class GamePlayer : NetworkBehaviour
                     // This will only happen on the local player
                     hudUI.SetActive(true);
                     // link healthUI to health
-                    healthUI.Health = avatar.health;
+                    healthUI.Health = ((PlayerHealth) avatar.health);
                     // link deckUI to deck
                     deckUI.deck = avatar.deck;
                     deckUI.Init();
@@ -219,6 +219,6 @@ public class GamePlayer : NetworkBehaviour
 
     [ClientRpc]
     private void RpcPlayerAlive() {
-        avatar.health.Respawn();
+        ((PlayerHealth) avatar.health).Respawn();
     }
 }

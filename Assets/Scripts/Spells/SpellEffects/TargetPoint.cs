@@ -6,7 +6,7 @@ public class TargetPoint : SpellEffect {
    public LayerMask mask;
 
    public override void Cast() {
-      var head = spell.owner.playerCamera.transform;
+      var head = spell.owner.aimTransform;
       RaycastHit hit;
       if (Physics.Raycast(head.position, head.forward, out hit, maxRange, mask)) {
          transform.position = hit.point;

@@ -58,7 +58,7 @@ public class Health : NetworkBehaviour {
     }
 
     [Server]
-    public virtual void TakeDamage(float damage, Avatar source) {
+    public virtual void TakeDamage(float damage, BaseAvatar source) {
         if (IsDead)
             return;
         if (armor > 0) {
@@ -91,7 +91,7 @@ public class Health : NetworkBehaviour {
     }
 
     [Server]
-    public void ApplyStatus(StatusFactory factory, Avatar source) {
+    public void ApplyStatus(StatusFactory factory, BaseAvatar source) {
         if (currentEffects.Contains(factory))
             return;
         Status s = factory.GetStatus(this, source);

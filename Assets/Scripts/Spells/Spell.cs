@@ -4,7 +4,7 @@ using Mirror;
 
 public class Spell : NetworkBehaviour, IPoolableObject
 {
-    public Avatar owner;
+    public BaseAvatar owner;
     public delegate void CastAction();
     public event CastAction OnCast;
     public event CastAction OnHold;
@@ -58,9 +58,8 @@ public class Spell : NetworkBehaviour, IPoolableObject
 
     public void Cast()
     {
-        Debug.Log("Spell Cast()");
         if (parentToCaster) {
-            transform.SetParent(owner.deck.castTransform);
+            transform.SetParent(owner.aimTransform);
         }
         OnCast();
     }

@@ -4,6 +4,6 @@ public class ApplyStatusEffect : SpellEffect {
    public StatusFactory statusFactory;
 
    public override void HitHealth(Health other) {
-      spell.owner.gamePlayer.ApplyStatus(other, statusFactory);
+      spell.owner.ApplyStatus(other, statusFactory);
    }
 }

@@ -11,7 +11,7 @@ public class ForCardInDeck : SpellEffect {
    public UnityEvent eachCardEvent;
 
    public override void Cast() {
-      var found = spell.owner.deck.cards.FindAll(c => c == searchCard);
+      var found = ((Avatar) spell.owner).deck.cards.FindAll(c => c == searchCard);
       StartCoroutine(InvokeOverTime(duration, found.Count * multiplier));
    }
 

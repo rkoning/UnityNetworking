@@ -9,7 +9,7 @@ public class AddCardsToDeck : SpellEffect
 
     public override void Cast() {
         for (int i = 0; i < numberToAdd; i++)
-            spell.owner.deck.AddCard(cardToAdd);
-        spell.owner.deck.Shuffle();
+            ((Avatar) spell.owner).deck.AddCard(cardToAdd);
+        ((Avatar) spell.owner).deck.Shuffle();
     }
 }

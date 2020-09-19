@@ -10,9 +10,6 @@ public class Avatar : BaseAvatar
     
     public GamePlayer gamePlayer;
     private CharacterController controller;
-    public PlayerHealth health;
-
-    public Animator animator;
 
     public CharacterAttribute jumpSpeed;
 
@@ -64,6 +61,8 @@ public class Avatar : BaseAvatar
 
     public void Init(GamePlayer gamePlayer)
     {
+        base.Init();
+        aimTransform = playerCamera.transform;
         this.gamePlayer = gamePlayer;
         health = GetComponent<PlayerHealth>();
         health.OnDeath += (float damage) => {
@@ -71,13 +70,10 @@ public class Avatar : BaseAvatar
             this.gamePlayer.PlayerDead();
         };
 
-        health.OnRespawn += (float damage) => {
+        ((PlayerHealth) health).OnRespawn += (float damage) => {
             animator.SetTrigger("Alive");
         };
         deck = GetComponent<Deck>();
-
-        overrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
-        animator.runtimeAnimatorController = overrideController;
         if (gamePlayer.hasAuthority)
         {
             controller = GetComponent<CharacterController>();
@@ -227,10 +223,6 @@ public class Avatar : BaseAvatar
         deck.Cancel();
     }
 
-    public void SetCastAnimation(AnimationClip clip) {
-        overrideController[currentCastAnimation.name] = clip;
-    }
-
     private class ButtonState {
         private string buttonId;
         private bool down;
@@ -253,5 +245,17 @@ public class Avatar : BaseAvatar
            up = !held;
            released = Input.GetButtonUp(buttonId);
         }
+    }
+
+    public override void GetFromPool(string name, Vector3 position, Quaternion rotation) {
+        gamePlayer.GetFromPool(name, position, rotation);
+    }
+
+    public override void ApplyStatus(Health health, StatusFactory factory) {
+        gamePlayer.ApplyStatus(health, factory);
+    }
+
+    public override void DealDamage(Health other, float amount) {
+        gamePlayer.DealDamage(other, amount);
     }
 }
